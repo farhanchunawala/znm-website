@@ -1,0 +1,76 @@
+@import '../../app/styles/mixins';
+
+.main {
+	position: relative;
+	background-color: #FAFAFA;
+	padding-top: 4px;
+	h2 {
+		color: #000;
+		text-align: center;
+		font-size: 19px;
+		font-weight: 700;
+		line-height: normal;
+		text-transform: uppercase;
+		position: absolute;
+		top: 21px;
+		left: 0;
+		right: 0;
+		
+	}
+	.container {
+		display: flex;
+		flex-wrap: wrap;
+		padding: 0 8px;
+	}
+	.frame {
+		flex: 0 0 50%;
+		max-width: 50%;
+		padding: 50px 16px 16px;
+		img {
+			height: auto;
+			width: 100%;
+			margin-bottom: -5px;
+		}
+		.imgtext {
+			color: #000;
+			text-align: center;
+			font-size: 17.2px;
+			font-style: normal;
+			font-weight: 500;
+			line-height: normal;
+			margin-top: 16px;
+		}
+	}
+	.viewall {
+		color: #FAFAFA;
+		text-align: center;
+		font-size: 16px;
+		font-weight: 400;
+		line-height: 40px;
+		text-transform: uppercase;
+		background: #000;
+		height: 40px;
+		padding: 0 16px;
+		margin: 0 auto 16px;
+	}
+}
+
+@media (min-width: $screen-sm) and (max-width: $screen-lg) {}
+
+@media (min-width: $screen-lg) {
+	.main {
+		h2 {
+			top: 15px;
+			font-size: 23px;
+			font-weight: 700;
+		}
+		.container {
+			padding: 0 48px;
+			.frame {
+				// @include flex-item($width:25%, $flex-grow:0, $flex-shrink:0);
+				flex: 0 0 25%;
+				max-width: 25%;
+			}
+		}
+	}
+}

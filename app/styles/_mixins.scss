@@ -1,0 +1,30 @@
+@import 'variables';
+
+@mixin text-style($font-size:null, $line-height:null, $font-weight:null) {
+	font-size: $font-size;
+	line-height: $line-height;
+	font-weight: $font-weight;
+}
+
+@mixin col($width:null) {
+	flex-grow: 0;
+	flex-shrink: 0;
+	flex-basis: $width;
+	max-width: $width;
+}
+
+@mixin flexbox($flex-wrap:null, $flex-direction:null, $justify-content:null, $align-items:null, $align-content:null) {
+	display: flex;
+	flex-wrap: $flex-wrap;				//https://www.w3schools.com/cssref/playdemo.php?filename=playcss_flex-wrap
+	flex-direction: $flex-direction;	//https://www.w3schools.com/cssref/playdemo.php?filename=playcss_flex-direction
+	justify-content: $justify-content;	//https://www.w3schools.com/cssref/playdemo.php?filename=playcss_justify-content
+	align-items: $align-items;			//https://www.w3schools.com/cssref/playdemo.php?filename=playcss_align-items
+	align-content: $align-content;		//https://www.w3schools.com/cssref/playdemo.php?filename=playcss_align-content
+}
+
+@mixin flex-item($width:null, $flex-grow:null, $flex-shrink:null) {
+	flex-grow: $flex-grow;
+	flex-shrink: $flex-shrink;
+	flex-basis: $width;
+	max-width: $width;
+}

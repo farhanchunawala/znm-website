@@ -1,4 +1,4 @@
-import { Quotes } from '../../components/quotes/Quotes';
+import { Quotes } from '../../components/Quotes/Quotes';
 
 export default function QuotesPage() {
 	return (
