@@ -1,0 +1,178 @@
+// https://people.googleapis.com/v1/people/c4982964556761738392?personFields=names,emailAddresses,phoneNumbers,addresses,birthdays,biographies,photos,urls
+{
+    "resourceName": "people/c4982964556761738392",
+    "etag": "%EhABAgMFBgcJCxAuNTc9Pj9AGgQBAgUHIgwza0E4MUk1L3paQT0=",
+    "names": [
+        {
+            "metadata": {
+                "primary": true,
+                "source": {
+                    "type": "CONTACT",
+                    "id": "45270bdd0e252c98"
+                }
+            },
+            "displayName": "People API Test Surname",
+            "familyName": "Test Surname",
+            "givenName": "People API",
+            "phoneticFamilyName": "phonetic Test Name",
+            "phoneticGivenName": "Phonetic Test first name",
+            "phoneticMiddleName": "phonetic Test Middle Name",
+            "displayNameLastFirst": "Test Surname, People API",
+            "unstructuredName": "People API Test Surname"
+        }
+    ],
+    "photos": [
+        {
+            "metadata": {
+                "primary": true,
+                "source": {
+                    "type": "CONTACT",
+                    "id": "45270bdd0e252c98"
+                }
+            },
+            "url": "https://lh3.googleusercontent.com/contacts/AG6tpzEfpna1fgx_gxx3HeDnPh-G3ppQyBI8JUxWLRdkkZC1_kpWxOnp=s100"
+        }
+    ],
+    "birthdays": [
+        {
+            "metadata": {
+                "primary": true,
+                "source": {
+                    "type": "CONTACT",
+                    "id": "45270bdd0e252c98"
+                }
+            },
+            "date": {
+                "year": 2024,
+                "month": 4,
+                "day": 10
+            }
+        }
+    ],
+    "addresses": [
+        {
+            "metadata": {
+                "primary": true,
+                "source": {
+                    "type": "CONTACT",
+                    "id": "45270bdd0e252c98"
+                }
+            },
+            "formattedValue": "125 New Bond St, London W1S 1DY, UK",
+            "type": "home",
+            "formattedType": "Home",
+            "streetAddress": "125 New Bond St",
+            "city": "London",
+            "postalCode": "W1S 1DY",
+            "country": "UK",
+            "countryCode": "GB"
+        },
+        {
+            "metadata": {
+                "source": {
+                    "type": "CONTACT",
+                    "id": "45270bdd0e252c98"
+                }
+            },
+            "formattedValue": "13426 78 Ave, Surrey, BC V3W 8J6, Canada",
+            "type": "work",
+            "formattedType": "Work",
+            "streetAddress": "13426 78 Ave",
+            "city": "Surrey",
+            "region": "BC",
+            "postalCode": "V3W 8J6",
+            "country": "Canada",
+            "countryCode": "CA"
+        }
+    ],
+    "emailAddresses": [
+        {
+            "metadata": {
+                "primary": true,
+                "source": {
+                    "type": "CONTACT",
+                    "id": "45270bdd0e252c98"
+                }
+            },
+            "value": "farhanchunawala.fc@gmail.com",
+            "type": "home",
+            "formattedType": "Home"
+        },
+        {
+            "metadata": {
+                "source": {
+                    "type": "CONTACT",
+                    "id": "45270bdd0e252c98"
+                }
+            },
+            "value": "farhanchunawala.fc98@gmail.com",
+            "type": "work",
+            "formattedType": "Work"
+        }
+    ],
+    "phoneNumbers": [
+        {
+            "metadata": {
+                "primary": true,
+                "source": {
+                    "type": "CONTACT",
+                    "id": "45270bdd0e252c98"
+                }
+            },
+            "value": "97697 35377",
+            "canonicalForm": "+919769735377",
+            "type": "mobile",
+            "formattedType": "Mobile"
+        },
+        {
+            "metadata": {
+                "source": {
+                    "type": "CONTACT",
+                    "id": "45270bdd0e252c98"
+                }
+            },
+            "value": "82919 43457",
+            "canonicalForm": "+918291943457",
+            "type": "work",
+            "formattedType": "Work"
+        }
+    ],
+    "biographies": [
+        {
+            "metadata": {
+                "primary": true,
+                "source": {
+                    "type": "CONTACT",
+                    "id": "45270bdd0e252c98"
+                }
+            },
+            "value": "Test Note",
+            "contentType": "TEXT_PLAIN"
+        }
+    ],
+    "urls": [
+        {
+            "metadata": {
+                "primary": true,
+                "source": {
+                    "type": "CONTACT",
+                    "id": "45270bdd0e252c98"
+                }
+            },
+            "value": "www.example.com",
+            "type": "other",
+            "formattedType": "Other"
+        },
+        {
+            "metadata": {
+                "source": {
+                    "type": "CONTACT",
+                    "id": "45270bdd0e252c98"
+                }
+            },
+            "value": "www.example2.com",
+            "type": "other",
+            "formattedType": "Other"
+        }
+    ]
+}
