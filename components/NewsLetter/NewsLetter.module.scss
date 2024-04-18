@@ -1,0 +1,116 @@
+@import '../../app/styles/mixins';
+
+.main {
+	.box {
+		background: black;
+		// width: 342px;
+		// height: 270px;
+		padding: 40px;
+		padding-bottom: 32px;
+		// @include flex-item($width:auto, $flex-grow:auto, $flex-shrink:auto);
+		// @include flexbox($align-items:center, $align-content:center);
+		width: 100%;
+		margin-top: 80px;
+		// @include flex-item($width:90%, $flex-grow:0, $flex-shrink:0);
+		// margin: 24px auto 48px;
+		h2 {
+			color: white;
+			margin-top: 34px;
+			font-family: 'Inter';
+			font-style: normal;
+			font-weight: 400;
+			font-size: 21px;
+			line-height: 34px;
+			align-items: center;
+			text-align: center;
+		}
+		input {
+			width: 250px;
+			height: 37px;
+			background-color: black;
+			color: white;
+			border: 1px;
+			border-bottom: 1px solid white;
+			box-sizing: border-box;
+			align-content: center;
+			display: block;
+			margin: auto;
+			margin-top: 30px;
+		}
+		button {
+			background-color: white;
+			color: black;
+			font-size: 16px;
+			font-weight: 400;
+			padding-top: 8px;
+			padding-bottom: 8px;
+			padding-right: 18px;
+			padding-left: 18px;
+			border: 1px;
+			margin: auto;
+			margin-top: 30px;
+			// margin-left: 30px;
+			// margin-right: 30px;
+			align-content: center;
+			display: block;
+		}
+		.location {
+			color: white;
+			font-weight: 400;
+			font-size: 12px;
+			// line-height: norma3l;
+			text-align: center;
+			margin-bottom: 30px;
+			svg {
+				height: 10px;
+				width: auto;
+				margin-right: 5px;
+			}
+		}
+		.social {
+			width: fit-content;
+			margin: 30px auto 0;
+			.app {
+				svg {
+					height: 20px;
+					width: auto;
+					margin: 0 8px;
+				}
+			}
+		}
+	}
+}
+
+@media (min-width: $screen-sm) {
+	.main {
+		.box {
+			.form {
+			display: flex;
+			justify-content: center;
+			// margin: unset;
+			}
+		}
+	}
+}
+
+@media (min-width: $screen-lg) {}
+
+// @media (max-width:768px) {
+// 	.main {
+// 		.box {flex: 0 0 33%;
+// 			max-width: 33%;
+// 			.link {}
+// 		}
+// 		.heading {}
+// 	}
+// }
+
+// @media (max-width:480px) {
+// 	.main {
+// 		.box {flex: 0 0 50%;
+// 			max-width: 50%;
+// 			.link {}
+// 		}
+// 		.heading {}
+// 	}
+// }

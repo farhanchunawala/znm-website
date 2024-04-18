@@ -1,7 +1,8 @@
-import Image from 'next/image';
 import type { ReactNode } from 'react';
 import { StoreProvider } from './StoreProvider';
-import { Nav } from '../components/Navbar/Navbar';
+import { Navbar } from '../components/Navbar/Navbar';
+import Footer from '../components/Footer/Footer';
+// import Image from 'next/image';
 
 import './styles/globals.scss';
 import styles from './styles/layout.module.scss';
@@ -16,7 +17,7 @@ export default function RootLayout({ children }: Props) {
 			<html lang="en">
 				<body>
 					<section className={styles.container}>
-						{/* <Nav /> */}
+						<Navbar />
 
 						{/* <header className={styles.header}>
 							<Image
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: Props) {
 
 						<main className={styles.main}>{children}</main>
 
+						<Footer />
 						{/* <footer className={styles.footer}>
 							<span>Learn </span>
 							<a
