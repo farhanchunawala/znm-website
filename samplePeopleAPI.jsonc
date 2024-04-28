@@ -1,7 +1,7 @@
-// https://people.googleapis.com/v1/people/c4982964556761738392?personFields=names,emailAddresses,phoneNumbers,addresses,birthdays,biographies,photos,urls
+// https://people.googleapis.com/v1/people/c4982964556761738392?personFields=names,emailAddresses,phoneNumbers,addresses,birthdays,biographies,photos,urls,organizations
 {
     "resourceName": "people/c4982964556761738392",
-    "etag": "%EhABAgMFBgcJCxAuNTc9Pj9AGgQBAgUHIgwza0E4MUk1L3paQT0=",
+    "etag": "%EhEBAgMFBgcJCwwQLjU3PT4/QBoEAQIFByIMM2tBODFJNS96WkE9",
     "names": [
         {
             "metadata": {
@@ -173,6 +173,22 @@
             "value": "www.example2.com",
             "type": "other",
             "formattedType": "Other"
+        }
+    ],
+    "organizations": [
+        {
+            "metadata": {
+                "primary": true,
+                "source": {
+                    "type": "CONTACT",
+                    "id": "45270bdd0e252c98"
+                }
+            },
+            "type": "unknown",
+            "formattedType": "Unknown",
+            "name": "Google",
+            "department": "Tech",
+            "title": "Associate Software Developer"
         }
     ]
 }
