@@ -3,6 +3,7 @@ import mongoose, { Schema } from 'mongoose';
 const FabricSchema = new mongoose.Schema(
 	{
 		brand: String,
+		color: String,
 	},
 	{ timestamps: true }
 );
