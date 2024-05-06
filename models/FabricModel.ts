@@ -3,18 +3,20 @@ import AutoIncrement from 'mongoose-sequence';
 
 const FabricSchema = new mongoose.Schema(
 	{
-		id: {
+		fabricId: {
 			type: Number,
 			unique: true,
 		},
 		name: {
 			brand: String,
+			collection: String,
+			product: String,
 		},
 	},
 	{ timestamps: true }
 );
 
-FabricSchema.plugin(AutoIncrement(mongoose), { inc_field: 'id' });
+FabricSchema.plugin(AutoIncrement(mongoose), { inc_field: 'fabricId' });
 
 // const Fabric = mongoose.models.Fabric || mongoose.model('Fabric', FabricSchema);
 const Fabric =

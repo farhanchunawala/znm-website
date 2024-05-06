@@ -3,16 +3,20 @@ import AutoIncrement from 'mongoose-sequence';
 
 const UserSchema = new mongoose.Schema(
 	{
-		id: {
+		userId: {
 			type: Number,
 			unique: true,
 		},
-		name: {},
+		name: {
+			firstName: String,
+			middleName: String,
+			lastName: String,
+		},
 	},
 	{ timestamps: true }
 );
 
-UserSchema.plugin(AutoIncrement(mongoose), { inc_field: 'id' });
+UserSchema.plugin(AutoIncrement(mongoose), { inc_field: 'userId' });
 
 // const User = mongoose.models.User || mongoose.model('User', UserSchema);
 const User = mongoose.models.User || mongoose.model('User', UserSchema, 'users');
