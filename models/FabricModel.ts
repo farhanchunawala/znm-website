@@ -3,39 +3,19 @@ import AutoIncrement from 'mongoose-sequence';
 
 const FabricSchema = new mongoose.Schema(
 	{
-		fabricId: {
-			type: Number,
-			unique: true,
-		},
+		fabricId: { type: Number, unique: true },
 		name: {
 			brand: String,
 			collection: String,
 			product: String,
 		},
-		details: {
+		metrics: {
 			width: Number,
 		},
 		composition: [
 			{
 				material: String,
 				amount: Number,
-			},
-		],
-		price: {
-			cost: Number,
-			firstPrice: Number,
-		},
-		colors: [
-			{
-				colorId: Number,
-				color: String,
-				quantity: [
-					{
-						length: Number,
-						location: String,
-					},
-				],
-				supplier: String,
 			},
 		],
 	},
