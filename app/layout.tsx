@@ -3,6 +3,7 @@ import { StoreProvider } from './StoreProvider';
 import { Navbar } from '../components/Navbar/Navbar';
 import Footer from '../components/Footer/Footer';
 // import Image from 'next/image';
+import Script from 'next/script';
 
 import './styles/globals.scss';
 import styles from './styles/layout.module.scss';
@@ -15,6 +16,12 @@ export default function RootLayout({ children }: Props) {
 	return (
 		<StoreProvider>
 			<html lang="en">
+				<head>
+					<Script
+						src="https://kit.fontawesome.com/80b27366cd.js"
+						crossOrigin="anonymous"
+					></Script>
+				</head>
 				<body>
 					<section className={styles.container}>
 						<Navbar />
