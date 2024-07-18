@@ -17,6 +17,10 @@ export default function RootLayout({ children }: Props) {
 		<StoreProvider>
 			<html lang="en">
 				<head>
+					<link
+						rel="stylesheet"
+						href="https://fonts.googleapis.com/icon?family=Material+Icons"
+					></link>
 					<Script
 						src="https://kit.fontawesome.com/80b27366cd.js"
 						crossOrigin="anonymous"
