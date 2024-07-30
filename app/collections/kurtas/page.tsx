@@ -6,40 +6,94 @@ import styles from '../../styles/Home.module.scss';
 import DisplayGallery from '@/components/DisplayGallery/DisplayGallery';
 
 export default function Home() {
-	const imageGrid = {
-		title: '',
+	// const imageGrid = {
+	// 	title: '',
+	// 	images: [
+	// 		{
+	// 			src: '/img1.webp',
+	// 			text: 'Morning Mist',
+	// 		},
+	// 		{
+	// 			src: '/img2.webp',
+	// 			text: 'Pine Green',
+	// 		},
+	// 		{
+	// 			src: '/img3.webp',
+	// 			text: 'Seafoam Green',
+	// 		},
+	// 		{
+	// 			src: '/img4.webp',
+	// 			text: 'Dusty Yale',
+	// 		},
+	// 		{
+	// 			src: '/img5.webp',
+	// 			text: 'Sterling Palms',
+	// 		},
+	// 		{
+	// 			src: '/img6.webp',
+	// 			text: 'Vintage Cobalt',
+	// 		},
+	// 		{
+	// 			src: '/img7.jpg',
+	// 			text: 'Castlaton Shine',
+	// 		},
+	// 		{
+	// 			src: '/img8.webp',
+	// 			text: 'Chanterelle Beige',
+	// 		},
+	// 	],
+	// };
+
+	const kurtas = {
+		title: 'Kurtas',
 		images: [
 			{
-				src: '/img1.webp',
-				text: 'Morning Mist',
+				src: '/kurtas/kurta1.1.webp',
+				text: 'Rustic Orange',
 			},
 			{
-				src: '/img2.webp',
-				text: 'Pine Green',
+				src: '/kurtas/kurta2.1.webp',
+				text: 'Nahua',
 			},
 			{
-				src: '/img3.webp',
-				text: 'Seafoam Green',
+				src: '/kurtas/kurta3.1.webp',
+				text: 'Aztec Kurta',
 			},
 			{
-				src: '/img4.webp',
-				text: 'Dusty Yale',
+				src: '/kurtas/kurta4.1.webp',
+				text: 'brunette',
 			},
 			{
-				src: '/img5.webp',
-				text: 'Sterling Palms',
+				src: '/kurtas/kurta5.1.webp',
+				text: 'Lapis',
 			},
 			{
-				src: '/img6.webp',
-				text: 'Vintage Cobalt',
+				src: '/kurtas/kurta6.1.webp',
+				text: 'Gwalior',
 			},
 			{
-				src: '/img7.jpg',
-				text: 'Castlaton Shine',
+				src: '/kurtas/kurta7.1.webp',
+				text: 'Asfar Kurta',
 			},
 			{
-				src: '/img8.webp',
-				text: 'Chanterelle Beige',
+				src: '/kurtas/kurta8.1.webp',
+				text: 'Zuhal',
+			},
+			{
+				src: '/kurtas/kurta9.1.webp',
+				text: 'Ilia',
+			},
+			{
+				src: '/kurtas/kurta10.1.webp',
+				text: 'Iyad',
+			},
+			{
+				src: '/kurtas/kurta11.2.webp',
+				text: 'Deep Water Kurta',
+			},
+			{
+				src: '/kurtas/kurta12.1.webp',
+				text: 'Arzoo A',
 			},
 		],
 	};
@@ -70,7 +124,7 @@ export default function Home() {
 					<Image className={`${styles.img}`} src="/img0.webp" alt="cloth" width="1200" height="600" priority={true} />
 				</div>
 			</div> */}
-				<DisplayGallery imageGrid={imageGrid}></DisplayGallery>
+				<DisplayGallery imageGrid={kurtas}></DisplayGallery>
 				<footer></footer>
 			</main>
 		</>
