@@ -20,13 +20,38 @@ export default function Home() {
 				<link rel="icon" href="/zmlogo.png" />
 			</Head>
 			<main className={`${styles.main}`}>
-				<Image
-					className={`${styles.main_image}`}
-					src="/product.png"
-					alt=""
-					width="205"
-					height="286"
-				/>
+				<div className={`${styles.images_holder}`}>
+					<div className={`${styles.image_wrapper}`}>
+						<Image
+							className={`${styles.product_image}`}
+							src="/kurtas/kurta1.1.webp"
+							alt=""
+							width="336"
+							height="471"
+							layout='responsive'	
+						/>
+					</div>
+					{/* <div className={`${styles.image_wrapper}`}> */}
+						<Image
+							className={`${styles.product_image}`}
+							src="/kurtas/kurta1.1.webp"
+							alt=""
+							width="336"
+							height="471"
+							layout='responsive'	
+						/>
+					{/* </div> */}
+					{/* <div className={`${styles.image_wrapper}`}>
+						<Image
+							className={`${styles.product_image}`}
+							src="/kurtas/kurta1.1.webp"
+							alt=""
+							width="336"
+							height="471"
+							layout='responsive'	
+						/>
+					</div> */}
+				</div>
 				<div className={`${styles.add_product_form}`}>
 					<div className={`${styles.title}`}>
 						<h1 className={`${styles.product_name}`}>
