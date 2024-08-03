@@ -4,10 +4,8 @@
 	font-family: 'Manrope';
 	.images_holder {
 		padding: 0 14px;
-		display: flex;
-		.main_image {
-			// width: calc(100%);
-			// height: auto;
+		.image_wrapper {
+			display: flex;
 		}
 	}
 	.add_product_form {
@@ -100,27 +98,13 @@
 		display: flex;
 		.images_holder {
 			display: flex;
-			// flex-wrap: wrap;
-			// width: 100px;
-			// flex: 0 0 50%;
-        	// max-width: 50%;
+			width: 100%;
 			.image_wrapper {
-				// width: 100%;
-				.main_image {
-					// width: calc(40%);
-					// height: auto;
-					padding: 2px;
-					display: flex;
-					// flex: 0 0 50%;
-					// max-width: 50%;
-					// width: 100%;
-				}
+				width: 100%;
 			}
 		}
 		.add_product_form {
 			width: 100%;
-			// flex: 0 0 50%;
-        	// max-width: 50%;
 			.title {
 				.product_name {
 					color: #222;

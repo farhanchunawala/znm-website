@@ -28,29 +28,19 @@ export default function Home() {
 							alt=""
 							width="336"
 							height="471"
-							layout='responsive'	
+							layout="responsive"
 						/>
 					</div>
-					{/* <div className={`${styles.image_wrapper}`}> */}
+					<div className={`${styles.image_wrapper}`}>
 						<Image
 							className={`${styles.product_image}`}
 							src="/kurtas/kurta1.1.webp"
 							alt=""
 							width="336"
 							height="471"
-							layout='responsive'	
+							layout="responsive"
 						/>
-					{/* </div> */}
-					{/* <div className={`${styles.image_wrapper}`}>
-						<Image
-							className={`${styles.product_image}`}
-							src="/kurtas/kurta1.1.webp"
-							alt=""
-							width="336"
-							height="471"
-							layout='responsive'	
-						/>
-					</div> */}
+					</div>
 				</div>
 				<div className={`${styles.add_product_form}`}>
 					<div className={`${styles.title}`}>
