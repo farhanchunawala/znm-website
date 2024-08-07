@@ -1,7 +1,12 @@
+'use client';
+
 import Head from 'next/head';
 import Image from 'next/image';
 // import { Inter } from 'next/font/google';
 import styles from './product.module.scss';
+import axios from 'axios';
+import { useEffect } from 'react';
+import { log } from 'console';
 // const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
@@ -9,9 +14,27 @@ export default function Home() {
 		title: 'Red Kurta',
 		mrp: 5000,
 		sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
-		description: 'redc kurta linen.'
+		description: 'redc kurta linen.',
 	};
-	
+
+	useEffect(() => {
+		getSampleData();
+	}, []);
+
+	const getSampleData = function () {
+		axios
+			.get('https://api.sampleapis.com/coffee/hot')
+			.then((response) => {
+				console.log('Data:', response.data);
+			})
+			.catch((error) => {
+				console.error('Error:', error);
+			})
+			.finally(() => {
+				console.log('Request finished');
+			});
+	};
+
 	return (
 		<>
 			<Head>
@@ -92,21 +115,35 @@ export default function Home() {
 				<div className={`${styles.add_product_form}`}>
 					<div className={`${styles.title}`}>
 						<h1 className={`${styles.product_name}`}>
-							{ productData.title }
+							{productData.title}
 						</h1>
 						<p className={`${styles.mrp}`}>
 							MRP inclusive of all taxes
 						</p>
-						<p className={`${styles.price}`}>Rs. { productData.mrp }</p>
+						<p className={`${styles.price}`}>
+							Rs. {productData.mrp}
+						</p>
 					</div>
 					<p className={`${styles.sizes_text}`}>sizes</p>
 					<div className={`${styles.sizes}`}>
-						<div className={`${styles.size}`}>{ productData.sizes[0] }</div>
-						<div className={`${styles.size}`}>{ productData.sizes[1] }</div>
-						<div className={`${styles.size}`}>{ productData.sizes[2] }</div>
-						<div className={`${styles.size}`}>{ productData.sizes[3] }</div>
-						<div className={`${styles.size}`}>{ productData.sizes[4] }</div>
-						<div className={`${styles.size}`}>{ productData.sizes[5] }</div>
+						<div className={`${styles.size}`}>
+							{productData.sizes[0]}
+						</div>
+						<div className={`${styles.size}`}>
+							{productData.sizes[1]}
+						</div>
+						<div className={`${styles.size}`}>
+							{productData.sizes[2]}
+						</div>
+						<div className={`${styles.size}`}>
+							{productData.sizes[3]}
+						</div>
+						<div className={`${styles.size}`}>
+							{productData.sizes[4]}
+						</div>
+						<div className={`${styles.size}`}>
+							{productData.sizes[5]}
+						</div>
 					</div>
 					<div className={`${styles.notify}`}>
 						<svg
@@ -153,9 +190,7 @@ export default function Home() {
 							</svg>
 						</div>
 						<div className={`${styles.description}`}>
-							<p>
-								{ productData.description }
-							</p>
+							<p>{productData.description}</p>
 						</div>
 					</div>
 				</div>
