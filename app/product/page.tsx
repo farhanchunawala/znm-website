@@ -5,6 +5,13 @@ import styles from './product.module.scss';
 // const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
+	const productData = {
+		title: 'Red Kurta',
+		mrp: 5000,
+		sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+		description: 'redc kurta linen.'
+	};
+	
 	return (
 		<>
 			<Head>
@@ -34,7 +41,47 @@ export default function Home() {
 					<div className={`${styles.image_wrapper}`}>
 						<Image
 							className={`${styles.product_image}`}
-							src="/kurtas/kurta1.1.webp"
+							src="/kurtas/kurta1.2.webp"
+							alt=""
+							width="336"
+							height="471"
+							layout="responsive"
+						/>
+					</div>
+					<div className={`${styles.image_wrapper}`}>
+						<Image
+							className={`${styles.product_image}`}
+							src="/kurtas/kurta1.3.webp"
+							alt=""
+							width="336"
+							height="471"
+							layout="responsive"
+						/>
+					</div>
+					<div className={`${styles.image_wrapper}`}>
+						<Image
+							className={`${styles.product_image}`}
+							src="/kurtas/kurta1.4.webp"
+							alt=""
+							width="336"
+							height="471"
+							layout="responsive"
+						/>
+					</div>
+					<div className={`${styles.image_wrapper}`}>
+						<Image
+							className={`${styles.product_image}`}
+							src="/kurtas/kurta1.5.webp"
+							alt=""
+							width="336"
+							height="471"
+							layout="responsive"
+						/>
+					</div>
+					<div className={`${styles.image_wrapper}`}>
+						<Image
+							className={`${styles.product_image}`}
+							src="/kurtas/kurta1.6.webp"
 							alt=""
 							width="336"
 							height="471"
@@ -45,21 +92,21 @@ export default function Home() {
 				<div className={`${styles.add_product_form}`}>
 					<div className={`${styles.title}`}>
 						<h1 className={`${styles.product_name}`}>
-							Regular Fit polo Shirt
+							{ productData.title }
 						</h1>
 						<p className={`${styles.mrp}`}>
 							MRP inclusive of all taxes
 						</p>
-						<p className={`${styles.price}`}>Rs. 0000.00</p>
+						<p className={`${styles.price}`}>Rs. { productData.mrp }</p>
 					</div>
 					<p className={`${styles.sizes_text}`}>sizes</p>
 					<div className={`${styles.sizes}`}>
-						<div className={`${styles.size}`}>XS</div>
-						<div className={`${styles.size}`}>S</div>
-						<div className={`${styles.size}`}>M</div>
-						<div className={`${styles.size}`}>L</div>
-						<div className={`${styles.size}`}>XL</div>
-						<div className={`${styles.size}`}>XXL</div>
+						<div className={`${styles.size}`}>{ productData.sizes[0] }</div>
+						<div className={`${styles.size}`}>{ productData.sizes[1] }</div>
+						<div className={`${styles.size}`}>{ productData.sizes[2] }</div>
+						<div className={`${styles.size}`}>{ productData.sizes[3] }</div>
+						<div className={`${styles.size}`}>{ productData.sizes[4] }</div>
+						<div className={`${styles.size}`}>{ productData.sizes[5] }</div>
 					</div>
 					<div className={`${styles.notify}`}>
 						<svg
@@ -107,9 +154,7 @@ export default function Home() {
 						</div>
 						<div className={`${styles.description}`}>
 							<p>
-								Polo shirt in soft, fine-knit cotton. Regular
-								fit with a collar, button placket and long
-								sleeves. Fine ribbing at the cuffs and hem.
+								{ productData.description }
 							</p>
 						</div>
 					</div>

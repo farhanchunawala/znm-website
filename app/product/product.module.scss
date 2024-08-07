@@ -6,6 +6,7 @@
 		padding: 0 14px;
 		.image_wrapper {
 			display: flex;
+			width: 100%;
 		}
 	}
 	.add_product_form {
@@ -97,10 +98,13 @@
 	.main {
 		display: flex;
 		.images_holder {
-			display: flex;
 			width: 100%;
+			display: flex;
+			flex-wrap: wrap;
+			gap: 2px;
 			.image_wrapper {
-				width: 100%;
+				flex: 0 0 calc(50% - 1px);
+				max-width: calc(50% - 1px);
 			}
 		}
 		.add_product_form {

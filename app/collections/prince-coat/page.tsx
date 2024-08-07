@@ -10,35 +10,51 @@ export default function Home() {
 		title: '',
 		images: [
 			{
-				src: '/img1.webp',
+				src: '/sherwani/sherwani 1.1.webp',
 				text: 'Morning Mist',
 			},
 			{
-				src: '/img2.webp',
+				src: '/sherwani/sherwani 2.1.webp',
 				text: 'Pine Green',
 			},
 			{
-				src: '/img3.webp',
+				src: '/sherwani/sherwani 3.1.webp',
 				text: 'Seafoam Green',
 			},
 			{
-				src: '/img4.webp',
+				src: '/sherwani/sherwani 4.1.webp',
 				text: 'Dusty Yale',
 			},
 			{
-				src: '/img5.webp',
+				src: '/sherwani/sherwani 5.1.webp',
 				text: 'Sterling Palms',
 			},
 			{
-				src: '/img6.webp',
+				src: '/sherwani/sherwani 6.1.webp',
 				text: 'Vintage Cobalt',
 			},
 			{
-				src: '/img7.jpg',
+				src: '/sherwani/sherwani 7.1.webp',
 				text: 'Castlaton Shine',
 			},
 			{
-				src: '/img8.webp',
+				src: '/sherwani/sherwani 8.1.webp',
+				text: 'Chanterelle Beige',
+			},
+			{
+				src: '/sherwani/sherwani 9.1.webp',
+				text: 'Chanterelle Beige',
+			},
+			{
+				src: '/sherwani/sherwani 10.1.webp',
+				text: 'Chanterelle Beige',
+			},
+			{
+				src: '/sherwani/sherwani 11.1.webp',
+				text: 'Chanterelle Beige',
+			},
+			{
+				src: '/sherwani/sherwani 12.1.webp',
 				text: 'Chanterelle Beige',
 			},
 		],
