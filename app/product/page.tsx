@@ -12,12 +12,18 @@ import { log } from 'console';
 export default function Product() {
 
 	const [product, setProduct] = useState(null);
+	const [formData, setFormData] = useState({
+		name: '',
+		mobileNo: '',
+		email: '',
+		message: '',
+	});
 
 	useEffect(() => {
-		getProducts()
+		getProduct()
 	}, []);
 
-	const getProducts = function () {
+	const getProduct = function () {
 		axios
 			.get('http://localhost:3000/api/product')
 			.then((response) => {
@@ -25,8 +31,27 @@ export default function Product() {
 			})
 			.catch((error) => {
 				console.error('Error:', error);
+			});
+	};
+
+	const saveProduct = (event) => {
+		event.preventDefault();
+		axios
+			.post('http://localhost:3000/api/inquiry/upsert', formData)
+			.then((response) => {
+				console.log('Form submitted successfully');
 			})
-			.finally(() => {});
+			.catch((error) => {
+				console.error('Error:', error);
+			});
+	};
+
+	const handleChange = (event) => {
+		const { name, value } = event.target;
+		setFormData((prev) => ({
+		  ...prev,
+		  [name]: value,
+		}));
 	};
 
 	return (
@@ -189,21 +214,39 @@ export default function Product() {
 									<p>{product.description}</p>
 								</div>
 							</div>
-							<div className={`${styles.inquiry_form}`}>
+							<form className={`${styles.inquiry_form}`} onSubmit={saveProduct} >
 								<input type="text" 
 									className={`${styles.personal_detail}`}
-									placeholder='Name'
+									placeholder="Name"
+									name="name"
+									value={formData.name}
+									onChange={handleChange}
 								/>
 								<input type="text" 
 									className={`${styles.personal_detail}`}
 									placeholder='Email'
+									name="email"
+									value={formData.email}
+									onChange={handleChange}
 								/>
 								<input type="text" 
 									className={`${styles.personal_detail}`}
 									placeholder='Phone'
+									name="mobileNo"
+									value={formData.mobileNo}
+									onChange={handleChange}
 								/>
-								<textarea className={`${styles.message}`} placeholder='message' name="description" id=""></textarea>
-							</div>
+								<textarea
+									className={`${styles.message}`}
+									placeholder='message'
+									name="message"
+									value={formData.message}
+									onChange={handleChange}
+								></textarea>
+								<button className={`${styles.send_button}`} type="submit" >
+									SEND
+								</button>
+							</form>
 						</div>
 					</>
 				) : (

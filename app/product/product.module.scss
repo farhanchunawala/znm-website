@@ -105,7 +105,20 @@
 				width: 100%;
 				height: 200px;
 				padding-left: 14px;
+				padding-top: 16px;
+				// font-family: ;
 			}
+		}
+		.send_button {
+			height: 45px;
+			// width: 60%;
+			width: 250px;
+			background-color: black;
+			color: white;
+			border: 1px black;
+			margin-left: 13px;
+			margin-top: 8px;
+
 		}
 	}
 }
