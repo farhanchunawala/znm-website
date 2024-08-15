@@ -10,19 +10,19 @@ const DisplayGallery = ({ imageGrid }) => {
 				<h2>{imageGrid.title}</h2>
 				<div className={`${styles.container}`}>
 					{imageGrid.images.map((image, index) => (
-						<Link
-							className={`${styles.frame}`}
-							key={index}
-							href="/product"
-						>
-							<Image
-								src={image.src}
-								alt={image.text}
-								width="205"
-								height="286"
-							/>
-							<p className={`${styles.imgtext}`}>{image.text}</p>
-						</Link>
+						<div className={`${styles.frame}`} key={index}>
+							<Link href="/product">
+								<Image
+									src={image.src}
+									alt={image.text}
+									width="205"
+									height="286"
+								/>
+								<p className={`${styles.imgtext}`}>
+									{image.text}
+								</p>
+							</Link>
+						</div>
 					))}
 					<Link
 						className={`${styles.viewall}`}
