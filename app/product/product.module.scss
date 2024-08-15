@@ -92,6 +92,34 @@
 				padding: 0 24px;
 			}
 		}
+		.inquiry_form {
+			margin: 13px;
+			// width: 100%;
+			.personal_detail {
+				height: 45px;
+				width: 100%;
+				margin-bottom: 13px;
+				padding-left: 14px;
+			}
+			.message {
+				width: 100%;
+				height: 200px;
+				padding-left: 14px;
+				padding-top: 16px;
+				// font-family: ;
+			}
+		}
+		.send_button {
+			height: 45px;
+			// width: 60%;
+			width: 250px;
+			background-color: black;
+			color: white;
+			border: 1px black;
+			margin-left: 13px;
+			margin-top: 8px;
+
+		}
 	}
 }
 @media (min-width: 576px) {
@@ -169,6 +197,12 @@
 					}
 				}
 			}
+			.inquiry_form {
+				.message {
+					height: 265px;
+				}
+			}
+			
 		}
 	}
 }
