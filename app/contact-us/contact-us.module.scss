@@ -1,0 +1,64 @@
+.main{
+    padding: 45px 13px 54px;
+    .header {
+        h1 {
+            text-align: center;
+            font-size: 25px;
+            font-weight: 400;
+            // margin-bottom: 23px;
+        }
+    }
+    .booking {
+        h1 {
+            font-size: 25px;
+            font-weight: 400
+            ;
+        }
+        p {
+            font-size: 13px;
+            .span {
+                font-weight: bold;
+            }
+        }
+    }
+    .social {
+        h1 {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        p {
+            font-size: 13px;
+            .span {
+                font-weight: bold;
+            }
+        }
+		.inquiry_form {
+			margin: 13px;
+			// width: 100%;
+			.personal_detail {
+				height: 45px;
+				width: 100%;
+				margin-bottom: 13px;
+				padding-left: 14px;
+			}
+			// .message {
+			// 	width: 100%;
+			// 	height: 200px;
+			// 	padding-left: 14px;
+			// 	padding-top: 16px;
+			// 	// font-family: ;
+			// }
+		}
+		.send_button {
+			height: 45px;
+			// width: 60%;
+			width: 250px;
+			background-color: black;
+			color: white;
+			border: 1px black;
+			margin-left: 13px;
+			margin-top: 8px;
+
+		}
+    }
+}
