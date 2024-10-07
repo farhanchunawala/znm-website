@@ -3,14 +3,13 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Product from '@/models/ProductModel';
 
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest, context: Context) {
 	try {
 		await dbConnect();
 
-		const { searchParams } = new URL(request.url);
-		const id = searchParams.get('id');
+		const { id } = context.params;
 
-		const product = await Product.findById(id);
+		const product = await Product.findOne({ productId: id });
 		return NextResponse.json(product);
 	} catch (error) {
 		console.error('Database operation failed:', error);

@@ -5,9 +5,11 @@ const ProductSchema = new mongoose.Schema(
 	{
 		productId: { type: Number, unique: true },
 		title: String,
+		type: String,
+		images: [],
 		mrp: String,
 		sizes: [],
-		description: String
+		description: String,
 	},
 	{ timestamps: true }
 );
@@ -15,7 +17,9 @@ const ProductSchema = new mongoose.Schema(
 ProductSchema.plugin(AutoIncrement(mongoose), { inc_field: 'productId' });
 
 // const Product = mongoose.models.Product || mongoose.model('Product', ProductSchema);
-const Product = mongoose.models.Product || mongoose.model('Product', ProductSchema, 'products');
+const Product =
+	mongoose.models.Product ||
+	mongoose.model('Product', ProductSchema, 'products');
 // const Product = mongoose.model('Product', ProductSchema, 'products');
 
 export default Product;

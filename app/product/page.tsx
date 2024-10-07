@@ -10,7 +10,6 @@ import { log } from 'console';
 // const inter = Inter({ subsets: ['latin'] });
 
 export default function Product() {
-
 	const [product, setProduct] = useState(null);
 	const [formData, setFormData] = useState({
 		name: '',
@@ -20,7 +19,7 @@ export default function Product() {
 	});
 
 	useEffect(() => {
-		getProduct()
+		getProduct();
 	}, []);
 
 	const getProduct = function () {
@@ -49,8 +48,8 @@ export default function Product() {
 	const handleChange = (event) => {
 		const { name, value } = event.target;
 		setFormData((prev) => ({
-		  ...prev,
-		  [name]: value,
+			...prev,
+			[name]: value,
 		}));
 	};
 
@@ -214,36 +213,45 @@ export default function Product() {
 									<p>{product.description}</p>
 								</div>
 							</div>
-							<form className={`${styles.inquiry_form}`} onSubmit={saveProduct} >
-								<input type="text" 
+							<form
+								className={`${styles.inquiry_form}`}
+								onSubmit={saveProduct}
+							>
+								<input
+									type="text"
 									className={`${styles.personal_detail}`}
 									placeholder="Name"
 									name="name"
 									value={formData.name}
 									onChange={handleChange}
 								/>
-								<input type="text" 
+								<input
+									type="text"
 									className={`${styles.personal_detail}`}
-									placeholder='Email'
+									placeholder="Email"
 									name="email"
 									value={formData.email}
 									onChange={handleChange}
 								/>
-								<input type="text" 
+								<input
+									type="text"
 									className={`${styles.personal_detail}`}
-									placeholder='Phone'
+									placeholder="Phone"
 									name="mobileNo"
 									value={formData.mobileNo}
 									onChange={handleChange}
 								/>
 								<textarea
 									className={`${styles.message}`}
-									placeholder='message'
+									placeholder="message"
 									name="message"
 									value={formData.message}
 									onChange={handleChange}
 								></textarea>
-								<button className={`${styles.send_button}`} type="submit" >
+								<button
+									className={`${styles.send_button}`}
+									type="submit"
+								>
 									SEND
 								</button>
 							</form>
