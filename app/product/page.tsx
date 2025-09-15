@@ -8,8 +8,15 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 // const inter = Inter({ subsets: ['latin'] });
 
+type ProductType = {
+	title: string;
+	mrp: number;
+	sizes: string[];
+	description: string;
+};
+
 export default function Product() {
-	const [product, setProduct] = useState(null);
+	const [product, setProduct] = useState<ProductType | null>(null);
 	const [formData, setFormData] = useState({
 		name: '',
 		mobileNo: '',
