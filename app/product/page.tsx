@@ -6,7 +6,6 @@ import Image from 'next/image';
 import styles from './product.module.scss';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { log } from 'console';
 // const inter = Inter({ subsets: ['latin'] });
 
 export default function Product() {
