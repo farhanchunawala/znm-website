@@ -30,10 +30,15 @@ export async function DELETE(request: NextRequest, context: Context) {
 			message: 'Fabric deleted successfully',
 			fabric,
 		});
-	} catch (error) {
-		console.error('Database operation failed:', error);
+	} catch (error: unknown) {
+		// Safely handle unknown errors
+		let message = 'Unknown error';
+		if (error instanceof Error) {
+			message = error.message;
+		}
+
 		return NextResponse.json(
-			{ error: 'Database operation failed', details: error.message },
+			{ error: 'Database operation failed', details: message },
 			{
 				status: 500,
 			}
