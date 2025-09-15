@@ -18,15 +18,13 @@
 		height: auto;
 		flex-grow: 1;
 		box-sizing: border-box;
-		// margin: 100px auto;
-		// min-width: 275px;
-		// max-height: 204;
 		
-		transition: transform 1s ease;
-		animation-name: slide;
-		animation-duration: 10s;
-		animation-delay: 2s;
-		animation-iteration-count: infinite;
+		// Carousel Animation turned off for now
+		// transition: transform 1s ease;
+		// animation-name: slide;
+		// animation-duration: 10s;
+		// animation-delay: 2s;
+		// animation-iteration-count: infinite;
 	}
 	.window::-webkit-scrollbar {
 		width: 0.5em; /* Set the width of the scrollbar */
