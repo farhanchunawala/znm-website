@@ -9,7 +9,7 @@ interface Context {
 	};
 }
 
-export async function DELETE(request: NextRequest, context: Context) {
+export async function DELETE(request: NextRequest, context) {
 	try {
 		await dbConnect();
 		const { id } = context.params;

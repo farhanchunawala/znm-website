@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Product from '@/models/ProductModel';
 
-export async function GET(request: NextRequest, context: Context) {
+export async function GET(request: NextRequest, context) {
 	try {
 		await dbConnect();
 

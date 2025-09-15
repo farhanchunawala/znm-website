@@ -3,11 +3,7 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/UserModel';
 
-interface Context {
-	params: undefined;
-}
-
-export async function POST(request: NextRequest, context: Context) {
+export async function POST(request: NextRequest, context) {
 	try {
 		await dbConnect();
 		const req = await request.json();
