@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Fabric from '@/models/FabricModel';
 
-export async function POST(request: NextRequest, context) {
+export async function POST(request: NextRequest) {
 	try {
 		await dbConnect();
 		const req = await request.json();

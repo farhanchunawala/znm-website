@@ -3,13 +3,7 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Fabric from '@/models/FabricModel';
 
-interface Context {
-	params: {
-		id: number;
-	};
-}
-
-export async function DELETE(request: NextRequest, context) {
+export async function DELETE(request: NextRequest, context: any) {
 	try {
 		await dbConnect();
 		const { id } = context.params;
