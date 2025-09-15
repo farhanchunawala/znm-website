@@ -13,8 +13,14 @@ export async function GET(request: NextRequest, context: Context) {
 		return NextResponse.json(product);
 	} catch (error) {
 		console.error('Database operation failed:', error);
+		// Safely handle unknown errors
+		let message = 'Unknown error';
+		if (error instanceof Error) {
+			message = error.message;
+		}
+
 		return NextResponse.json(
-			{ error: 'Database operation failed', details: error.message },
+			{ error: 'Database operation failed', details: message },
 			{
 				status: 500,
 			}
