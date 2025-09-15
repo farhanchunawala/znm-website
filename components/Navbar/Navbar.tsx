@@ -14,7 +14,7 @@ export const Navbar = () => {
 	return (
 		<div className={`${styles.main}`}>
 			<div className={`${styles.header}`}>
-				<svg
+				{/* <svg
 					onClick={handleClick}
 					className={`${styles.hamburger}`}
 					xmlns="http://www.w3.org/2000/svg"
@@ -26,7 +26,7 @@ export const Navbar = () => {
 					<path d="M4 23.9688H28V25.9688H4V23.9688Z" fill="black" />
 					<path d="M4 15.9688H28V17.9688H4V15.9688Z" fill="black" />
 					<path d="M4 7.96875H28V9.96875H4V7.96875Z" fill="black" />
-				</svg>
+				</svg> */}
 				<h1 className={`${styles.heading} ${styles.text}`}>
 					ZOLL & METER
 				</h1>

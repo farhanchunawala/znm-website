@@ -6,7 +6,7 @@ import styles from './styles/Home.module.scss';
 
 export default function IndexPage() {
 	const imageGrid = {
-		title: 'MENSWEAR 23',
+		title: 'MENSWEAR 25',
 		images: [
 			{
 				src: '/img1.webp',
@@ -154,7 +154,7 @@ export default function IndexPage() {
 			</div>
 			<DisplayGallery imageGrid={kurtas} />
 			<DisplayGallery imageGrid={imageGrid} />
-			<DisplayGallery imageGrid={imageGrid} />
+			{/* <DisplayGallery imageGrid={imageGrid} /> */}
 		</>
 	);
 }
