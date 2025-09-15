@@ -16,7 +16,12 @@ type ProductType = {
 };
 
 export default function Product() {
-	const [product, setProduct] = useState<ProductType | null>(null);
+	const [product, setProduct] = useState<ProductType>({
+		title: '',
+		mrp: 0,
+		sizes: ['', '', '', '', '', ''],
+		description: '',
+	});
 	const [formData, setFormData] = useState({
 		name: '',
 		mobileNo: '',
@@ -30,7 +35,7 @@ export default function Product() {
 
 	const getProduct = function () {
 		axios
-			.get('http://localhost:3000/api/product')
+			.get('/api/product')
 			.then((response) => {
 				setProduct(response.data);
 			})
@@ -42,7 +47,7 @@ export default function Product() {
 	const saveProduct = (event) => {
 		event.preventDefault();
 		axios
-			.post('http://localhost:3000/api/inquiry/upsert', formData)
+			.post('/api/inquiry/upsert', formData)
 			.then((response) => {
 				console.log('Form submitted successfully');
 			})
