@@ -3,6 +3,7 @@
 	// padding: 8px;
 	.window{
 		width: calc(100vw - 48px);
+		overflow: hidden;
 		overflow-x: scroll;
 		margin: 0 24px;
 		position: relative;
@@ -19,12 +20,12 @@
 		flex-grow: 1;
 		box-sizing: border-box;
 		
-		// Carousel Animation turned off for now
-		// transition: transform 1s ease;
-		// animation-name: slide;
-		// animation-duration: 10s;
-		// animation-delay: 2s;
-		// animation-iteration-count: infinite;
+		// Carousel: Animation turned off for now;
+		transition: transform 1s ease;
+		animation-name: slide;
+		animation-duration: 30s;
+		animation-delay: 5s;
+		animation-iteration-count: infinite;
 	}
 	.window::-webkit-scrollbar {
 		width: 0.5em; /* Set the width of the scrollbar */
@@ -39,14 +40,20 @@
 		0% {
 			transform: translateX(0);
 		}
-		33% {
+		20% {
 			transform: translateX(-100%);
 		}
-		67% {
+		40% {
 			transform: translateX(-200%);
 		}
-		100% {
+		60% {
 			transform: translateX(-300%);
+		}
+		80% {
+			transform: translateX(-400%);
+		}
+		100% {
+			transform: translateX(-500%);
 		}
 	}
 // }

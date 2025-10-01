@@ -28,7 +28,7 @@ export const Navbar = () => {
 					<path d="M4 7.96875H28V9.96875H4V7.96875Z" fill="black" />
 				</svg> */}
 				<h1 className={`${styles.heading} ${styles.text}`}>
-					ZOLL & METER
+					ZOLL & METÉR
 				</h1>
 			</div>
 			<nav className={styles.mainnav}>
