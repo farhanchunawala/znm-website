@@ -9,7 +9,7 @@ export default function IndexPage() {
 		title: 'MENSWEAR 25',
 		images: [
 			{
-				src: '/img1.webp',
+				src: '/',
 				text: 'Morning Mist',
 			},
 			{
@@ -44,54 +44,54 @@ export default function IndexPage() {
 	};
 
 	const kurtas = {
-		title: 'Kurtas',
+		title: 'KURTAS',
 		images: [
 			{
-				src: '/kurtas/kurta1.1.webp',
+				src: '/kurta/kurta-14.png',
 				text: 'Rustic Orange',
 			},
 			{
-				src: '/kurtas/kurta2.1.webp',
+				src: '/kurta/kurta-12.png',
 				text: 'Nahua',
 			},
 			{
-				src: '/kurtas/kurta3.1.webp',
+				src: '/kurta/kurta-15.png',
 				text: 'Aztec Kurta',
 			},
 			{
-				src: '/kurtas/kurta4.1.webp',
+				src: '/kurta/kurta-13.png',
 				text: 'brunette',
 			},
 			{
-				src: '/kurtas/kurta5.1.webp',
+				src: '/kurta/kurta-9.png',
 				text: 'Lapis',
 			},
 			{
-				src: '/kurtas/kurta6.1.webp',
+				src: '/kurta/kurta-2.png',
 				text: 'Gwalior',
 			},
 			{
-				src: '/kurtas/kurta7.1.webp',
+				src: '/kurta/kurta-6.png',
 				text: 'Asfar Kurta',
 			},
 			{
-				src: '/kurtas/kurta8.1.webp',
+				src: '/kurta/kurta-1.png',
 				text: 'Zuhal',
 			},
 			{
-				src: '/kurtas/kurta9.1.webp',
+				src: '/kurta/kurta-16.png',
 				text: 'Ilia',
 			},
 			{
-				src: '/kurtas/kurta10.1.webp',
+				src: '/kurta/kurta-17.png',
 				text: 'Iyad',
 			},
 			{
-				src: '/kurtas/kurta11.2.webp',
+				src: '/kurta/kurta-18.png',
 				text: 'Deep Water Kurta',
 			},
 			{
-				src: '/kurtas/kurta12.1.webp',
+				src: '/kurta/kurta-11.png',
 				text: 'Arzoo A',
 			},
 		],
@@ -105,17 +105,7 @@ export default function IndexPage() {
 					<div className={`${styles.slide}`}>
 						<Image
 							className={`${styles.img}`}
-							src="/display-photo/dp1.1-thobes.png"
-							alt="cloth"
-							width="1200"
-							height="600"
-							priority={true}
-						/>
-					</div>
-					<div className={`${styles.slide}`}>
-						<Image
-							className={`${styles.img}`}
-							src="/display-photo/dp2.1-shirts.png"
+							src="/display-photo/dp5-sherwani.png"
 							alt="cloth"
 							width="1200"
 							height="600"
@@ -135,6 +125,16 @@ export default function IndexPage() {
 					<div className={`${styles.slide}`}>
 						<Image
 							className={`${styles.img}`}
+							src="/display-photo/dp6-vest.png"
+							alt="cloth"
+							width="1200"
+							height="600"
+							priority={true}
+						/>
+					</div>
+					<div className={`${styles.slide}`}>
+						<Image
+							className={`${styles.img}`}
 							src="/display-photo/dp4-kurtas.png"
 							alt="cloth"
 							width="1200"
@@ -145,7 +145,7 @@ export default function IndexPage() {
 					<div className={`${styles.slide}`}>
 						<Image
 							className={`${styles.img}`}
-							src="/display-photo/dp5-sherwani.png"
+							src="/display-photo/dp1.1-kurtas.png"
 							alt="cloth"
 							width="1200"
 							height="600"
@@ -155,7 +155,7 @@ export default function IndexPage() {
 					<div className={`${styles.slide}`}>
 						<Image
 							className={`${styles.img}`}
-							src="/display-photo/dp6-vest.png"
+							src="/display-photo/dp2.1-shirts.png"
 							alt="cloth"
 							width="1200"
 							height="600"
