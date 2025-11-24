@@ -47,51 +47,51 @@ export default function IndexPage() {
 		title: 'KURTAS',
 		images: [
 			{
-				src: '/kurta/kurta-14.png',
+				src: '/kurta/1.png',
 				text: 'Rustic Orange',
 			},
 			{
-				src: '/kurta/kurta-12.png',
+				src: '/kurta/2.png',
 				text: 'Nahua',
 			},
 			{
-				src: '/kurta/kurta-15.png',
+				src: '/kurta/3.png',
 				text: 'Aztec Kurta',
 			},
 			{
-				src: '/kurta/kurta-13.png',
+				src: '/kurta/4.png',
 				text: 'brunette',
 			},
 			{
-				src: '/kurta/kurta-9.png',
+				src: '/kurta/5.png',
 				text: 'Lapis',
 			},
 			{
-				src: '/kurta/kurta-2.png',
+				src: '/kurta/6.png',
 				text: 'Gwalior',
 			},
 			{
-				src: '/kurta/kurta-6.png',
+				src: '/kurta/7.png',
 				text: 'Asfar Kurta',
 			},
 			{
-				src: '/kurta/kurta-1.png',
+				src: '/kurta/8.png',
 				text: 'Zuhal',
 			},
 			{
-				src: '/kurta/kurta-16.png',
+				src: '/kurta/9.png',
 				text: 'Ilia',
 			},
 			{
-				src: '/kurta/kurta-17.png',
+				src: '/kurta/10.png',
 				text: 'Iyad',
 			},
 			{
-				src: '/kurta/kurta-18.png',
+				src: '/kurta/11.png',
 				text: 'Deep Water Kurta',
 			},
 			{
-				src: '/kurta/kurta-11.png',
+				src: '/kurta/12.png',
 				text: 'Arzoo A',
 			},
 		],

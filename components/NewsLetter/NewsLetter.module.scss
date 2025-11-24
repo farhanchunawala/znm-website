@@ -11,12 +11,13 @@
 		// @include flexbox($align-items:center, $align-content:center);
 		width: 100%;
 		margin-top: 80px;
+
 		// @include flex-item($width:90%, $flex-grow:0, $flex-shrink:0);
 		// margin: 24px auto 48px;
 		h2 {
 			color: white;
 			margin-top: 34px;
-			font-family: 'Inter';
+
 			font-style: normal;
 			font-weight: 400;
 			font-size: 21px;
@@ -24,6 +25,7 @@
 			align-items: center;
 			text-align: center;
 		}
+
 		input {
 			width: 250px;
 			height: 37px;
@@ -37,6 +39,7 @@
 			margin: auto;
 			margin-top: 30px;
 		}
+
 		button {
 			background-color: white;
 			color: black;
@@ -54,6 +57,7 @@
 			align-content: center;
 			display: block;
 		}
+
 		.location {
 			color: white;
 			font-weight: 400;
@@ -61,15 +65,18 @@
 			// line-height: norma3l;
 			text-align: center;
 			margin-bottom: 30px;
+
 			svg {
 				height: 10px;
 				width: auto;
 				margin-right: 5px;
 			}
 		}
+
 		.social {
 			width: fit-content;
 			margin: 30px auto 0;
+
 			.app {
 				svg {
 					height: 20px;
@@ -85,9 +92,9 @@
 	.main {
 		.box {
 			.form {
-			display: flex;
-			justify-content: center;
-			// margin: unset;
+				display: flex;
+				justify-content: center;
+				// margin: unset;
 			}
 		}
 	}

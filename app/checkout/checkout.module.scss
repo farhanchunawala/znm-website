@@ -1,0 +1,182 @@
+.main {
+    padding: 120px 20px 60px;
+    min-height: 80vh;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: 'Inter', sans-serif;
+
+    h1 {
+        font-size: 2.5rem;
+        font-weight: 300;
+        margin-bottom: 40px;
+        text-align: center;
+        letter-spacing: 1px;
+    }
+}
+
+.checkoutContainer {
+    display: flex;
+    gap: 40px;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
+}
+
+.checkoutForm {
+    flex: 2;
+
+    h2 {
+        font-size: 1.5rem;
+        font-weight: 400;
+        margin-bottom: 20px;
+    }
+
+    .formSection {
+        margin-bottom: 30px;
+
+        h3 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+    }
+
+    .formRow {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px;
+
+        @media (max-width: 576px) {
+            flex-direction: column;
+        }
+    }
+
+    .formGroup {
+        flex: 1;
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            font-size: 0.95rem;
+
+            &:focus {
+                outline: none;
+                border-color: #000;
+            }
+        }
+    }
+}
+
+.orderSummary {
+    flex: 1;
+    background-color: #f9f9f9;
+    padding: 30px;
+    height: fit-content;
+    position: sticky;
+    top: 120px;
+
+    h2 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        font-weight: 400;
+    }
+
+    .summaryItem {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #ddd;
+
+        img {
+            width: 60px;
+            height: 80px;
+            object-fit: cover;
+        }
+
+        .itemInfo {
+            flex: 1;
+
+            h4 {
+                font-size: 0.9rem;
+                font-weight: 500;
+                margin: 0 0 5px;
+            }
+
+            p {
+                font-size: 0.85rem;
+                color: #666;
+                margin: 2px 0;
+            }
+        }
+
+        .itemPrice {
+            font-weight: 600;
+        }
+    }
+
+    .summaryRow {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        font-size: 0.95rem;
+
+        &.total {
+            border-top: 1px solid #ddd;
+            padding-top: 15px;
+            margin-top: 15px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+    }
+
+    .placeOrderButton {
+        width: 100%;
+        padding: 15px;
+        background-color: #000;
+        color: #fff;
+        border: none;
+        font-size: 1rem;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: background-color 0.3s;
+
+        &:hover {
+            background-color: #333;
+        }
+    }
+}
+
+.emptyCart {
+    text-align: center;
+    padding: 60px 0;
+
+    p {
+        font-size: 1.2rem;
+        color: #666;
+        margin-bottom: 20px;
+    }
+
+    a {
+        display: inline-block;
+        padding: 12px 30px;
+        background-color: #000;
+        color: #fff;
+        text-decoration: none;
+        transition: background-color 0.3s;
+
+        &:hover {
+            background-color: #333;
+        }
+    }
+}

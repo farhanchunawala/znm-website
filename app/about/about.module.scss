@@ -1,0 +1,64 @@
+.main {
+    padding: 120px 20px 60px;
+    min-height: 80vh;
+    max-width: 1000px;
+    margin: 0 auto;
+    font-family: 'Inter', sans-serif;
+
+    h1 {
+        font-size: 3rem;
+        font-weight: 300;
+        margin-bottom: 20px;
+        text-align: center;
+        letter-spacing: 2px;
+    }
+
+    .subtitle {
+        text-align: center;
+        font-size: 1.2rem;
+        color: #666;
+        margin-bottom: 60px;
+        font-style: italic;
+    }
+
+    .content {
+        line-height: 1.8;
+        font-size: 1.05rem;
+        color: #333;
+
+        p {
+            margin-bottom: 25px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin: 40px 0 20px;
+            letter-spacing: 1px;
+        }
+    }
+
+    .values {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        margin: 40px 0;
+
+        .value {
+            padding: 30px;
+            background-color: #f9f9f9;
+            text-align: center;
+
+            h3 {
+                font-size: 1.3rem;
+                font-weight: 500;
+                margin-bottom: 15px;
+            }
+
+            p {
+                color: #666;
+                line-height: 1.6;
+            }
+        }
+    }
+}

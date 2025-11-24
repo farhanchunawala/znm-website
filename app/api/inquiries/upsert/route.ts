@@ -2,6 +2,7 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Inquiry from '@/models/InquiryModel';
+import { sendInquiryEmail } from '@/lib/mailer';
 
 export async function POST(request: NextRequest) {
 	try {
@@ -9,7 +10,8 @@ export async function POST(request: NextRequest) {
 		const req = await request.json();
 		const inquiry = new Inquiry(req);
 		await inquiry.save();
-		return NextResponse.json({ inquiry });
+		await sendInquiryEmail(req);
+		return NextResponse.json({ inquiry, emailSent: true });
 		// return NextResponse.json(inquiry);
 	} catch (error) {
 		console.error('Database operation failed:', error);
