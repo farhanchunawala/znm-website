@@ -13,31 +13,31 @@ export default function IndexPage() {
 				text: 'Morning Mist',
 			},
 			{
-				src: '/img2.webp',
+				src: '/',
 				text: 'Pine Green',
 			},
 			{
-				src: '/img3.webp',
+				src: '/',
 				text: 'Seafoam Green',
 			},
 			{
-				src: '/img4.webp',
+				src: '/',
 				text: 'Dusty Yale',
 			},
 			{
-				src: '/img5.webp',
+				src: '/',
 				text: 'Sterling Palms',
 			},
 			{
-				src: '/img6.webp',
+				src: '/',
 				text: 'Vintage Cobalt',
 			},
 			{
-				src: '/img7.jpg',
+				src: '/',
 				text: 'Castlaton Shine',
 			},
 			{
-				src: '/img8.webp',
+				src: '/',
 				text: 'Chanterelle Beige',
 			},
 		],

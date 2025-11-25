@@ -1,0 +1,227 @@
+.orderDetail {
+    padding-bottom: 50px;
+
+    @media print {
+        padding: 0;
+        background: white;
+
+        .topBar,
+        .backBtn,
+        .printBtn {
+            display: none;
+        }
+    }
+
+    h1 {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 700;
+        color: #2c3e50;
+    }
+
+    h3 {
+        margin: 0 0 15px 0;
+        font-size: 16px;
+        font-weight: 600;
+        color: #2c3e50;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+    }
+
+    .subHeader {
+        margin-top: 20px;
+    }
+}
+
+.topBar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.backBtn,
+.printBtn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.backBtn {
+    background: #95a5a6;
+    color: white;
+
+    &:hover {
+        background: #7f8c8d;
+    }
+}
+
+.printBtn {
+    background: #34495e;
+    color: white;
+
+    &:hover {
+        background: #2c3e50;
+    }
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    .titleGroup {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+        .date {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+    }
+
+    .statusSelect {
+        padding: 8px 16px;
+        border-radius: 20px;
+        border: 2px solid transparent;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 14px;
+        outline: none;
+
+        &.prepaid {
+            background: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+        &.unpaid {
+            background: #fff3cd;
+            color: #856404;
+            border-color: #ffeaa7;
+        }
+    }
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.infoRow {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 14px;
+
+    .label {
+        color: #7f8c8d;
+        font-weight: 500;
+    }
+
+    .link {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: 500;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.address {
+    line-height: 1.6;
+    color: #34495e;
+    font-size: 14px;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+}
+
+.itemsList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.itemRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #f0f0f0;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    .itemInfo {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+        .itemName {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .itemMeta {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+    }
+
+    .itemPrice {
+        font-weight: 600;
+        color: #2c3e50;
+    }
+}
+
+.summary {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+
+    .summaryRow {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        color: #7f8c8d;
+        font-size: 14px;
+
+        &.total {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+            color: #2c3e50;
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 0;
+        }
+    }
+}
+
+.loading {
+    text-align: center;
+    padding: 50px;
+    color: #7f8c8d;
+    font-size: 16px;
+}

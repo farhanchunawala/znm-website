@@ -1,7 +1,8 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './Navbar.module.scss';
 import SideNav from '../SideNav/SideNav';
+import AccountPanel from '../AccountPanel/AccountPanel';
 import Link from 'next/link';
 import { SearchIcon } from '../Icons/SearchIcon';
 import { UserIcon } from '../Icons/UserIcon';
@@ -12,9 +13,25 @@ import { selectCartCount } from '@/lib/features/cartSlice';
 
 export const Navbar = () => {
 	const [isHidden, setIsHidden] = useState(true);
+	const [showAccountPanel, setShowAccountPanel] = useState(false);
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const cartCount = useAppSelector(selectCartCount);
 	const [showSearch, setShowSearch] = useState(false);
 	const [searchQuery, setSearchQuery] = useState('');
+
+	useEffect(() => {
+		// Check if user is logged in
+		checkAuthStatus();
+	}, []);
+
+	const checkAuthStatus = async () => {
+		try {
+			const response = await fetch('/api/user/profile');
+			setIsLoggedIn(response.ok);
+		} catch (error) {
+			setIsLoggedIn(false);
+		}
+	};
 
 	const handleClick = () => {
 		setIsHidden(!isHidden);
@@ -33,6 +50,14 @@ export const Navbar = () => {
 			// Here you would typically navigate to search results
 			alert(`Searching for: ${searchQuery}`);
 			// router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+		}
+	};
+
+	const handleAccountClick = () => {
+		if (isLoggedIn) {
+			setShowAccountPanel(true);
+		} else {
+			window.location.href = '/login';
 		}
 	};
 
@@ -67,9 +92,9 @@ export const Navbar = () => {
 					</Link>
 
 					<div className={styles.rightSection}>
-						<Link href="/account" className={styles.iconLink}>
+						<div className={styles.iconLink} onClick={handleAccountClick} style={{ cursor: 'pointer' }}>
 							<UserIcon width={20} height={20} />
-						</Link>
+						</div>
 						<Link href="/cart" className={styles.iconLink}>
 							<div className={styles.cartIconWrapper}>
 								<CartIcon width={20} height={20} />
@@ -125,6 +150,7 @@ export const Navbar = () => {
 				</div>
 			</nav>
 			{isHidden ? null : <SideNav></SideNav>}
+			<AccountPanel isOpen={showAccountPanel} onClose={() => setShowAccountPanel(false)} />
 		</div>
 	);
 };

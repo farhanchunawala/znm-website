@@ -21,10 +21,14 @@ const OrderSchema = new mongoose.Schema(
             address: String,
             city: String,
             state: String,
+            country: String,
             zipCode: String,
             phone: String,
         },
         total: Number,
+        paymentStatus: { type: String, enum: ['prepaid', 'unpaid'], default: 'unpaid' },
+        archived: { type: Boolean, default: false },
+        archivedAt: Date,
     },
     { timestamps: true }
 );

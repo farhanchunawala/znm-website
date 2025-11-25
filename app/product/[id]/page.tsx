@@ -27,10 +27,12 @@ export default function Product({ params }: Props) {
 
 	const dispatch = useAppDispatch();
 	const [selectedSize, setSelectedSize] = useState('');
+	const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
 	const handleAddToCart = () => {
 		if (!selectedSize) {
-			alert('Please select a size');
+			setFeedback({ type: 'error', message: 'Please select a size' });
+			setTimeout(() => setFeedback(null), 3000);
 			return;
 		}
 
@@ -44,7 +46,8 @@ export default function Product({ params }: Props) {
 				image: productData.images[0],
 			})
 		);
-		alert('Added to cart!');
+		setFeedback({ type: 'success', message: 'Added to cart!' });
+		setTimeout(() => setFeedback(null), 3000);
 		setSelectedSize(''); // Reset size selection
 	};
 
@@ -162,6 +165,11 @@ export default function Product({ params }: Props) {
 							</svg>
 							<p className={`${styles.txt}`}>ADD TO CART</p>
 						</div>
+						{feedback && (
+							<div className={`${styles.feedback} ${styles[feedback.type]}`}>
+								{feedback.message}
+							</div>
+						)}
 						<div className={`${styles.dnf}`}>
 							<div className={`${styles.collapse}`}>
 								<p className={`${styles.txt_dnf}`}>

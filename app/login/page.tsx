@@ -1,12 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './login.module.scss';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function LoginPage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState('');
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -18,13 +21,40 @@ export default function LoginPage() {
             ...prev,
             [name]: value,
         }));
+        // Clear error when user starts typing
+        if (error) setError('');
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Here you would typically authenticate the user
-        alert('Login functionality coming soon!');
-        // router.push('/account');
+        setError('');
+
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Redirect to specified URL or home page
+                const redirect = searchParams.get('redirect') || '/';
+                router.push(redirect);
+            } else {
+                if (response.status === 401) {
+                    setError('Wrong password or email');
+                } else {
+                    setError(data.error || 'Login failed');
+                }
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            setError('An error occurred during login');
+        }
     };
 
     return (
@@ -32,6 +62,8 @@ export default function LoginPage() {
             <div className={styles.loginContainer}>
                 <h1>LOGIN</h1>
                 <p className={styles.subtitle}>Welcome back to Zoll & Metér</p>
+
+                {error && <div className={styles.errorMessage}>{error}</div>}
 
                 <form onSubmit={handleSubmit}>
                     <div className={styles.formGroup}>
@@ -48,14 +80,23 @@ export default function LoginPage() {
 
                     <div className={styles.formGroup}>
                         <label htmlFor="password">Password</label>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                        />
+                        <div className={styles.passwordField}>
+                            <input
+                                type={showPassword ? 'text' : 'password'}
+                                id="password"
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                required
+                            />
+                            <button
+                                type="button"
+                                className={styles.togglePassword}
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? '👁️' : '👁️‍🗨️'}
+                            </button>
+                        </div>
                     </div>
 
                     <div className={styles.forgotPassword}>
@@ -70,7 +111,7 @@ export default function LoginPage() {
                 <div className={styles.divider}>OR</div>
 
                 <div className={styles.register}>
-                    Don't have an account? <Link href="/register">Create one</Link>
+                    Don't have an account? <Link href="/signup">Create one</Link>
                 </div>
             </div>
         </div>
