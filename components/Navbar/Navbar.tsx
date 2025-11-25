@@ -104,9 +104,9 @@ export const Navbar = () => {
 					<Link className={`${styles.link}`} href="/collections/new-in">
 						NEW IN
 					</Link>
-					<Link className={`${styles.link}`} href="/collections/late-checkout">
+					{/* <Link className={`${styles.link}`} href="/collections/late-checkout">
 						LATE CHECKOUT AT THE FRED
-					</Link>
+					</Link> */}
 					<Link className={`${styles.link}`} href="/collections/kurtas">
 						KURTA
 					</Link>

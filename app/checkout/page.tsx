@@ -32,13 +32,26 @@ export default function CheckoutPage() {
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Here you would typically process the order
-        alert('Order placed successfully! (This is a demo)');
-        // Optionally clear cart and redirect
-        // dispatch(clearCart());
-        // router.push('/order-confirmation');
+        try {
+            const response = await fetch('/api/orders/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ formData, cartItems, total }),
+            });
+            const data = await response.json();
+            if (response.ok && data.emailSent) {
+                window.alert('Order placed successfully! Check your email for details.');
+                // TODO: clear cart if needed (dispatch clearCart)
+                // router.push('/order-confirmation');
+            } else {
+                window.alert('Failed to place order. Please try again.');
+            }
+        } catch (err) {
+            console.error('Error placing order:', err);
+            window.alert('An error occurred while placing the order.');
+        }
     };
 
     if (cartItems.length === 0) {
