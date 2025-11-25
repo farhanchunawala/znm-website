@@ -39,7 +39,21 @@ export async function POST(request: NextRequest) {
         }
 
         // Look for customer with matching phone
-        const customer = await Customer.findOne({ phone: user.phone });
+        let customer = await Customer.findOne({ phone: user.phone });
+
+        if (!customer) {
+            // Try matching last 10 digits if phone is long enough (to handle country code differences)
+            // Remove non-digits/characters to get clean number
+            const cleanPhone = user.phone.replace(/\D/g, '');
+
+            if (cleanPhone.length >= 10) {
+                const last10 = cleanPhone.slice(-10);
+                // Search for phone ending with these 10 digits
+                customer = await Customer.findOne({
+                    phone: { $regex: new RegExp(`${last10}$`) }
+                });
+            }
+        }
 
         if (!customer) {
             return NextResponse.json(

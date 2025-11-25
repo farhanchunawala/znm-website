@@ -19,6 +19,13 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        if (password.length < 8) {
+            return NextResponse.json(
+                { error: 'Password must be at least 8 characters long' },
+                { status: 400 }
+            );
+        }
+
         // Connect to database
         await dbConnect();
 

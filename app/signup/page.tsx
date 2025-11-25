@@ -45,6 +45,12 @@ export default function SignupPage() {
         e.preventDefault();
         setError('');
 
+        // Validate password length
+        if (formData.password.length < 8) {
+            setError('Password must be at least 8 characters long');
+            return;
+        }
+
         // Validate passwords match
         if (formData.password !== formData.confirmPassword) {
             setError('Passwords do not match');

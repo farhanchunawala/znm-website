@@ -1,12 +1,51 @@
+'use client';
+
 import React from 'react';
 import styles from './NewsLetter.module.scss';
 // import Link from 'next/link';
 
 const NewsLetter = () => {
+	const [email, setEmail] = React.useState('');
+	const [status, setStatus] = React.useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+	const [message, setMessage] = React.useState('');
+
+	const handleSubmit = async (e: React.FormEvent) => {
+		e.preventDefault();
+		if (!email) return;
+
+		setStatus('loading');
+		try {
+			const response = await fetch('/api/newsletter/subscribe', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ email }),
+			});
+			const data = await response.json();
+
+			if (response.ok) {
+				setStatus('success');
+				setMessage(data.message);
+				setEmail('');
+			} else {
+				setStatus('error');
+				setMessage(data.error || 'Subscription failed');
+			}
+		} catch (error) {
+			setStatus('error');
+			setMessage('An error occurred. Please try again.');
+		}
+
+		// Clear message after 3 seconds
+		setTimeout(() => {
+			setStatus('idle');
+			setMessage('');
+		}, 3000);
+	};
+
 	return (
-		<div className={`${styles.main}`}>
-			<div className={`${styles.box}`}>
-				<p className={`${styles.location}`}>
+		<div className={`${styles.main} `}>
+			<div className={`${styles.box} `}>
+				<p className={`${styles.location} `}>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="548"
@@ -23,9 +62,9 @@ const NewsLetter = () => {
 					400102
 				</p>
 				<hr />
-				<div className={`${styles.social}`}>
+				<div className={`${styles.social} `}>
 					<a
-						className={`${styles.app}`}
+						className={`${styles.app} `}
 						href="https://www.instagram.com/zollandmeter/?ref=app"
 						target="_blank"
 					>
@@ -43,7 +82,7 @@ const NewsLetter = () => {
 						</svg>
 					</a>
 					<a
-						className={`${styles.app}`}
+						className={`${styles.app} `}
 						href="https://wa.me/919769735377?text=Hi"
 						target="_blank"
 					>
@@ -65,7 +104,7 @@ const NewsLetter = () => {
 						</svg>
 					</a>
 					<a
-						className={`${styles.app}`}
+						className={`${styles.app} `}
 						href="tel:+917718819099"
 						target="_blank"
 					>
@@ -87,7 +126,7 @@ const NewsLetter = () => {
 						</svg>
 					</a>
 					<a
-						className={`${styles.app}`}
+						className={`${styles.app} `}
 						href="mailto:zollandmeter@gmail.com"
 						target="_blank"
 					>
@@ -111,11 +150,28 @@ const NewsLetter = () => {
 						</svg>
 					</a>
 				</div>
-				{/* <h2>Sign up to our Whatsapp</h2>
-			<div className={`${styles.form}`}>
-				<input type="tel" maxLength="10" id="number" placeholder="Enter phone number" min="10" max="10"/>
-				<button type="button" onClick="myFunction()">SUBSCRIBE</button>
-			</div> */}
+
+				<div className={styles.newsletter}>
+					<h2>Subscribe to our Newsletter</h2>
+					<form className={styles.form} onSubmit={handleSubmit}>
+						<input
+							type="email"
+							placeholder="Enter your email"
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
+							required
+							disabled={status === 'loading'}
+						/>
+						<button type="submit" disabled={status === 'loading'}>
+							{status === 'loading' ? '...' : 'SUBSCRIBE'}
+						</button>
+					</form>
+					{message && (
+						<p className={`${styles.message} ${styles[status]} `}>
+							{message}
+						</p>
+					)}
+				</div>
 			</div>
 		</div>
 	);

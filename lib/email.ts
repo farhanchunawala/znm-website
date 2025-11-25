@@ -69,3 +69,41 @@ export const sendWelcomeEmail = async (email: string, name: string) => {
 
     return sendEmail({ to: email, subject, text, html });
 };
+
+export const sendNewsletterAdminNotification = async (subscriberEmail: string) => {
+    const adminEmail = process.env.ADMIN_EMAIL || process.env.SMTP_USER || 'admin@zollandmeter.com';
+    const subject = 'New Newsletter Subscription';
+    const text = `A new user has subscribed to the newsletter: ${subscriberEmail}`;
+    const html = `
+        <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee;">
+            <h2>New Newsletter Subscriber</h2>
+            <p><strong>Email:</strong> ${subscriberEmail}</p>
+            <p><strong>Time:</strong> ${new Date().toLocaleString()}</p>
+        </div>
+    `;
+
+    return sendEmail({ to: adminEmail, subject, text, html });
+};
+
+export const sendNewsletterUserThankYou = async (email: string) => {
+    const subject = 'Thank you for subscribing to Zoll & Metér';
+    const text = `Thank you for subscribing to our newsletter. We'll keep you updated with our latest collections and offers.`;
+    const html = `
+        <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto;">
+            <h1 style="color: #000;">Welcome to our Newsletter</h1>
+            <p>Thank you for subscribing to Zoll & Metér updates.</p>
+            <p>You'll be the first to know about our:</p>
+            <ul>
+                <li>New Collection Launches</li>
+                <li>Exclusive Offers</li>
+                <li>Style Guides</li>
+            </ul>
+            <div style="margin: 30px 0;">
+                <a href="${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}" style="background-color: #000; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 4px;">Visit Store</a>
+            </div>
+            <p>Best Regards,<br>The Zoll & Metér Team</p>
+        </div>
+    `;
+
+    return sendEmail({ to: email, subject, text, html });
+};

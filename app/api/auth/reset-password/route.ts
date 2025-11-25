@@ -18,6 +18,13 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        if (newPassword.length < 8) {
+            return NextResponse.json(
+                { error: 'Password must be at least 8 characters long' },
+                { status: 400 }
+            );
+        }
+
         // Verify reset code
         const storedData = resetCodes.get(email);
 

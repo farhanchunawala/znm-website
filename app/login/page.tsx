@@ -29,6 +29,12 @@ export default function LoginPage() {
         e.preventDefault();
         setError('');
 
+        // Validate password length
+        if (formData.password.length < 8) {
+            setError('Password must be at least 8 characters long');
+            return;
+        }
+
         try {
             const response = await fetch('/api/auth/login', {
                 method: 'POST',
