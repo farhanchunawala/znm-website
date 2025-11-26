@@ -27,6 +27,18 @@ const OrderSchema = new mongoose.Schema(
         },
         total: Number,
         paymentStatus: { type: String, enum: ['prepaid', 'unpaid'], default: 'unpaid' },
+        status: {
+            type: String,
+            enum: ['pending', 'fulfilled', 'shipped', 'logistics', 'delivered'],
+            default: 'pending'
+        },
+        fulfilledAt: Date,
+        shippedAt: Date,
+        logisticsAt: Date,
+        deliveredAt: Date,
+        invoiceNumber: String,
+        notes: String,
+        groups: [{ type: Schema.Types.ObjectId, ref: 'Group' }],
         archived: { type: Boolean, default: false },
         archivedAt: Date,
     },

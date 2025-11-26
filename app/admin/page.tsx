@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { UsersIcon, ShoppingBagIcon, CurrencyDollarIcon, ClockIcon, ChartBarIcon } from '@heroicons/react/24/outline';
 import styles from './dashboard.module.scss';
 
 interface DashboardStats {
@@ -41,7 +42,9 @@ export default function AdminDashboard() {
 
             <div className={styles.statsGrid}>
                 <div className={styles.statCard}>
-                    <div className={styles.statIcon}>👥</div>
+                    <div className={styles.statIcon}>
+                        <UsersIcon />
+                    </div>
                     <div className={styles.statInfo}>
                         <h3>Total Customers</h3>
                         <p className={styles.statValue}>{loading ? '...' : stats.totalCustomers}</p>
@@ -49,7 +52,9 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className={styles.statCard}>
-                    <div className={styles.statIcon}>📦</div>
+                    <div className={styles.statIcon}>
+                        <ShoppingBagIcon />
+                    </div>
                     <div className={styles.statInfo}>
                         <h3>Total Orders</h3>
                         <p className={styles.statValue}>{loading ? '...' : stats.totalOrders}</p>
@@ -57,7 +62,9 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className={styles.statCard}>
-                    <div className={styles.statIcon}>💰</div>
+                    <div className={styles.statIcon}>
+                        <CurrencyDollarIcon />
+                    </div>
                     <div className={styles.statInfo}>
                         <h3>Total Revenue</h3>
                         <p className={styles.statValue}>₹{loading ? '...' : stats.totalRevenue.toLocaleString()}</p>
@@ -65,7 +72,9 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className={styles.statCard}>
-                    <div className={styles.statIcon}>⏳</div>
+                    <div className={styles.statIcon}>
+                        <ClockIcon />
+                    </div>
                     <div className={styles.statInfo}>
                         <h3>Unpaid Orders</h3>
                         <p className={styles.statValue}>{loading ? '...' : stats.pendingOrders}</p>
@@ -77,13 +86,13 @@ export default function AdminDashboard() {
                 <h2>Quick Actions</h2>
                 <div className={styles.actionButtons}>
                     <a href="/admin/customers" className={styles.actionBtn}>
-                        <span>👥</span> Manage Customers
+                        <UsersIcon /> Manage Customers
                     </a>
                     <a href="/admin/orders" className={styles.actionBtn}>
-                        <span>📦</span> Manage Orders
+                        <ShoppingBagIcon /> Manage Orders
                     </a>
                     <a href="/admin/analytics" className={styles.actionBtn}>
-                        <span>📈</span> View Analytics
+                        <ChartBarIcon /> View Analytics
                     </a>
                 </div>
             </div>

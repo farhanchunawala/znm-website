@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { PlusIcon } from '@heroicons/react/24/outline';
 import styles from './customers.module.scss';
 
 interface Customer {
@@ -9,6 +10,7 @@ interface Customer {
     customerId: string;
     firstName: string;
     lastName: string;
+    email?: string;
     emails: string[];
     phone: string;
     phoneCode: string;
@@ -29,6 +31,7 @@ export default function CustomersPage() {
     const [showArchived, setShowArchived] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortBy, setSortBy] = useState('latest');
+    const [selectedCustomers, setSelectedCustomers] = useState<string[]>([]);
 
     useEffect(() => {
         fetchCustomers();
@@ -43,6 +46,39 @@ export default function CustomersPage() {
             console.error('Failed to fetch customers:', error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const toggleSelectAll = () => {
+        if (selectedCustomers.length === filteredCustomers.length) {
+            setSelectedCustomers([]);
+        } else {
+            setSelectedCustomers(filteredCustomers.map(c => c._id));
+        }
+    };
+
+    const toggleSelect = (id: string) => {
+        setSelectedCustomers(prev =>
+            prev.includes(id) ? prev.filter(cid => cid !== id) : [...prev, id]
+        );
+    };
+
+    const handleBulkAction = async (action: string) => {
+        if (selectedCustomers.length === 0) return;
+
+        try {
+            const res = await fetch('/api/admin/customers/bulk', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ids: selectedCustomers, action }),
+            });
+
+            if (res.ok) {
+                setSelectedCustomers([]);
+                fetchCustomers();
+            }
+        } catch (error) {
+            console.error('Bulk operation failed:', error);
         }
     };
 
@@ -70,12 +106,12 @@ export default function CustomersPage() {
         }
     };
 
-    const exportToCSV = () => {
+    const handleExportCSV = () => {
         const headers = ['Customer ID', 'Name', 'Email', 'Phone', 'City', 'Total Orders', 'Total Spent'];
         const rows = filteredCustomers.map(c => [
             c.customerId,
             `${c.firstName} ${c.lastName}`,
-            c.emails[0] || '',
+            c.email || c.emails[0] || '',
             `${c.phoneCode}${c.phone}`,
             c.city,
             c.orderCount || 0,
@@ -105,13 +141,20 @@ export default function CustomersPage() {
     return (
         <div className={styles.customersPage}>
             <div className={styles.header}>
-                <h1>Customer Management</h1>
+                <h1>Customers</h1>
                 <div className={styles.actions}>
-                    <button onClick={exportToCSV} className={styles.exportBtn}>
-                        📥 Export CSV
+                    <Link href="/admin/customers/new" className={styles.addBtn}>
+                        <PlusIcon />
+                        Add Customer
+                    </Link>
+                    <Link href="/admin/customers/import" className={styles.exportBtn}>
+                        Import CSV
+                    </Link>
+                    <button onClick={handleExportCSV} className={styles.exportBtn}>
+                        Export CSV
                     </button>
                     <button onClick={() => setShowArchived(!showArchived)} className={styles.archiveBtn}>
-                        {showArchived ? '📋 Show Active' : '📁 Show Archived'}
+                        {showArchived ? 'Show Active' : 'Show Archived'}
                     </button>
                 </div>
             </div>
@@ -137,6 +180,18 @@ export default function CustomersPage() {
                 </select>
             </div>
 
+            {selectedCustomers.length > 0 && (
+                <div className={styles.bulkActions}>
+                    <span>{selectedCustomers.length} selected</span>
+                    <button onClick={() => handleBulkAction('delete')} className={styles.bulkBtn}>
+                        Delete
+                    </button>
+                    <button onClick={() => handleBulkAction('archive')} className={styles.bulkBtn}>
+                        Archive
+                    </button>
+                </div>
+            )}
+
             {loading ? (
                 <div className={styles.loading}>Loading customers...</div>
             ) : (
@@ -149,6 +204,13 @@ export default function CustomersPage() {
                         <table className={styles.table}>
                             <thead>
                                 <tr>
+                                    <th>
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedCustomers.length === filteredCustomers.length && filteredCustomers.length > 0}
+                                            onChange={toggleSelectAll}
+                                        />
+                                    </th>
                                     <th>Customer ID</th>
                                     <th>Name</th>
                                     <th>Email</th>
@@ -162,6 +224,13 @@ export default function CustomersPage() {
                             <tbody>
                                 {filteredCustomers.map((customer) => (
                                     <tr key={customer._id}>
+                                        <td>
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedCustomers.includes(customer._id)}
+                                                onChange={() => toggleSelect(customer._id)}
+                                            />
+                                        </td>
                                         <td className={styles.customerId}>
                                             <Link href={`/admin/customers/${customer._id}`} className={styles.link}>
                                                 {customer.customerId}
@@ -172,7 +241,7 @@ export default function CustomersPage() {
                                                 {customer.firstName} {customer.lastName}
                                             </Link>
                                         </td>
-                                        <td>{customer.emails?.[0] || 'N/A'}</td>
+                                        <td>{customer.email || customer.emails?.[0] || 'N/A'}</td>
                                         <td>{customer.phoneCode}{customer.phone}</td>
                                         <td>{customer.city}, {customer.state}</td>
                                         <td className={styles.centered}>{customer.orderCount || 0}</td>

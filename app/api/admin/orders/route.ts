@@ -15,14 +15,15 @@ export async function GET(request: NextRequest) {
 
         let orders = await Order.find(query).lean();
 
-        // Get customer names
+        // Get customer names and internal IDs
         const ordersWithCustomerNames = await Promise.all(
             orders.map(async (order) => {
                 const customer = await Customer.findOne({ customerId: order.customerId });
                 return {
                     ...order,
                     customerName: customer ? `${customer.firstName} ${customer.lastName}` : null,
-                };
+                    customer_internal_id: customer?._id?.toString() || null,
+                } as typeof order & { customerName: string | null; customer_internal_id: string | null };
             })
         );
 

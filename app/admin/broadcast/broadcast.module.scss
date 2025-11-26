@@ -1,0 +1,332 @@
+.broadcastPage {
+    h1 {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 600;
+        color: #000000;
+        letter-spacing: -0.5px;
+    }
+
+    h2 {
+        margin: 0 0 20px 0;
+        font-size: 16px;
+        font-weight: 600;
+        color: #212121;
+    }
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+
+    .stats {
+        display: flex;
+        gap: 24px;
+    }
+
+    .statItem {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background: #f5f5f5;
+        border-radius: 6px;
+        border: 1px solid #e0e0e0;
+
+        svg {
+            width: 18px;
+            height: 18px;
+            color: #616161;
+        }
+
+        span {
+            font-size: 14px;
+            font-weight: 500;
+            color: #424242;
+        }
+    }
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+
+    @media (max-width: 1024px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.composer,
+.subscribersList {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 24px;
+}
+
+.formGroup {
+    margin-bottom: 20px;
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #424242;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .input,
+    .textarea {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        font-size: 14px;
+        font-family: inherit;
+        background: #ffffff;
+        color: #212121;
+        transition: all 0.2s;
+
+        &::placeholder {
+            color: #9e9e9e;
+        }
+
+        &:focus {
+            outline: none;
+            border-color: #757575;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+        }
+    }
+
+    .textarea {
+        resize: vertical;
+        min-height: 200px;
+        line-height: 1.6;
+    }
+}
+
+.status {
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    font-weight: 500;
+
+    &.success {
+        background: #f5f5f5;
+        color: #000000;
+        border: 1px solid #000000;
+    }
+
+    &.error {
+        background: #ffffff;
+        color: #d32f2f;
+        border: 1px solid #d32f2f;
+    }
+}
+
+.actions {
+    display: flex;
+    gap: 12px;
+}
+
+.testBtn,
+.sendBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.testBtn {
+    background: #ffffff;
+    color: #616161;
+
+    &:hover:not(:disabled) {
+        background: #f5f5f5;
+        border-color: #bdbdbd;
+    }
+}
+
+.sendBtn {
+    background: #000000;
+    color: #ffffff;
+    border-color: #000000;
+
+    &:hover:not(:disabled) {
+        background: #212121;
+    }
+
+    &:active:not(:disabled) {
+        background: #424242;
+    }
+}
+
+.subscribersList {
+    .list {
+        max-height: 600px;
+        overflow-y: auto;
+    }
+
+    .subscriberItem {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        border-bottom: 1px solid #f5f5f5;
+        transition: background-color 0.15s;
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        &:hover {
+            background-color: #fafafa;
+        }
+
+        >svg {
+            width: 18px;
+            height: 18px;
+            color: #9e9e9e;
+            flex-shrink: 0;
+        }
+
+        .subscriberInfo {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+
+            .email {
+                font-size: 14px;
+                color: #212121;
+                font-weight: 500;
+            }
+
+            .date {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                font-size: 12px;
+                color: #757575;
+
+                svg {
+                    width: 12px;
+                    height: 12px;
+                }
+            }
+        }
+    }
+}
+
+.loading,
+.empty {
+    text-align: center;
+    padding: 40px;
+    color: #9e9e9e;
+    font-size: 14px;
+}
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 32px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+
+    h3 {
+        margin: 0 0 16px 0;
+        font-size: 20px;
+        font-weight: 600;
+        color: #000000;
+    }
+
+    p {
+        margin: 0 0 24px 0;
+        font-size: 14px;
+        color: #424242;
+        line-height: 1.6;
+
+        strong {
+            color: #000000;
+            font-weight: 600;
+        }
+    }
+
+    .modalActions {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+    }
+
+    .cancelBtn,
+    .confirmBtn {
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    }
+
+    .cancelBtn {
+        background: #ffffff;
+        color: #616161;
+        border: 1px solid #e0e0e0;
+
+        &:hover:not(:disabled) {
+            background: #f5f5f5;
+            border-color: #bdbdbd;
+        }
+    }
+
+    .confirmBtn {
+        background: #000000;
+        color: #ffffff;
+        border: 1px solid #000000;
+
+        &:hover:not(:disabled) {
+            background: #212121;
+        }
+    }
+}

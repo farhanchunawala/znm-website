@@ -123,35 +123,35 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
                     <div className={styles.infoRow}>
                         <span className={styles.label}>Name:</span>
                         <Link href={`/admin/customers/${order.customerId}`} className={styles.link}>
-                            {order.shippingInfo.firstName} {order.shippingInfo.lastName}
+                            {order.shippingInfo?.firstName || 'N/A'} {order.shippingInfo?.lastName || ''}
                         </Link>
                     </div>
                     <div className={styles.infoRow}>
                         <span className={styles.label}>Email:</span>
-                        <a href={`mailto:${order.shippingInfo.email}`} className={styles.link}>
-                            {order.shippingInfo.email}
+                        <a href={`mailto:${order.shippingInfo?.email || ''}`} className={styles.link}>
+                            {order.shippingInfo?.email || 'N/A'}
                         </a>
                     </div>
                     <div className={styles.infoRow}>
                         <span className={styles.label}>Phone:</span>
-                        <a href={`tel:${order.shippingInfo.phone}`} className={styles.link}>
-                            {order.shippingInfo.phone}
+                        <a href={`tel:${order.shippingInfo?.phone || ''}`} className={styles.link}>
+                            {order.shippingInfo?.phone || 'N/A'}
                         </a>
                     </div>
 
                     <h3 className={styles.subHeader}>Shipping Address</h3>
                     <div className={styles.address}>
-                        {order.shippingInfo.address}<br />
-                        {order.shippingInfo.city}, {order.shippingInfo.state}<br />
-                        {order.shippingInfo.country} - {order.shippingInfo.zipCode}
+                        {order.shippingInfo?.address || 'N/A'}<br />
+                        {order.shippingInfo?.city || 'N/A'}, {order.shippingInfo?.state || 'N/A'}<br />
+                        {order.shippingInfo?.country || 'N/A'} - {order.shippingInfo?.zipCode || 'N/A'}
                     </div>
                 </div>
 
                 {/* Order Items */}
                 <div className={styles.card}>
-                    <h3>Order Items ({order.items.length})</h3>
+                    <h3>Order Items ({order.items?.length || 0})</h3>
                     <div className={styles.itemsList}>
-                        {order.items.map((item, index) => (
+                        {order.items?.map((item, index) => (
                             <div key={index} className={styles.itemRow}>
                                 <div className={styles.itemInfo}>
                                     <span className={styles.itemName}>{item.title}</span>
@@ -161,13 +161,13 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
                                     ₹{(item.price * item.quantity).toLocaleString()}
                                 </div>
                             </div>
-                        ))}
+                        )) || <div className={styles.noItems}>No items in this order</div>}
                     </div>
 
                     <div className={styles.summary}>
                         <div className={styles.summaryRow}>
                             <span>Subtotal</span>
-                            <span>₹{order.total.toLocaleString()}</span>
+                            <span>₹{order.total?.toLocaleString() || '0'}</span>
                         </div>
                         <div className={styles.summaryRow}>
                             <span>Shipping</span>
@@ -175,7 +175,7 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
                         </div>
                         <div className={`${styles.summaryRow} ${styles.total}`}>
                             <span>Total</span>
-                            <span>₹{order.total.toLocaleString()}</span>
+                            <span>₹{order.total?.toLocaleString() || '0'}</span>
                         </div>
                     </div>
                 </div>

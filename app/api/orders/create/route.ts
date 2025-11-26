@@ -57,6 +57,7 @@ export async function POST(request: NextRequest) {
                     state: formData.state,
                     country: formData.country,
                     zipCode: formData.zipCode,
+                    email: formData.email, // set primary email
                 }
             };
 
@@ -84,6 +85,7 @@ export async function POST(request: NextRequest) {
             console.log('Creating new customer with email:', formData.email);
             const newCustomer = new Customer({
                 customerId,
+                email: formData.email, // primary email
                 emails: [formData.email],
                 phoneCode: formData.phoneCode,
                 phone: fullPhoneNumber,

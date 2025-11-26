@@ -45,7 +45,7 @@ const NewsLetter = () => {
 	return (
 		<div className={`${styles.main} `}>
 			<div className={`${styles.box} `}>
-				<p className={`${styles.location} `}>
+				{/* <p className={`${styles.location} `}>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="548"
@@ -60,9 +60,9 @@ const NewsLetter = () => {
 					</svg>
 					Shop no. 10, Abba Apartment, Jogeshwari West, Mumbai -
 					400102
-				</p>
+				</p> */}
 				<hr />
-				<div className={`${styles.social} `}>
+				{/* <div className={`${styles.social} `}>
 					<a
 						className={`${styles.app} `}
 						href="https://www.instagram.com/zollandmeter/?ref=app"
@@ -149,7 +149,7 @@ const NewsLetter = () => {
 							/>
 						</svg>
 					</a>
-				</div>
+				</div> */}
 
 				<div className={styles.newsletter}>
 					<h2>Subscribe to our Newsletter</h2>

@@ -9,6 +9,7 @@ interface Customer {
     customerId: string;
     firstName: string;
     lastName: string;
+    email?: string;
     emails: string[];
     phone: string;
     phoneCode: string;
@@ -90,7 +91,7 @@ export default function CustomerDetailPage({ params }: { params: { id: string } 
                     <h3>Contact Information</h3>
                     <div className={styles.infoRow}>
                         <span className={styles.label}>Email:</span>
-                        <span>{customer.emails?.join(', ') || 'N/A'}</span>
+                        <span>{customer.email || customer.emails?.join(', ') || 'N/A'}</span>
                     </div>
                     <div className={styles.infoRow}>
                         <span className={styles.label}>Phone:</span>

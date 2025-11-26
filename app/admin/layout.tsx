@@ -2,6 +2,7 @@
 
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { HomeIcon, UsersIcon, ShoppingBagIcon, ChartBarIcon, ArrowLeftOnRectangleIcon, MegaphoneIcon, TruckIcon, TagIcon } from '@heroicons/react/24/outline';
 import styles from './admin-layout.module.scss';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -14,10 +15,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     };
 
     const navItems = [
-        { href: '/admin', label: 'Dashboard', icon: '📊' },
-        { href: '/admin/customers', label: 'Customers', icon: '👥' },
-        { href: '/admin/orders', label: 'Orders', icon: '📦' },
-        { href: '/admin/analytics', label: 'Analytics', icon: '📈' },
+        { href: '/admin', label: 'Dashboard', icon: HomeIcon },
+        { href: '/admin/customers', label: 'Customers', icon: UsersIcon },
+        { href: '/admin/orders', label: 'Orders', icon: ShoppingBagIcon },
+        { href: '/admin/shipments', label: 'Shipments', icon: TruckIcon },
+        { href: '/admin/groups', label: 'Groups', icon: TagIcon },
+        { href: '/admin/broadcast', label: 'Broadcast', icon: MegaphoneIcon },
+        { href: '/admin/analytics', label: 'Analytics', icon: ChartBarIcon },
     ];
 
     return (
@@ -28,20 +32,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 </div>
 
                 <nav className={styles.nav}>
-                    {navItems.map((item) => (
-                        <Link
-                            key={item.href}
-                            href={item.href}
-                            className={`${styles.navItem} ${pathname === item.href ? styles.active : ''}`}
-                        >
-                            <span className={styles.icon}>{item.icon}</span>
-                            <span>{item.label}</span>
-                        </Link>
-                    ))}
+                    {navItems.map((item) => {
+                        const Icon = item.icon;
+                        return (
+                            <Link
+                                key={item.href}
+                                href={item.href}
+                                className={`${styles.navItem} ${pathname === item.href ? styles.active : ''}`}
+                            >
+                                <Icon className={styles.icon} />
+                                <span>{item.label}</span>
+                            </Link>
+                        );
+                    })}
                 </nav>
 
                 <button onClick={handleLogout} className={styles.logoutBtn}>
-                    <span className={styles.icon}>🚪</span>
+                    <ArrowLeftOnRectangleIcon className={styles.icon} />
                     <span>Logout</span>
                 </button>
             </aside>

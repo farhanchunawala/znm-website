@@ -107,3 +107,170 @@ export const sendNewsletterUserThankYou = async (email: string) => {
 
     return sendEmail({ to: email, subject, text, html });
 };
+
+export const sendBroadcastEmail = async (emails: string[], subject: string, message: string) => {
+    try {
+        // Send emails in batches to avoid overwhelming the SMTP server
+        const batchSize = 50;
+        const results = [];
+
+        for (let i = 0; i < emails.length; i += batchSize) {
+            const batch = emails.slice(i, i + batchSize);
+
+            // Send to each email in the batch
+            const batchPromises = batch.map(email => {
+                const html = `
+                    <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto;">
+                        <div style="padding: 20px; border-bottom: 2px solid #000;">
+                            <h1 style="color: #000; margin: 0;">Zoll & Metér</h1>
+                        </div>
+                        <div style="padding: 30px 20px;">
+                            ${message.replace(/\n/g, '<br>')}
+                        </div>
+                        <div style="padding: 20px; border-top: 1px solid #eee; color: #666; font-size: 12px;">
+                            <p>You're receiving this email because you subscribed to our newsletter.</p>
+                            <p>Zoll & Metér | ${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}</p>
+                        </div>
+                    </div>
+                `;
+
+                return sendEmail({
+                    to: email,
+                    subject,
+                    text: message,
+                    html,
+                });
+            });
+
+            const batchResults = await Promise.allSettled(batchPromises);
+            results.push(...batchResults);
+
+            // Add a small delay between batches to avoid rate limiting
+            if (i + batchSize < emails.length) {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+        }
+
+        const successful = results.filter(r => r.status === 'fulfilled').length;
+        const failed = results.filter(r => r.status === 'rejected').length;
+
+        console.log(`Broadcast sent: ${successful} successful, ${failed} failed out of ${emails.length} total`);
+
+        return {
+            success: true,
+            total: emails.length,
+            successful,
+            failed,
+        };
+    } catch (error) {
+        console.error('Error sending broadcast email:', error);
+        return { success: false, error };
+    }
+};
+
+export const sendOrderShippedEmail = async (orderDetails: any, trackingId?: string) => {
+    const { shippingInfo, orderId, items } = orderDetails;
+    const subject = `Your Order #${orderId} Has Been Shipped!`;
+    
+    const trackingInfo = trackingId 
+        ? `<p><strong>Tracking ID:</strong> ${trackingId}</p>`
+        : '<p>You will receive tracking information shortly.</p>';
+    
+    const html = `
+        <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto;">
+            <div style="padding: 20px; border-bottom: 2px solid #000;">
+                <h1 style="color: #000; margin: 0;">Zoll & Metér</h1>
+            </div>
+            <div style="padding: 30px 20px;">
+                <h2 style="color: #000;">Your Order Has Been Shipped!</h2>
+                <p>Dear ${shippingInfo.firstName},</p>
+                <p>Great news! Your order #${orderId} has been shipped and is on its way to you.</p>
+                ${trackingInfo}
+                <p>Your order will be delivered to:</p>
+                <div style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin: 20px 0;">
+                    <p style="margin: 5px 0;"><strong>${shippingInfo.firstName} ${shippingInfo.lastName}</strong></p>
+                    <p style="margin: 5px 0;">${shippingInfo.address}</p>
+                    <p style="margin: 5px 0;">${shippingInfo.city}, ${shippingInfo.state} ${shippingInfo.zipCode}</p>
+                    <p style="margin: 5px 0;">${shippingInfo.country}</p>
+                </div>
+            </div>
+            <div style="padding: 20px; border-top: 1px solid #eee; color: #666; font-size: 12px;">
+                <p>Thank you for shopping with Zoll & Metér</p>
+            </div>
+        </div>
+    `;
+    
+    return sendEmail({
+        to: shippingInfo.email,
+        subject,
+        text: `Your order #${orderId} has been shipped!`,
+        html,
+    });
+};
+
+export const sendTrackingAvailableEmail = async (orderDetails: any, trackingId: string, carrier?: string) => {
+    const { shippingInfo, orderId } = orderDetails;
+    const subject = `Track Your Order #${orderId}`;
+    
+    const carrierInfo = carrier ? `<p><strong>Carrier:</strong> ${carrier}</p>` : '';
+    
+    const html = `
+        <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto;">
+            <div style="padding: 20px; border-bottom: 2px solid #000;">
+                <h1 style="color: #000; margin: 0;">Zoll & Metér</h1>
+            </div>
+            <div style="padding: 30px 20px;">
+                <h2 style="color: #000;">Tracking Information Available</h2>
+                <p>Dear ${shippingInfo.firstName},</p>
+                <p>Your order #${orderId} is now trackable!</p>
+                <div style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin: 20px 0;">
+                    <p style="margin: 5px 0;"><strong>Tracking ID:</strong> ${trackingId}</p>
+                    ${carrierInfo}
+                </div>
+                <p>You can use this tracking number to monitor your shipment's progress.</p>
+            </div>
+            <div style="padding: 20px; border-top: 1px solid #eee; color: #666; font-size: 12px;">
+                <p>Thank you for shopping with Zoll & Metér</p>
+            </div>
+        </div>
+    `;
+    
+    return sendEmail({
+        to: shippingInfo.email,
+        subject,
+        text: `Track your order #${orderId} with tracking ID: ${trackingId}`,
+        html,
+    });
+};
+
+export const sendOrderDeliveredEmail = async (orderDetails: any) => {
+    const { shippingInfo, orderId } = orderDetails;
+    const subject = `Your Order #${orderId} Has Been Delivered`;
+    
+    const html = `
+        <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto;">
+            <div style="padding: 20px; border-bottom: 2px solid #000;">
+                <h1 style="color: #000; margin: 0;">Zoll & Metér</h1>
+            </div>
+            <div style="padding: 30px 20px;">
+                <h2 style="color: #000;">Order Delivered!</h2>
+                <p>Dear ${shippingInfo.firstName},</p>
+                <p>Your order #${orderId} has been successfully delivered!</p>
+                <p>We hope you love your purchase. If you have any questions or concerns, please don't hesitate to contact us.</p>
+                <div style="margin: 30px 0;">
+                    <a href="${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}" style="background-color: #000; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">Shop Again</a>
+                </div>
+            </div>
+            <div style="padding: 20px; border-top: 1px solid #eee; color: #666; font-size: 12px;">
+                <p>Thank you for shopping with Zoll & Metér</p>
+            </div>
+        </div>
+    `;
+    
+    return sendEmail({
+        to: shippingInfo.email,
+        subject,
+        text: `Your order #${orderId} has been delivered!`,
+        html,
+    });
+};

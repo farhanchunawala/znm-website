@@ -1,72 +1,87 @@
 @import 'mixins';
+
 // .homepage{
-	// padding: 8px;
-	.window{
-		width: calc(100vw - 48px);
-		overflow: hidden;
-		overflow-x: scroll;
-		margin: 0 24px;
-		position: relative;
-		height: calc((100vw) / 2);
+// padding: 8px;
+.window {
+	width: calc(100vw - 48px);
+	overflow: hidden;
+	overflow-x: scroll;
+	margin: 0 24px;
+	position: relative;
+	height: calc((100vw) / 2);
+}
+
+.box {
+	display: flex;
+	width: max-content;
+	position: absolute;
+}
+
+.img {
+	width: calc(100vw - 48px);
+	height: auto;
+	flex-grow: 1;
+	box-sizing: border-box;
+
+	// Carousel: Animation turned off for now;
+	transition: transform 1s ease;
+	animation-name: slide;
+	animation-duration: 30s;
+	animation-delay: 5s;
+	animation-iteration-count: infinite;
+}
+
+.window::-webkit-scrollbar {
+	width: 0.5em;
+	/* Set the width of the scrollbar */
+}
+
+.window::-webkit-scrollbar-thumb {
+	background-color: transparent;
+	/* Set the color of the thumb */
+}
+
+.window::-webkit-scrollbar-track {
+	background-color: transparent;
+	/* Set the color of the track */
+}
+
+@keyframes slide {
+	0% {
+		transform: translateX(0);
 	}
-	.box{
-		display: flex;
-		width: max-content;
-		position: absolute;
+
+	25% {
+		transform: translateX(-100%);
 	}
-	.img {
-		width: calc(100vw - 48px);
-		height: auto;
-		flex-grow: 1;
-		box-sizing: border-box;
-		
-		// Carousel: Animation turned off for now;
-		transition: transform 1s ease;
-		animation-name: slide;
-		animation-duration: 30s;
-		animation-delay: 5s;
-		animation-iteration-count: infinite;
+
+	50% {
+		transform: translateX(-200%);
 	}
-	.window::-webkit-scrollbar {
-		width: 0.5em; /* Set the width of the scrollbar */
+
+	75% {
+		transform: translateX(-300%);
 	}
-	.window::-webkit-scrollbar-thumb {
-		background-color: transparent; /* Set the color of the thumb */
+
+	100% {
+		transform: translateX(-400%);
 	}
-	.window::-webkit-scrollbar-track {
-		background-color: transparent; /* Set the color of the track */
-	}
-	@keyframes slide {
-		0% {
-			transform: translateX(0);
-		}
-		20% {
-			transform: translateX(-100%);
-		}
-		40% {
-			transform: translateX(-200%);
-		}
-		60% {
-			transform: translateX(-300%);
-		}
-		80% {
-			transform: translateX(-400%);
-		}
-		100% {
-			transform: translateX(-500%);
-		}
-	}
+}
+
 // }
 
 @media (min-width: $screen-sm) {
+
 	// .homepage {
-		// padding: 32px;
-		.window {
-			width: calc(100vw - 96px);
-			margin: 0 48px;
-		}
-		.img {
-			width: calc(100vw - 96px);
-		}
+	// padding: 32px;
+	.window {
+		width: calc(100vw - 96px);
+		margin: 0 48px;
+	}
+
+	.img {
+		width: calc(100vw - 96px);
+	}
+
 	// }
 }
