@@ -36,7 +36,8 @@ interface Order {
     }>;
     total: number;
     paymentStatus: 'prepaid' | 'unpaid';
-    status: 'pending' | 'fulfilled' | 'shipped' | 'logistics' | 'delivered';
+    status: 'pending' | 'fulfilled' | 'shipped' | 'outForDelivery' | 'delivered';
+    groups: string[];
     archived: boolean;
     createdAt: string;
     shippingInfo: {
@@ -45,13 +46,20 @@ interface Order {
         city: string;
         state: string;
     };
+    shipment?: {
+        _id: string;
+        shipmentId: string;
+        trackingId: string;
+        carrier: string;
+        status: string;
+    };
 }
 
 const STATUS_ICONS: Record<string, any> = {
     pending: PendingIcon,
     fulfilled: FulfilledIcon,
     shipped: ShippedIcon,
-    logistics: LogisticsIcon,
+    outForDelivery: LogisticsIcon,
     delivered: DeliveredIcon,
 };
 
@@ -59,7 +67,7 @@ const STATUS_COLORS: Record<string, string> = {
     pending: '#a3a3a3',
     fulfilled: '#525252',
     shipped: '#404040',
-    logistics: '#262626',
+    outForDelivery: '#262626',
     delivered: '#000',
 };
 
@@ -73,9 +81,12 @@ export default function OrdersPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [sortBy, setSortBy] = useState('latest');
     const [showBulkActions, setShowBulkActions] = useState(false);
+    const [groups, setGroups] = useState<any[]>([]);
+    const [selectedGroup, setSelectedGroup] = useState('');
 
     useEffect(() => {
         fetchOrders();
+        fetchGroups();
     }, [showArchived, sortBy]);
 
     const fetchOrders = async () => {
@@ -87,6 +98,16 @@ export default function OrdersPage() {
             console.error('Failed to fetch orders:', error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const fetchGroups = async () => {
+        try {
+            const res = await fetch('/api/admin/groups');
+            const data = await res.json();
+            setGroups(data.groups || data || []);
+        } catch (error) {
+            console.error('Failed to fetch groups:', error);
         }
     };
 
@@ -179,7 +200,7 @@ export default function OrdersPage() {
 
             if (res.ok) {
                 setSelectedOrders([]);
-                setShowBulkActions(false);
+                setSelectedGroup('');
                 fetchOrders();
             }
         } catch (error) {
@@ -201,8 +222,9 @@ export default function OrdersPage() {
     };
 
     const getStatusIcon = (status: string) => {
-        const Icon = STATUS_ICONS[status] || PendingIcon;
-        return <Icon size={16} className={styles.statusIcon} />;
+        const IconComponent = STATUS_ICONS[status];
+        if (!IconComponent) return null;
+        return <IconComponent size={16} className={styles.statusIcon} />;
     };
 
     return (
@@ -273,18 +295,34 @@ export default function OrdersPage() {
                 <div className={styles.bulkActionsBar}>
                     <span>{selectedOrders.length} selected</span>
                     <div className={styles.bulkButtons}>
-                        <button onClick={() => handleBulkAction('archive')} className={styles.bulkBtn}>
-                            <ArchiveIcon size={16} />
-                            Archive
+                        <button onClick={() => handleBulkAction(showArchived ? 'unarchive' : 'archive')} className={styles.bulkBtn}>
+                            {showArchived ? <UnarchiveIcon size={16} /> : <ArchiveIcon size={16} />}
+                            {showArchived ? 'Unarchive' : 'Archive'}
                         </button>
                         <button onClick={() => handleBulkAction('delete')} className={styles.bulkBtnDanger}>
                             <DeleteIcon size={16} />
                             Delete
                         </button>
-                        <button onClick={() => setShowBulkActions(true)} className={styles.bulkBtn}>
-                            <GroupIcon size={16} />
-                            Add to Group
-                        </button>
+                        <div className={styles.groupSelector}>
+                            <select
+                                value={selectedGroup}
+                                onChange={(e) => setSelectedGroup(e.target.value)}
+                                className={styles.groupSelect}
+                            >
+                                <option value="">Select Group...</option>
+                                {groups.map(group => (
+                                    <option key={group._id} value={group._id}>{group.name}</option>
+                                ))}
+                            </select>
+                            <button
+                                onClick={() => selectedGroup && handleBulkAction('addToGroup', selectedGroup)}
+                                disabled={!selectedGroup}
+                                className={styles.bulkBtn}
+                            >
+                                <GroupIcon size={16} />
+                                Add to Group
+                            </button>
+                        </div>
                         <button onClick={exportToCSV} className={styles.bulkBtn}>
                             <ExportIcon size={16} />
                             Export Selected

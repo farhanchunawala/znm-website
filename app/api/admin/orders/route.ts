@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Order from '@/models/OrderModel';
 import Customer from '@/models/CustomerModel';
+import Shipment from '@/models/ShipmentModel';
 
 export async function GET(request: NextRequest) {
     try {
@@ -11,42 +12,55 @@ export async function GET(request: NextRequest) {
         const archived = searchParams.get('archived') === 'true';
         const sort = searchParams.get('sort') || 'latest';
 
-        const query = archived ? { archived: true } : { archived: { $ne: true } };
+        const query: any = { archived };
 
+        // Fetch orders
         let orders = await Order.find(query).lean();
 
-        // Get customer names and internal IDs
-        const ordersWithCustomerNames = await Promise.all(
-            orders.map(async (order) => {
-                const customer = await Customer.findOne({ customerId: order.customerId });
-                return {
-                    ...order,
-                    customerName: customer ? `${customer.firstName} ${customer.lastName}` : null,
-                    customer_internal_id: customer?._id?.toString() || null,
-                } as typeof order & { customerName: string | null; customer_internal_id: string | null };
-            })
-        );
+        // Fetch all shipments for these orders
+        const orderIds = orders.map(o => o._id);
+        const shipments = await Shipment.find({ orderId: { $in: orderIds } }).lean();
+        const shipmentMap = new Map(shipments.map(s => [s.orderId.toString(), s]));
 
-        // Sort orders
-        let sortedOrders = [...ordersWithCustomerNames];
-        switch (sort) {
-            case 'oldest':
-                sortedOrders.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-                break;
-            case 'highestTotal':
-                sortedOrders.sort((a, b) => (b.total || 0) - (a.total || 0));
-                break;
-            case 'lowestTotal':
-                sortedOrders.sort((a, b) => (a.total || 0) - (b.total || 0));
-                break;
-            case 'latest':
-            default:
-                sortedOrders.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        // Enrich orders with shipment data and sync status
+        orders = orders.map((order: any) => {
+            const shipment = shipmentMap.get(order._id.toString());
+            return {
+                ...order,
+                shipment: shipment || null,
+                // Sync order status with shipment status if shipment exists
+                status: shipment ? shipment.status : order.status,
+            };
+        });
+
+        // Fetch customer names
+        const customerIds = [...new Set(orders.map(o => o.customerId))];
+        const customers = await Customer.find({ customerId: { $in: customerIds } }).lean();
+        const customerMap = new Map(customers.map(c => [c.customerId, c]));
+
+        orders = orders.map(order => {
+            const customer = customerMap.get(order.customerId);
+            return {
+                ...order,
+                customerName: customer ? `${customer.firstName} ${customer.lastName}` : null,
+                customer_internal_id: customer?._id,
+            };
+        });
+
+        // Sort
+        if (sort === 'latest') {
+            orders.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        } else if (sort === 'oldest') {
+            orders.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+        } else if (sort === 'highestTotal') {
+            orders.sort((a, b) => (b.total || 0) - (a.total || 0));
+        } else if (sort === 'lowestTotal') {
+            orders.sort((a, b) => (a.total || 0) - (b.total || 0));
         }
 
-        return NextResponse.json(sortedOrders);
-    } catch (error) {
+        return NextResponse.json(orders);
+    } catch (error: any) {
         console.error('Failed to fetch orders:', error);
-        return NextResponse.json({ error: 'Failed to fetch orders' }, { status: 500 });
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

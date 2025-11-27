@@ -83,7 +83,7 @@ export default function CustomersPage() {
     };
 
     const handleDelete = async (id: string) => {
-        if (!confirm('Are you sure you want to delete this customer? This will permanently remove them from the database.')) return;
+        if (!confirm('Are you sure you want to permanently delete this customer? This action cannot be undone.')) return;
 
         try {
             await fetch(`/api/admin/customers/${id}`, { method: 'DELETE' });

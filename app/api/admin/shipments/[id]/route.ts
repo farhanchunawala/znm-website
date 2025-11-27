@@ -11,8 +11,15 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
         const { id } = params;
 
         const shipment = await Shipment.findById(id)
-            .populate('orderId')
-            .populate('customerId');
+            .populate({
+                path: 'orderId',
+                select: 'orderId total items paymentStatus invoiceNumber shippingInfo',
+            })
+            .populate({
+                path: 'customerId',
+                select: 'customerId firstName lastName email phone',
+            })
+            .lean();
 
         if (!shipment) {
             return NextResponse.json({ error: 'Shipment not found' }, { status: 404 });

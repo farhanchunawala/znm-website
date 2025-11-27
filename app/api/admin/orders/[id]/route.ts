@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Order from '@/models/OrderModel';
+import Customer from '@/models/CustomerModel';
+import Shipment from '@/models/ShipmentModel';
 
 export async function GET(
     request: NextRequest,
@@ -9,13 +11,24 @@ export async function GET(
     try {
         await dbConnect();
         const { id } = params;
-        const order = await Order.findById(id);
+        const order = await Order.findById(id).lean();
 
         if (!order) {
             return NextResponse.json({ error: 'Order not found' }, { status: 404 });
         }
 
-        return NextResponse.json(order);
+        // Get customer name
+        const customer = await Customer.findOne({ customerId: order.customerId }).lean();
+
+        // Get shipment if exists
+        const shipment = await Shipment.findOne({ orderId: order._id }).lean();
+
+        return NextResponse.json({
+            ...order,
+            customerName: customer ? `${customer.firstName} ${customer.lastName}` : null,
+            customer_internal_id: customer?._id,
+            shipment: shipment || null,
+        });
     } catch (error) {
         console.error('Failed to fetch order:', error);
         return NextResponse.json({ error: 'Failed to fetch order' }, { status: 500 });

@@ -1,244 +1,257 @@
 .shipmentsPage {
-    h1 {
-        margin: 0 0 32px 0;
-        font-size: 28px;
-        font-weight: 600;
-        color: #000000;
-        letter-spacing: -0.5px;
-    }
+    padding: 20px;
 }
 
 .header {
-    margin-bottom: 24px;
-}
-
-.tabs {
     display: flex;
-    gap: 8px;
-    margin-bottom: 24px;
-    border-bottom: 1px solid #e0e0e0;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
 }
 
-.tab {
-    padding: 12px 24px;
-    border: none;
-    background: none;
-    color: #616161;
+.header h1 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #000;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.addBtn,
+.exportBtn,
+.archiveBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: 2px solid #000;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
-    border-bottom: 2px solid transparent;
     transition: all 0.2s;
+    text-decoration: none;
+}
 
-    &:hover {
-        color: #212121;
-        background: #f5f5f5;
-    }
+.addBtn {
+    background: #000;
+    color: #fff;
+}
 
-    &.active {
-        color: #000000;
-        border-bottom-color: #000000;
-    }
+.addBtn:hover {
+    background: #262626;
+}
+
+.exportBtn {
+    background: #fff;
+    color: #000;
+}
+
+.exportBtn:hover {
+    background: #fafafa;
+}
+
+.archiveBtn {
+    background: #525252;
+    color: #fff;
+    border-color: #525252;
+}
+
+.archiveBtn:hover {
+    background: #404040;
+    border-color: #404040;
+}
+
+.filters {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.searchInput {
+    flex: 1;
+    padding: 10px 16px;
+    border: 2px solid #d4d4d4;
+    font-size: 14px;
+}
+
+.searchInput:focus {
+    outline: none;
+    border-color: #000;
+}
+
+.statusSelect,
+.sortSelect {
+    padding: 10px 16px;
+    border: 2px solid #d4d4d4;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+}
+
+.statusSelect:focus,
+.sortSelect:focus {
+    outline: none;
+    border-color: #000;
+}
+
+.bulkActions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    background: #fafafa;
+    border: 2px solid #000;
+    margin-bottom: 20px;
+}
+
+.bulkActions span {
+    font-weight: 600;
+    color: #000;
+}
+
+.bulkButtons {
+    display: flex;
+    gap: 10px;
+}
+
+.bulkBtn,
+.bulkBtnDanger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: 2px solid #000;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.bulkBtn {
+    background: white;
+    color: #000;
+}
+
+.bulkBtn:hover {
+    background: #000;
+    color: #fff;
+}
+
+.bulkBtnDanger {
+    background: #000;
+    color: white;
+}
+
+.bulkBtnDanger:hover {
+    background: #262626;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    font-size: 14px;
+    color: #525252;
+    font-weight: 500;
 }
 
 .tableContainer {
-    background: #ffffff;
-    border-radius: 8px;
-    border: 1px solid #e0e0e0;
-    overflow: hidden;
+    overflow-x: auto;
+    border: 2px solid #e5e5e5;
 }
 
 .table {
     width: 100%;
     border-collapse: collapse;
-
-    thead {
-        background: #fafafa;
-
-        th {
-            padding: 16px 20px;
-            text-align: left;
-            font-weight: 600;
-            color: #212121;
-            border-bottom: 1px solid #e0e0e0;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-    }
-
-    tbody {
-        tr {
-            border-bottom: 1px solid #f5f5f5;
-            transition: background-color 0.15s;
-
-            &:hover {
-                background-color: #fafafa;
-            }
-
-            &:last-child {
-                border-bottom: none;
-            }
-
-            td {
-                padding: 16px 20px;
-                font-size: 14px;
-                color: #424242;
-
-                &.shipmentId {
-                    font-weight: 600;
-                    color: #000000;
-                }
-
-                .email {
-                    font-size: 12px;
-                    color: #757575;
-                }
-            }
-        }
-    }
 }
 
-.status {
-    display: inline-flex;
+.table thead {
+    background: #fafafa;
+}
+
+.table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 600;
+    color: #000;
+    border-bottom: 2px solid #e5e5e5;
+}
+
+.table td {
+    padding: 12px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid #f3f3f3;
+}
+
+.table tbody tr:hover {
+    background: #fafafa;
+}
+
+.shipmentId {
+    font-weight: 600;
+}
+
+.link,
+.orderLink,
+.customerLink {
+    color: #000;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.link:hover,
+.orderLink:hover,
+.customerLink:hover {
+    text-decoration: underline;
+}
+
+.trackingId {
+    font-family: monospace;
+    color: #525252;
+}
+
+.statusBadge {
+    display: flex;
     align-items: center;
     gap: 6px;
-    padding: 4px 12px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-
-    svg {
-        width: 14px;
-        height: 14px;
-    }
-
-    &.pending {
-        background: #f5f5f5;
-        color: #757575;
-        border: 1px solid #e0e0e0;
-    }
-
-    &.fulfilled,
-    &.shipped,
-    &.in_transit {
-        background: #f5f5f5;
-        color: #000000;
-        border: 1px solid #bdbdbd;
-    }
-
-    &.delivered {
-        background: #000000;
-        color: #ffffff;
-        border: 1px solid #000000;
-    }
-}
-
-.trackingForm {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-
-    .input {
-        padding: 8px 12px;
-        border: 1px solid #e0e0e0;
-        border-radius: 4px;
-        font-size: 13px;
-
-        &:focus {
-            outline: none;
-            border-color: #757575;
-        }
-    }
-}
-
-.saveBtn,
-.cancelBtn,
-.addTrackingBtn {
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.saveBtn {
-    background: #000000;
-    color: #ffffff;
-    border: 1px solid #000000;
-
-    &:hover {
-        background: #212121;
-    }
-}
-
-.cancelBtn {
-    background: #ffffff;
-    color: #616161;
-    border: 1px solid #e0e0e0;
-
-    &:hover {
-        background: #f5f5f5;
-    }
-}
-
-.addTrackingBtn {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    background: #ffffff;
-    color: #212121;
-    border: 1px solid #e0e0e0;
-
-    svg {
-        width: 14px;
-        height: 14px;
-    }
-
-    &:hover {
-        background: #f5f5f5;
-        border-color: #bdbdbd;
-    }
-}
-
-.trackingInfo {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-
-    strong {
-        font-size: 13px;
-        color: #000000;
-    }
-
-    span {
-        font-size: 12px;
-        color: #757575;
-    }
-}
-
-.statusSelect {
-    padding: 6px 12px;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
     font-size: 13px;
     font-weight: 500;
-    cursor: pointer;
-    background: #ffffff;
-
-    &:focus {
-        outline: none;
-        border-color: #757575;
-    }
+    text-transform: capitalize;
 }
 
-.loading,
-.empty {
+.statusIcon {
+    flex-shrink: 0;
+}
+
+.actionButtons {
+    display: flex;
+    gap: 8px;
+}
+
+.editAction,
+.deleteAction {
+    padding: 6px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #737373;
+    transition: color 0.2s;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.editAction:hover,
+.deleteAction:hover {
+    color: #000;
+}
+
+.loading {
     text-align: center;
-    padding: 60px;
-    color: #9e9e9e;
-    font-size: 15px;
+    padding: 40px;
+    color: #737373;
 }

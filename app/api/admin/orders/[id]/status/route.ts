@@ -28,47 +28,50 @@ export async function POST(
         }
 
         const previousStatus = order.status;
+        // Update status and timestamp
         order.status = status;
-
-        // Update timestamp based on status
-        const now = new Date();
-        switch (status) {
-            case 'fulfilled':
-                order.fulfilledAt = now;
-                // Generate invoice number if not exists
-                if (!order.invoiceNumber) {
-                    order.invoiceNumber = generateInvoiceNumber();
-                }
-                break;
-            case 'shipped':
-                order.shippedAt = now;
-                break;
-            case 'logistics':
-                order.logisticsAt = now;
-                break;
-            case 'delivered':
-                order.deliveredAt = now;
-                break;
+        if (status === 'fulfilled') {
+            order.fulfilledAt = new Date();
+            // Generate invoice number if not exists
+            if (!order.invoiceNumber) {
+                order.invoiceNumber = generateInvoiceNumber();
+            }
+        } else if (status === 'shipped') {
+            order.shippedAt = new Date();
+        } else if (status === 'outForDelivery') {
+            order.outForDeliveryAt = new Date();
+        } else if (status === 'delivered') {
+            order.deliveredAt = new Date();
         }
 
         await order.save();
 
-        // Update or create shipment
+        // Create or update shipment
         let shipment = await Shipment.findOne({ orderId: order._id });
-        if (!shipment) {
-            const shipmentCount = await Shipment.countDocuments();
+
+        if (status === 'shipped' && !shipment) {
+            // Create shipment when order is shipped
             shipment = await Shipment.create({
-                shipmentId: `SHIP-${String(shipmentCount + 1).padStart(6, '0')}`,
+                shipmentId: `SHP-${order.orderId}`,
                 orderId: order._id,
                 customerId: customer._id,
-                status: status,
+                status: 'shipped',
+                trackingId: `TRK-${order.orderId}`,
+                carrier: 'Default Carrier',
+                shippedAt: new Date(),
             });
-        } else {
-            shipment.status = status;
-            if (status === 'fulfilled') shipment.fulfilledAt = now;
-            if (status === 'shipped') shipment.shippedAt = now;
-            if (status === 'logistics') shipment.logisticsAt = now;
-            if (status === 'delivered') shipment.deliveredAt = now;
+        } else if (shipment) {
+            // Update existing shipment status
+            if (status === 'shipped') {
+                shipment.status = 'shipped';
+                shipment.shippedAt = new Date();
+            } else if (status === 'outForDelivery') {
+                shipment.status = 'outForDelivery';
+                shipment.outForDeliveryAt = new Date();
+            } else if (status === 'delivered') {
+                shipment.status = 'delivered';
+                shipment.deliveredAt = new Date();
+            }
             await shipment.save();
         }
 
@@ -99,11 +102,11 @@ export async function POST(
                 case 'shipped':
                     subject = `Order ${order.orderId} Shipped`;
                     emailHtml = orderShippedEmail(order, customer, {
-                        trackingId: shipment.trackingId,
-                        carrier: shipment.carrier,
+                        trackingId: shipment?.trackingId || '',
+                        carrier: shipment?.carrier || '',
                     });
                     break;
-                case 'logistics':
+                case 'outForDelivery':
                     subject = `Order ${order.orderId} Out for Delivery`;
                     emailHtml = orderInLogisticsEmail(order, customer);
                     break;

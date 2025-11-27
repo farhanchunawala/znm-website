@@ -9,35 +9,31 @@ export async function GET(request: NextRequest) {
         await dbConnect();
 
         const { searchParams } = new URL(request.url);
-        const status = searchParams.get('status');
         const archived = searchParams.get('archived') === 'true';
         const sort = searchParams.get('sort') || 'latest';
 
-        const query: any = { archived };
-        if (status && status !== 'all') {
-            query.status = status;
-        }
+        const query: any = archived ? { archived: true } : { archived: { $ne: true } };
 
-        let sortQuery: any = {};
-        switch (sort) {
-            case 'latest':
-                sortQuery = { createdAt: -1 };
-                break;
-            case 'oldest':
-                sortQuery = { createdAt: 1 };
-                break;
-            default:
-                sortQuery = { createdAt: -1 };
-        }
-
-        const shipments = await Shipment.find(query)
-            .populate('orderId', 'orderId total items')
-            .populate('customerId', 'customerId firstName lastName email')
-            .sort(sortQuery)
+        let shipments = await Shipment.find(query)
+            .populate({
+                path: 'orderId',
+                select: 'orderId status total items shippingInfo',
+            })
+            .populate({
+                path: 'customerId',
+                select: 'customerId firstName lastName email',
+            })
             .lean();
 
+        // Sort
+        if (sort === 'latest') {
+            shipments.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        } else if (sort === 'oldest') {
+            shipments.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+        }
+
         return NextResponse.json(shipments);
-    } catch (error) {
+    } catch (error: any) {
         console.error('Failed to fetch shipments:', error);
         return NextResponse.json({ error: 'Failed to fetch shipments' }, { status: 500 });
     }

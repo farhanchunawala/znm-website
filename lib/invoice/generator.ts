@@ -33,7 +33,13 @@ export function generateInvoiceNumber(): string {
     return `INV-${year}${month}-${random}`;
 }
 
-export function generateInvoiceHTML(order: Order): string {
+export function generateInvoiceHTML(
+    order: Order,
+    options?: {
+        courierName?: string;
+        packagingProvider?: 'we' | 'courier';
+    }
+): string {
     const invoiceDate = order.fulfilledAt ? new Date(order.fulfilledAt) : new Date();
     const invoiceNumber = order.invoiceNumber || generateInvoiceNumber();
 
@@ -382,29 +388,79 @@ export function generateInvoiceHTML(order: Order): string {
     `;
 }
 
-export async function generateInvoicePDF(order: Order): Promise<Buffer> {
-    const html = generateInvoiceHTML(order);
-
+export async function generateInvoicePDF(
+    order: any,
+    options?: {
+        courierName?: string;
+        packagingProvider?: 'we' | 'courier';
+        saveToDatabase?: boolean;
+    }
+): Promise<{ pdfBuffer: Buffer; invoiceNumber: string }> {
     const browser = await puppeteer.launch({
         headless: true,
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
 
-    const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'networkidle0' });
+    try {
+        const page = await browser.newPage();
 
-    const pdfBuffer = await page.pdf({
-        format: 'A4',
-        printBackground: true,
-        margin: {
-            top: '0',
-            right: '0',
-            bottom: '0',
-            left: '0',
-        },
-    });
+        // Generate invoice number if not exists
+        const invoiceNumber = order.invoiceNumber || generateInvoiceNumber();
 
-    await browser.close();
+        const htmlContent = generateInvoiceHTML(order, {
+            courierName: options?.courierName,
+            packagingProvider: options?.packagingProvider,
+        });
 
-    return Buffer.from(pdfBuffer);
+        await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
+
+        const pdfBuffer = await page.pdf({
+            format: 'A4',
+            printBackground: true,
+            margin: {
+                top: '20mm',
+                right: '15mm',
+                bottom: '20mm',
+                left: '15mm',
+            },
+        });
+
+        // Save to MongoDB if requested
+        if (options?.saveToDatabase) {
+            const Invoice = (await import('@/models/InvoiceModel')).default;
+            const Customer = (await import('@/models/CustomerModel')).default;
+
+            // Get customer ID
+            const customer: any = await Customer.findOne({ customerId: order.customerId }).lean();
+
+            if (customer) {
+                // Set expiry to 3 months from now
+                const expiresAt = new Date();
+                expiresAt.setMonth(expiresAt.getMonth() + 3);
+
+                // Check if invoice already exists
+                const existingInvoice: any = await Invoice.findOne({ invoiceNumber });
+
+                if (existingInvoice) {
+                    // Update existing
+                    existingInvoice.pdfData = pdfBuffer.toString('base64');
+                    existingInvoice.expiresAt = expiresAt;
+                    await existingInvoice.save();
+                } else {
+                    // Create new
+                    await Invoice.create({
+                        invoiceNumber,
+                        orderId: order._id,
+                        customerId: customer._id,
+                        pdfData: pdfBuffer.toString('base64'),
+                        expiresAt,
+                    });
+                }
+            }
+        }
+
+        return { pdfBuffer: Buffer.from(pdfBuffer), invoiceNumber };
+    } finally {
+        await browser.close();
+    }
 }

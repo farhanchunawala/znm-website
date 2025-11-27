@@ -29,12 +29,12 @@ const OrderSchema = new mongoose.Schema(
         paymentStatus: { type: String, enum: ['prepaid', 'unpaid'], default: 'unpaid' },
         status: {
             type: String,
-            enum: ['pending', 'fulfilled', 'shipped', 'logistics', 'delivered'],
-            default: 'pending'
+            enum: ['pending', 'fulfilled', 'shipped', 'outForDelivery', 'delivered'],
+            default: 'pending',
         },
         fulfilledAt: Date,
         shippedAt: Date,
-        logisticsAt: Date,
+        outForDeliveryAt: Date,
         deliveredAt: Date,
         invoiceNumber: String,
         notes: String,

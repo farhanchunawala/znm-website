@@ -1,25 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Customer from '@/models/CustomerModel';
-import Order from '@/models/OrderModel';
 
-export async function DELETE(
-    request: NextRequest,
-    { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
     try {
         await dbConnect();
-        const { id } = params;
 
-        // Delete customer
-        await Customer.findByIdAndDelete(id);
+        const deletedCustomer = await Customer.findByIdAndDelete(params.id);
 
-        // Optionally delete associated orders
-        // await Order.deleteMany({ customerId: customer.customerId });
+        if (!deletedCustomer) {
+            return NextResponse.json({ error: 'Customer not found' }, { status: 404 });
+        }
 
-        return NextResponse.json({ success: true });
-    } catch (error) {
+        return NextResponse.json({ success: true, message: 'Customer deleted successfully' });
+    } catch (error: any) {
         console.error('Failed to delete customer:', error);
-        return NextResponse.json({ error: 'Failed to delete customer' }, { status: 500 });
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

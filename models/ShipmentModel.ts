@@ -4,12 +4,12 @@ export interface IShipment extends Document {
     shipmentId: string;
     orderId: Schema.Types.ObjectId;
     customerId: Schema.Types.ObjectId;
-    status: 'pending' | 'fulfilled' | 'shipped' | 'logistics' | 'delivered';
+    status: 'pending' | 'shipped' | 'outForDelivery' | 'delivered';
     trackingId?: string;
     carrier?: string;
     fulfilledAt?: Date;
     shippedAt?: Date;
-    logisticsAt?: Date;
+    outForDeliveryAt?: Date;
     deliveredAt?: Date;
     notes?: string;
     groups: Schema.Types.ObjectId[];
@@ -26,14 +26,14 @@ const ShipmentSchema = new mongoose.Schema(
         customerId: { type: Schema.Types.ObjectId, ref: 'Customer', required: true },
         status: {
             type: String,
-            enum: ['pending', 'fulfilled', 'shipped', 'logistics', 'delivered'],
+            enum: ['pending', 'shipped', 'outForDelivery', 'delivered'],
             default: 'pending',
         },
-        trackingId: String,
-        carrier: String,
+        trackingId: { type: String, required: true },
+        carrier: { type: String, required: true },
         fulfilledAt: Date,
         shippedAt: Date,
-        logisticsAt: Date,
+        outForDeliveryAt: Date,
         deliveredAt: Date,
         notes: String,
         groups: [{ type: Schema.Types.ObjectId, ref: 'Group' }],
