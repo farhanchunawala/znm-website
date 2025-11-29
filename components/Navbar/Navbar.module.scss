@@ -1,57 +1,201 @@
 @import '../../app/styles/mixins';
 
 .main {
+	width: 100%;
+	background: #fff;
+	position: relative;
+	z-index: 100;
+
 	.header {
-		height: 54px;
-		position: relative;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		margin-bottom: 8px;
-		z-index: 10;
-		background: #fff;
 		width: 100%;
-		.heading {
-			font-size: 24px;
-			line-height: normal;
-		}
-		.hamburger {
-			position: absolute;
-			left: 14px;
-			top: 0;
-			bottom: 0;
-			margin: auto;
-		}
-	}
-	.navbar {
-		display: none;
-	}
-}
-@media (min-width: 576px) {
-	.main {
-		.header {
-			margin: 20px auto 20px;
+		padding: 20px 40px;
+		border-bottom: 1px solid transparent; // Optional separator
+
+		.topBar {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			width: 100%;
+			max-width: 1440px;
+			margin: 0 auto;
+
+			.leftSection {
+				display: flex;
+				align-items: center;
+
+				.searchIcon {
+					cursor: pointer;
+					display: none; // Hidden on mobile by default, shown on desktop
+
+					@media (min-width: 768px) {
+						display: block;
+					}
+				}
+
+				.hamburger {
+					cursor: pointer;
+					display: block;
+
+					@media (min-width: 992px) {
+						// Hide hamburger on larger screens where nav is visible
+						display: none;
+					}
+				}
+			}
+
 			.heading {
-				font-size: 40px;
-				line-height: 1;
+				text-decoration: none;
+				color: #000;
+				text-align: center;
+
+				.logoContainer {
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+
+					.logoSymbol {
+						width: 40px; // Adjust size as needed
+						height: auto;
+						margin-bottom: 5px;
+					}
+
+					.logoName {
+						font-size: 24px;
+						letter-spacing: 4px;
+						font-weight: 400;
+						text-transform: uppercase;
+					}
+				}
 			}
-			.hamburger {
-				display: none;
+
+			.rightSection {
+				display: flex;
+				align-items: center;
+				gap: 20px;
+
+				.iconLink {
+					color: #000;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					text-decoration: none;
+
+					.cartIconWrapper {
+						position: relative;
+						display: flex;
+						align-items: center;
+
+						.cartCount {
+							position: absolute;
+							top: -8px;
+							right: -8px;
+							background-color: #000;
+							color: #fff;
+							font-size: 10px;
+							width: 16px;
+							height: 16px;
+							border-radius: 50%;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							font-weight: 600;
+						}
+					}
+				}
 			}
 		}
+	}
+
+	.searchBar {
+		width: 100%;
+		padding: 15px 40px;
+		background-color: #f9f9f9;
+		border-top: 1px solid #eee;
+
+		form {
+			display: flex;
+			gap: 10px;
+			max-width: 600px;
+			margin: 0 auto;
+
+			input {
+				flex: 1;
+				padding: 12px 15px;
+				border: 1px solid #ddd;
+				font-size: 0.95rem;
+
+				&:focus {
+					outline: none;
+					border-color: #000;
+				}
+			}
+
+			button {
+				padding: 12px 25px;
+				background-color: #000;
+				color: #fff;
+				border: none;
+				cursor: pointer;
+				font-size: 0.95rem;
+				transition: background-color 0.2s;
+
+				&:hover {
+					background-color: #333;
+				}
+			}
+		}
+	}
+
+	.mainnav {
+		width: 100%;
+		border-top: 1px solid #eee; // Optional separator
+		display: none; // Hidden on mobile
+
+		@media (min-width: 992px) {
+			display: block;
+		}
+
 		.navbar {
 			display: flex;
-			justify-content: space-around;
-			// align-items: center;
-			width: calc(100% - 20%);
-			padding: 0 6%;
-			margin: 0 auto 30px;
+			justify-content: center;
+			align-items: center;
+			gap: 40px;
+			padding: 20px 0;
+			max-width: 1440px;
+			margin: 0 auto;
+			flex-wrap: wrap;
+
 			.link {
 				color: #000;
-				font-size: 16px;
-				font-weight: 700;
-				line-height: normal;
+				font-size: 12px;
+				font-weight: 500;
+				letter-spacing: 1.5px;
 				text-decoration: none;
+				text-transform: uppercase;
+				transition: opacity 0.2s;
+
+				&:hover {
+					opacity: 0.7;
+				}
+			}
+		}
+	}
+}
+
+// Mobile adjustments
+@media (max-width: 767px) {
+	.main {
+		.header {
+			padding: 15px 20px;
+
+			.topBar {
+				.heading {
+					.logoText {
+						.logoName {
+							font-size: 18px;
+						}
+					}
+				}
 			}
 		}
 	}

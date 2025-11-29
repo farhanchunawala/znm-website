@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import type { Metadata } from 'next';
-// import { Counter } from '../components/Counter';
+// import { Counter } from '../components/counter/Counter';
 import DisplayGallery from '../components/DisplayGallery/DisplayGallery';
 import styles from './styles/Home.module.scss';
 
@@ -9,89 +9,89 @@ export default function IndexPage() {
 		title: 'MENSWEAR 25',
 		images: [
 			{
-				src: '/img1.webp',
+				src: '/',
 				text: 'Morning Mist',
 			},
 			{
-				src: '/img2.webp',
+				src: '/',
 				text: 'Pine Green',
 			},
 			{
-				src: '/img3.webp',
+				src: '/',
 				text: 'Seafoam Green',
 			},
 			{
-				src: '/img4.webp',
+				src: '/',
 				text: 'Dusty Yale',
 			},
 			{
-				src: '/img5.webp',
+				src: '/',
 				text: 'Sterling Palms',
 			},
 			{
-				src: '/img6.webp',
+				src: '/',
 				text: 'Vintage Cobalt',
 			},
 			{
-				src: '/img7.jpg',
+				src: '/',
 				text: 'Castlaton Shine',
 			},
 			{
-				src: '/img8.webp',
+				src: '/',
 				text: 'Chanterelle Beige',
 			},
 		],
 	};
 
 	const kurtas = {
-		title: 'Kurtas',
+		title: 'KURTAS',
 		images: [
 			{
-				src: '/kurtas/kurta1.1.webp',
+				src: '/kurta/1.png',
 				text: 'Rustic Orange',
 			},
 			{
-				src: '/kurtas/kurta2.1.webp',
+				src: '/kurta/2.png',
 				text: 'Nahua',
 			},
 			{
-				src: '/kurtas/kurta3.1.webp',
+				src: '/kurta/3.png',
 				text: 'Aztec Kurta',
 			},
 			{
-				src: '/kurtas/kurta4.1.webp',
+				src: '/kurta/4.png',
 				text: 'brunette',
 			},
 			{
-				src: '/kurtas/kurta5.1.webp',
+				src: '/kurta/5.png',
 				text: 'Lapis',
 			},
 			{
-				src: '/kurtas/kurta6.1.webp',
+				src: '/kurta/6.png',
 				text: 'Gwalior',
 			},
 			{
-				src: '/kurtas/kurta7.1.webp',
+				src: '/kurta/7.png',
 				text: 'Asfar Kurta',
 			},
 			{
-				src: '/kurtas/kurta8.1.webp',
+				src: '/kurta/8.png',
 				text: 'Zuhal',
 			},
 			{
-				src: '/kurtas/kurta9.1.webp',
+				src: '/kurta/9.png',
 				text: 'Ilia',
 			},
 			{
-				src: '/kurtas/kurta10.1.webp',
+				src: '/kurta/10.png',
 				text: 'Iyad',
 			},
 			{
-				src: '/kurtas/kurta11.2.webp',
+				src: '/kurta/11.png',
 				text: 'Deep Water Kurta',
 			},
 			{
-				src: '/kurtas/kurta12.1.webp',
+				src: '/kurta/12.png',
 				text: 'Arzoo A',
 			},
 		],
@@ -102,54 +102,66 @@ export default function IndexPage() {
 			{/* <Counter /> */}
 			<div className={`${styles.window}`}>
 				<div className={`${styles.box}`}>
-					<Image
-						className={`${styles.img}`}
-						src="/img0.webp"
-						alt="cloth"
-						width="1200"
-						height="600"
-						priority={true}
-					/>
-					<Image
-						className={`${styles.img}`}
-						src="/img0.webp"
-						alt="cloth"
-						width="1200"
-						height="600"
-						priority={true}
-					/>
-					<Image
-						className={`${styles.img}`}
-						src="/img0.webp"
-						alt="cloth"
-						width="1200"
-						height="600"
-						priority={true}
-					/>
-					<Image
-						className={`${styles.img}`}
-						src="/img0.webp"
-						alt="cloth"
-						width="1200"
-						height="600"
-						priority={true}
-					/>
-					<Image
-						className={`${styles.img}`}
-						src="/img0.webp"
-						alt="cloth"
-						width="1200"
-						height="600"
-						priority={true}
-					/>
-					<Image
-						className={`${styles.img}`}
-						src="/img0.webp"
-						alt="cloth"
-						width="1200"
-						height="600"
-						priority={true}
-					/>
+					<div className={`${styles.slide}`}>
+						<Image
+							className={`${styles.img}`}
+							src="/display-photo/dp5-sherwani.png"
+							alt="cloth"
+							width="1200"
+							height="600"
+							priority={true}
+						/>
+					</div>
+					<div className={`${styles.slide}`}>
+						<Image
+							className={`${styles.img}`}
+							src="/display-photo/dp3.1-suits.png"
+							alt="cloth"
+							width="1200"
+							height="600"
+							priority={true}
+						/>
+					</div>
+					<div className={`${styles.slide}`}>
+						<Image
+							className={`${styles.img}`}
+							src="/display-photo/dp6-vest.png"
+							alt="cloth"
+							width="1200"
+							height="600"
+							priority={true}
+						/>
+					</div>
+					<div className={`${styles.slide}`}>
+						<Image
+							className={`${styles.img}`}
+							src="/display-photo/dp4-kurtas.png"
+							alt="cloth"
+							width="1200"
+							height="600"
+							priority={true}
+						/>
+					</div>
+					<div className={`${styles.slide}`}>
+						<Image
+							className={`${styles.img}`}
+							src="/display-photo/dp1.1-kurtas.png"
+							alt="cloth"
+							width="1200"
+							height="600"
+							priority={true}
+						/>
+					</div>
+					<div className={`${styles.slide}`}>
+						<Image
+							className={`${styles.img}`}
+							src="/display-photo/dp2.1-shirts.png"
+							alt="cloth"
+							width="1200"
+							height="600"
+							priority={true}
+						/>
+					</div>
 				</div>
 			</div>
 			<DisplayGallery imageGrid={kurtas} />

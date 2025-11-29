@@ -1,0 +1,283 @@
+.customersPage {
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #000;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.addBtn,
+.importBtn,
+.exportBtn,
+.archiveBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: 2px solid #000;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.addBtn {
+    background: #000;
+    color: #fff;
+}
+
+.addBtn:hover {
+    background: #262626;
+}
+
+.importBtn {
+    background: #fff;
+    color: #000;
+}
+
+.importBtn:hover {
+    background: #fafafa;
+}
+
+.exportBtn {
+    background: #fff;
+    color: #000;
+}
+
+.exportBtn:hover {
+    background: #fafafa;
+}
+
+.archiveBtn {
+    background: #525252;
+    color: #fff;
+    border-color: #525252;
+}
+
+.archiveBtn:hover {
+    background: #404040;
+    border-color: #404040;
+}
+
+.filters {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.searchInput {
+    flex: 1;
+    padding: 10px 16px;
+    border: 2px solid #d4d4d4;
+    font-size: 14px;
+}
+
+.searchInput:focus {
+    outline: none;
+    border-color: #000;
+}
+
+.sortSelect {
+    padding: 10px 16px;
+    border: 2px solid #d4d4d4;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+}
+
+.sortSelect:focus {
+    outline: none;
+    border-color: #000;
+}
+
+.bulkActions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    background: #fafafa;
+    border: 2px solid #000;
+    margin-bottom: 20px;
+}
+
+.bulkActions span {
+    font-weight: 600;
+    color: #000;
+}
+
+.bulkButtons {
+    display: flex;
+    gap: 10px;
+}
+
+.bulkBtn,
+.bulkBtnDanger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: 2px solid #000;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.bulkBtn {
+    background: white;
+    color: #000;
+}
+
+.bulkBtn:hover {
+    background: #000;
+    color: #fff;
+}
+
+.bulkBtnDanger {
+    background: #000;
+    color: white;
+}
+
+.bulkBtnDanger:hover {
+    background: #262626;
+}
+
+.groupSelector {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.groupSelect {
+    padding: 8px 14px;
+    border: 2px solid #d4d4d4;
+    font-size: 13px;
+    background: #fff;
+    cursor: pointer;
+    min-width: 150px;
+}
+
+.groupSelect:focus {
+    outline: none;
+    border-color: #000;
+}
+
+.bulkBtn:disabled {
+    background: #e5e5e5;
+    color: #a3a3a3;
+    cursor: not-allowed;
+    border-color: #d4d4d4;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    font-size: 14px;
+    color: #525252;
+    font-weight: 500;
+}
+
+.tableContainer {
+    overflow-x: auto;
+    border: 2px solid #e5e5e5;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table thead {
+    background: #fafafa;
+}
+
+.table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 600;
+    color: #000;
+    border-bottom: 2px solid #e5e5e5;
+}
+
+.table td {
+    padding: 12px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid #f3f3f3;
+}
+
+.table tbody tr:hover {
+    background: #fafafa;
+}
+
+.customerId {
+    font-weight: 500;
+}
+
+.link {
+    color: #000;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+.name {
+    font-weight: 500;
+}
+
+.centered {
+    text-align: center;
+    font-weight: 600;
+}
+
+.amount {
+    font-weight: 600;
+    color: #000;
+}
+
+.actionButtons {
+    display: flex;
+    gap: 8px;
+}
+
+.archiveAction,
+.deleteAction {
+    padding: 6px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #737373;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+}
+
+.archiveAction:hover,
+.deleteAction:hover {
+    color: #000;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #737373;
+}

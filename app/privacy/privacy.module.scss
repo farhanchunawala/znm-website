@@ -1,0 +1,106 @@
+@import '../styles/variables';
+
+.container {
+    min-height: 100vh;
+    background: $b100;
+    padding: 60px 20px;
+}
+
+.content {
+    max-width: 800px;
+    margin: 0 auto;
+    color: $b0;
+
+    h1 {
+        font-size: 32px;
+        font-weight: 400;
+        letter-spacing: 4px;
+        text-align: center;
+        margin-bottom: 40px;
+        text-transform: uppercase;
+    }
+
+    section {
+        margin-bottom: 40px;
+
+        h2 {
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 1.8;
+            color: $b20;
+            margin-bottom: 16px;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+
+            li {
+                font-size: 14px;
+                line-height: 1.8;
+                color: $b20;
+                padding-left: 20px;
+                position: relative;
+                margin-bottom: 8px;
+
+                &:before {
+                    content: '—';
+                    position: absolute;
+                    left: 0;
+                }
+            }
+        }
+
+        a {
+            color: $b0;
+            text-decoration: underline;
+            transition: opacity 0.2s;
+
+            &:hover {
+                opacity: 0.7;
+            }
+        }
+    }
+
+    .backLink {
+        margin-top: 60px;
+        text-align: center;
+
+        a {
+            color: $b0;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-decoration: none;
+            transition: opacity 0.2s;
+
+            &:hover {
+                opacity: 0.7;
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 40px 20px;
+    }
+
+    .content {
+        h1 {
+            font-size: 24px;
+        }
+
+        section {
+            h2 {
+                font-size: 16px;
+            }
+        }
+    }
+}

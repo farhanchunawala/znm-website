@@ -1,0 +1,38 @@
+.offerBar {
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    padding: 10px 20px;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    position: relative;
+    z-index: 99;
+
+    a {
+        color: #fff;
+        text-decoration: underline;
+        margin-left: 5px;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+
+    .closeButton {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+        font-size: 1.2rem;
+        padding: 0;
+        line-height: 1;
+
+        &:hover {
+            opacity: 0.7;
+        }
+    }
+}

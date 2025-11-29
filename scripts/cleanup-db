@@ -1,0 +1,52 @@
+// Script to clean up invalid orders with NaN IDs
+// Run this with: node scripts/cleanup-db.js
+
+const mongoose = require('mongoose');
+const fs = require('fs');
+const path = require('path');
+
+// Read .env.local file
+function loadEnv() {
+    const envPath = path.join(__dirname, '..', '.env.local');
+    const envContent = fs.readFileSync(envPath, 'utf8');
+    const lines = envContent.split('\n');
+
+    for (const line of lines) {
+        const trimmed = line.trim();
+        if (trimmed && !trimmed.startsWith('#')) {
+            const [key, ...valueParts] = trimmed.split('=');
+            const value = valueParts.join('=').replace(/^["']|["']$/g, '');
+            process.env[key] = value;
+        }
+    }
+}
+
+loadEnv();
+
+async function cleanupDatabase() {
+    try {
+        // Connect to MongoDB
+        await mongoose.connect(process.env.MONGODB_URI);
+        console.log('Connected to MongoDB');
+
+        // Get the orders collection
+        const db = mongoose.connection.db;
+        const ordersCollection = db.collection('orders');
+
+        // Find and delete orders with NaN in orderId
+        const result = await ordersCollection.deleteMany({
+            orderId: { $regex: /NaN/ }
+        });
+
+        console.log(`Deleted ${result.deletedCount} invalid order(s)`);
+
+        // Close connection
+        await mongoose.connection.close();
+        console.log('Database cleanup complete');
+    } catch (error) {
+        console.error('Error cleaning up database:', error);
+        process.exit(1);
+    }
+}
+
+cleanupDatabase();

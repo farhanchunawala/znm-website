@@ -1,0 +1,329 @@
+.orderEdit {
+    padding: 20px;
+    max-width: 1200px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e5e5e5;
+}
+
+.header h1 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #000;
+    margin: 0 0 8px 0;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: #737373;
+    margin: 0;
+}
+
+.subtitle a {
+    color: #000;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.subtitle a:hover {
+    text-decoration: underline;
+}
+
+.actions {
+    display: flex;
+    gap: 12px;
+}
+
+.cancelBtn,
+.saveBtn {
+    padding: 10px 20px;
+    border: 2px solid #000;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cancelBtn {
+    background: #fff;
+    color: #000;
+}
+
+.cancelBtn:hover {
+    background: #fafafa;
+}
+
+.saveBtn {
+    background: #000;
+    color: #fff;
+}
+
+.saveBtn:hover:not(:disabled) {
+    background: #262626;
+}
+
+.saveBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.section {
+    background: #fff;
+    border: 2px solid #e5e5e5;
+    padding: 24px;
+}
+
+.section h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #000;
+    margin: 0 0 16px 0;
+}
+
+.sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.sectionHeader h2 {
+    margin: 0;
+}
+
+.statusGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+}
+
+.statusBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border: 2px solid #d4d4d4;
+    background: #fff;
+    color: #737373;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.statusBtn:hover {
+    border-color: #000;
+    color: #000;
+}
+
+.statusBtn.active {
+    border-color: #000;
+    background: #000;
+    color: #fff;
+}
+
+.paymentButtons {
+    display: flex;
+    gap: 12px;
+}
+
+.paymentBtn {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #d4d4d4;
+    background: #fff;
+    color: #737373;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.paymentBtn:hover {
+    border-color: #000;
+    color: #000;
+}
+
+.paymentBtn.active {
+    border-color: #000;
+    background: #000;
+    color: #fff;
+}
+
+.addItemBtn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: 2px solid #000;
+    background: #fff;
+    color: #000;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.addItemBtn:hover {
+    background: #000;
+    color: #fff;
+}
+
+.itemsList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.itemRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border: 2px solid #e5e5e5;
+    background: #fafafa;
+}
+
+.itemNumber {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.itemFields {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 100px 120px 120px;
+    gap: 12px;
+    align-items: center;
+}
+
+.itemInput,
+.qtyInput,
+.priceInput {
+    padding: 10px 12px;
+    border: 2px solid #d4d4d4;
+    font-size: 14px;
+}
+
+.itemInput:focus,
+.qtyInput:focus,
+.priceInput:focus {
+    outline: none;
+    border-color: #000;
+}
+
+.itemTotal {
+    font-weight: 600;
+    font-size: 15px;
+    color: #000;
+    text-align: right;
+}
+
+.removeBtn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #d4d4d4;
+    background: #fff;
+    color: #737373;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.removeBtn:hover {
+    border-color: #000;
+    background: #000;
+    color: #fff;
+}
+
+.totalRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background: #000;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.totalAmount {
+    font-size: 20px;
+}
+
+.notesInput {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #d4d4d4;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.notesInput:focus {
+    outline: none;
+    border-color: #000;
+}
+
+.shippingInfo {
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.shippingInfo p {
+    margin: 0 0 8px 0;
+}
+
+.shippingInfo strong {
+    color: #737373;
+    font-weight: 600;
+    display: inline-block;
+    width: 100px;
+}
+
+.loading,
+.error {
+    text-align: center;
+    padding: 60px 20px;
+    font-size: 16px;
+    color: #737373;
+}
+
+.error {
+    color: #000;
+}
+
+@media (max-width: 768px) {
+    .itemFields {
+        grid-template-columns: 1fr;
+    }
+
+    .statusGrid {
+        grid-template-columns: 1fr;
+    }
+}

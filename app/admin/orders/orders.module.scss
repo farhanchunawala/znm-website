@@ -1,0 +1,483 @@
+.ordersPage {
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #000;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.addBtn,
+.importBtn,
+.exportBtn,
+.archiveBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: 2px solid #000;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.addBtn {
+    background: #000;
+    color: #fff;
+}
+
+.addBtn:hover {
+    background: #262626;
+}
+
+.importBtn {
+    background: #fff;
+    color: #000;
+}
+
+.importBtn:hover {
+    background: #fafafa;
+}
+
+.exportBtn {
+    background: #fff;
+    color: #000;
+}
+
+.exportBtn:hover {
+    background: #fafafa;
+}
+
+.archiveBtn {
+    background: #525252;
+    color: #fff;
+    border-color: #525252;
+}
+
+.archiveBtn:hover {
+    background: #404040;
+    border-color: #404040;
+}
+
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #e5e5e5;
+}
+
+.tab {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 20px;
+    border: none;
+    background: none;
+    font-size: 14px;
+    font-weight: 500;
+    color: #737373;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+}
+
+.tab:hover {
+    color: #000;
+}
+
+.tab.active {
+    color: #000;
+    border-bottom-color: #000;
+}
+
+.filters {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.searchInput {
+    flex: 1;
+    padding: 10px 16px;
+    border: 2px solid #d4d4d4;
+    font-size: 14px;
+}
+
+.searchInput:focus {
+    outline: none;
+    border-color: #000;
+}
+
+.sortSelect {
+    padding: 10px 16px;
+    border: 2px solid #d4d4d4;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+}
+
+.sortSelect:focus {
+    outline: none;
+    border-color: #000;
+}
+
+.bulkActionsBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    background: #fafafa;
+    border: 2px solid #000;
+    margin-bottom: 20px;
+}
+
+.bulkActionsBar span {
+    font-weight: 600;
+    color: #000;
+}
+
+.bulkButtons {
+    display: flex;
+    gap: 10px;
+}
+
+.bulkBtn,
+.bulkBtnDanger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: 2px solid #000;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.bulkBtn {
+    background: white;
+    color: #000;
+}
+
+.bulkBtn:hover {
+    background: #000;
+    color: #fff;
+}
+
+.bulkBtnDanger {
+    background: #000;
+    color: white;
+}
+
+.bulkBtnDanger:hover {
+    background: #262626;
+}
+
+.groupSelector {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.groupSelect {
+    padding: 8px 14px;
+    border: 2px solid #d4d4d4;
+    font-size: 13px;
+    background: #fff;
+    cursor: pointer;
+    min-width: 150px;
+}
+
+.groupSelect:focus {
+    outline: none;
+    border-color: #000;
+}
+
+.bulkBtn:disabled {
+    background: #e5e5e5;
+    color: #a3a3a3;
+    cursor: not-allowed;
+    border-color: #d4d4d4;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    font-size: 14px;
+    color: #525252;
+}
+
+.tableContainer {
+    overflow-x: auto;
+    border: 2px solid #e5e5e5;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table thead {
+    background: #fafafa;
+}
+
+.table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 600;
+    color: #000;
+    border-bottom: 2px solid #e5e5e5;
+}
+
+.table td {
+    padding: 12px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid #f3f3f3;
+}
+
+.table tbody tr:hover {
+    background: #fafafa;
+}
+
+.orderId {
+    font-weight: 500;
+}
+
+.orderLink {
+    color: #000;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.orderLink:hover {
+    text-decoration: underline;
+}
+
+.customerInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.customerId {
+    font-size: 12px;
+    color: #737373;
+    text-decoration: none;
+}
+
+.customerId:hover {
+    color: #000;
+    text-decoration: underline;
+}
+
+.customerName {
+    font-size: 14px;
+    color: #000;
+}
+
+.total {
+    font-weight: 600;
+    color: #000;
+}
+
+.paymentStatus {
+    padding: 6px 12px;
+    border: 2px solid #d4d4d4;
+    font-size: 13px;
+    cursor: pointer;
+    background: #fff;
+}
+
+.paymentStatus:focus {
+    outline: none;
+    border-color: #000;
+}
+
+.paymentStatus.prepaid {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+}
+
+.paymentStatus.unpaid {
+    background: #fff;
+    color: #000;
+    border-color: #000;
+}
+
+.statusBadge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: capitalize;
+    color: #000;
+}
+
+.statusIcon {
+    flex-shrink: 0;
+}
+
+.trackingCell {
+    font-size: 13px;
+}
+
+.trackingInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.trackingId {
+    font-family: monospace;
+    font-weight: 600;
+    color: #000;
+}
+
+.carrier {
+    font-size: 12px;
+    color: #737373;
+}
+
+.noTracking {
+    color: #d4d4d4;
+}
+
+.actionButtons {
+    display: flex;
+    gap: 8px;
+}
+
+.editAction,
+.deleteAction {
+    padding: 6px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #737373;
+    transition: color 0.2s;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.editAction:hover {
+    color: #000;
+}
+
+.deleteAction:hover {
+    color: #000;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #737373;
+}
+
+/* Import page styles */
+.importContainer {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.importSection {
+    background: white;
+    padding: 30px;
+    border: 2px solid #e5e5e5;
+    margin-bottom: 20px;
+}
+
+.importSection h3 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    color: #000;
+}
+
+.importSection p {
+    color: #737373;
+    margin-bottom: 15px;
+}
+
+.downloadBtn,
+.importBtn {
+    padding: 12px 24px;
+    border: 2px solid #000;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.downloadBtn {
+    background: #000;
+    color: #fff;
+}
+
+.downloadBtn:hover {
+    background: #262626;
+}
+
+.importBtn {
+    background: #000;
+    color: #fff;
+}
+
+.importBtn:hover {
+    background: #262626;
+}
+
+.importBtn:disabled {
+    background: #d4d4d4;
+    border-color: #d4d4d4;
+    cursor: not-allowed;
+}
+
+.fileInput {
+    width: 100%;
+    padding: 10px;
+    border: 2px dashed #d4d4d4;
+    cursor: pointer;
+}
+
+.fileName {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #000;
+    font-weight: 600;
+}
+
+.error {
+    padding: 15px;
+    background: #f5f5f5;
+    color: #000;
+    border: 2px solid #000;
+    margin-top: 20px;
+}
+
+.success {
+    padding: 15px;
+    background: #fafafa;
+    color: #000;
+    border: 2px solid #000;
+    margin-top: 20px;
+}

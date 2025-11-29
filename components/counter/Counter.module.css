@@ -4,7 +4,7 @@
 	justify-content: center;
 }
 
-.row > button {
+.row>button {
 	margin-left: 4px;
 	margin-right: 8px;
 }
@@ -18,7 +18,7 @@
 	padding-left: 16px;
 	padding-right: 16px;
 	margin-top: 2px;
-	font-family: 'Courier New', Courier, monospace;
+
 }
 
 .button {

@@ -1,0 +1,141 @@
+.main {
+    padding: 120px 20px 60px;
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+}
+
+.newsletterContainer {
+    max-width: 600px;
+    width: 100%;
+    padding: 60px 40px;
+    background-color: #fff;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+    h1 {
+        font-size: 2.5rem;
+        font-weight: 300;
+        margin-bottom: 15px;
+        letter-spacing: 2px;
+    }
+
+    .subtitle {
+        color: #666;
+        margin-bottom: 40px;
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    .benefits {
+        text-align: left;
+        margin-bottom: 40px;
+
+        ul {
+            list-style: none;
+            padding: 0;
+
+            li {
+                padding: 10px 0;
+                padding-left: 30px;
+                position: relative;
+                color: #333;
+
+                &::before {
+                    content: '✓';
+                    position: absolute;
+                    left: 0;
+                    color: #000;
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+
+    form {
+        .formGroup {
+            margin-bottom: 20px;
+
+            input {
+                width: 100%;
+                padding: 15px;
+                border: 1px solid #ddd;
+                font-size: 1rem;
+
+                &:focus {
+                    outline: none;
+                    border-color: #000;
+                }
+            }
+        }
+
+        .subscribeButton {
+            width: 100%;
+            padding: 15px;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            letter-spacing: 1px;
+
+            &:hover {
+                background-color: #333;
+            }
+        }
+    }
+
+    .privacy {
+        margin-top: 20px;
+        font-size: 0.85rem;
+        color: #999;
+
+        a {
+            color: #666;
+            text-decoration: underline;
+
+            &:hover {
+                color: #000;
+            }
+        }
+    }
+}
+
+.successMessage {
+    max-width: 600px;
+    width: 100%;
+    padding: 60px 40px;
+    background-color: #fff;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+    h2 {
+        font-size: 2rem;
+        font-weight: 400;
+        margin-bottom: 15px;
+        color: #000;
+    }
+
+    p {
+        color: #666;
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+    }
+
+    a {
+        display: inline-block;
+        padding: 12px 30px;
+        background-color: #000;
+        color: #fff;
+        text-decoration: none;
+        transition: background-color 0.3s;
+
+        &:hover {
+            background-color: #333;
+        }
+    }
+}

@@ -1,0 +1,143 @@
+.container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.feedbackForm {
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    max-width: 600px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.feedbackForm h1 {
+    margin: 0 0 10px 0;
+    font-size: 32px;
+    color: #111827;
+}
+
+.subtitle {
+    color: #6b7280;
+    margin-bottom: 30px;
+}
+
+.ratingSection {
+    margin-bottom: 35px;
+    padding-bottom: 35px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.ratingSection:last-of-type {
+    border-bottom: none;
+}
+
+.ratingSection h3 {
+    margin: 0 0 5px 0;
+    font-size: 20px;
+    color: #111827;
+}
+
+.ratingSection p {
+    margin: 0 0 15px 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.stars {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.starButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: #d1d5db;
+    transition: all 0.2s;
+}
+
+.starButton:hover {
+    transform: scale(1.1);
+}
+
+.starButton svg[fill="currentColor"] {
+    color: #fbbf24;
+}
+
+.textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 80px;
+}
+
+.textarea:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.submitBtn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.submitBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+}
+
+.success {
+    background: white;
+    padding: 60px 40px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.success h1 {
+    margin: 0 0 20px 0;
+    font-size: 36px;
+    color: #10b981;
+}
+
+.success p {
+    font-size: 16px;
+    color: #6b7280;
+    margin: 10px 0;
+}
+
+.error {
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    text-align: center;
+    color: #ef4444;
+    font-size: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.loading {
+    text-align: center;
+    color: white;
+    font-size: 18px;
+}

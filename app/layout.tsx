@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { StoreProvider } from './StoreProvider';
 import { Navbar } from '../components/Navbar/Navbar';
+import { OfferBar } from '../components/OfferBar/OfferBar';
 import Footer from '../components/Footer/Footer';
 // import Image from 'next/image';
 import Script from 'next/script';
@@ -28,6 +29,7 @@ export default function RootLayout({ children }: Props) {
 				</head>
 				<body>
 					<section className={styles.container}>
+						<OfferBar />
 						<Navbar />
 
 						{/* <header className={styles.header}>
