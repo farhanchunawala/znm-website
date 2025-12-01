@@ -1,0 +1,46 @@
+{
+    "recommendations": [
+        // Essential for Next.js/React development
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        // TypeScript support
+        "ms-vscode.vscode-typescript-next",
+        // SCSS/CSS support
+        "syler.sass-indented",
+        "mrmlnc.vscode-scss",
+        "stylelint.vscode-stylelint",
+        // React/JSX support
+        "dsznajder.es7-react-js-snippets",
+        "burkeholland.simple-react-snippets",
+        // Git integration
+        "eamodio.gitlens",
+        "mhutchie.git-graph",
+        // Code quality and productivity
+        "streetsidesoftware.code-spell-checker",
+        "usernamehw.errorlens",
+        "christian-kohler.path-intellisense",
+        "christian-kohler.npm-intellisense",
+        // MongoDB support (for your Mongoose models)
+        "mongodb.mongodb-vscode",
+        // Auto rename tag
+        "formulahendry.auto-rename-tag",
+        // Bracket colorization
+        "coenraads.bracket-pair-colorizer-2",
+        // Import cost
+        "wix.vscode-import-cost",
+        // Better comments
+        "aaron-bond.better-comments",
+        // REST client (for testing your API routes)
+        "humao.rest-client",
+        // Environment variable support
+        "mikestead.dotenv",
+        // Auto close tag
+        "formulahendry.auto-close-tag",
+        // Indent rainbow
+        "oderwat.indent-rainbow",
+        // TODO Highlight
+        "wayou.vscode-todo-highlight"
+    ],
+    "unwantedRecommendations": []
+}
