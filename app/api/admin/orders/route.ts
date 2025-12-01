@@ -4,6 +4,8 @@ import Order from '@/models/OrderModel';
 import Customer from '@/models/CustomerModel';
 import Shipment from '@/models/ShipmentModel';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
     try {
         await dbConnect();

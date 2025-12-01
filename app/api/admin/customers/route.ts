@@ -3,6 +3,8 @@ import dbConnect from '@/lib/mongodb';
 import Customer from '@/models/CustomerModel';
 import Order from '@/models/OrderModel';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
     try {
         await dbConnect();

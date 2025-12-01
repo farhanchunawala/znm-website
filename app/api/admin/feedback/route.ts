@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Feedback from '@/models/FeedbackModel';
 
+export const dynamic = 'force-dynamic';
+
 // GET - List all feedback with filters
 export async function GET(request: NextRequest) {
     try {
