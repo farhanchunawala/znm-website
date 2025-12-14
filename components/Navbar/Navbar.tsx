@@ -66,7 +66,10 @@ export const Navbar = () => {
 			<div className={`${styles.header}`}>
 				<div className={styles.topBar}>
 					<div className={styles.leftSection}>
-						<div className={styles.searchIcon} onClick={handleSearchToggle}>
+						<div
+							className={styles.searchIcon}
+							onClick={handleSearchToggle}
+						>
 							<SearchIcon width={20} height={20} />
 						</div>
 						<svg
@@ -78,27 +81,53 @@ export const Navbar = () => {
 							viewBox="0 0 32 33"
 							fill="none"
 						>
-							<path d="M4 23.9688H28V25.9688H4V23.9688Z" fill="black" />
-							<path d="M4 15.9688H28V17.9688H4V15.9688Z" fill="black" />
-							<path d="M4 7.96875H28V9.96875H4V7.96875Z" fill="black" />
+							<path
+								d="M4 23.9688H28V25.9688H4V23.9688Z"
+								fill="black"
+							/>
+							<path
+								d="M4 15.9688H28V17.9688H4V15.9688Z"
+								fill="black"
+							/>
+							<path
+								d="M4 7.96875H28V9.96875H4V7.96875Z"
+								fill="black"
+							/>
 						</svg>
 					</div>
 
-					<Link href="/" className={`${styles.heading} ${styles.text}`}>
+					<Link
+						href="/"
+						className={`${styles.heading} ${styles.text}`}
+					>
 						<div className={styles.logoContainer}>
-							<img src="/images/znm-logo.png" alt="Logo" className={styles.logoSymbol} />
-							<span className={styles.logoName}>ZOLL & METÉR</span>
+							<img
+								src="/images/znm-logo.png"
+								alt="Logo"
+								className={styles.logoSymbol}
+							/>
+							<span className={styles.logoName}>
+								ZOLL & METÉR
+							</span>
 						</div>
 					</Link>
 
 					<div className={styles.rightSection}>
-						<div className={styles.iconLink} onClick={handleAccountClick} style={{ cursor: 'pointer' }}>
+						<div
+							className={styles.iconLink}
+							onClick={handleAccountClick}
+							style={{ cursor: 'pointer' }}
+						>
 							<UserIcon width={20} height={20} />
 						</div>
 						<Link href="/cart" className={styles.iconLink}>
 							<div className={styles.cartIconWrapper}>
 								<CartIcon width={20} height={20} />
-								{cartCount > 0 && <span className={styles.cartCount}>{cartCount}</span>}
+								{cartCount > 0 && (
+									<span className={styles.cartCount}>
+										{cartCount}
+									</span>
+								)}
 							</div>
 						</Link>
 					</div>
@@ -120,37 +149,64 @@ export const Navbar = () => {
 			)}
 			<nav className={styles.mainnav}>
 				<div className={`${styles.navbar}`}>
-					<Link className={`${styles.link}`} href="/collections/suroor">
+					<Link
+						className={`${styles.link}`}
+						href="/collections/suroor"
+					>
 						SUROOR
 					</Link>
-					<Link className={`${styles.link}`} href="/collections/vault">
+					<Link
+						className={`${styles.link}`}
+						href="/collections/vault"
+					>
 						VAULT
 					</Link>
-					<Link className={`${styles.link}`} href="/collections/new-in">
+					<Link
+						className={`${styles.link}`}
+						href="/collections/new-in"
+					>
 						NEW IN
 					</Link>
 					{/* <Link className={`${styles.link}`} href="/collections/late-checkout">
 						LATE CHECKOUT AT THE FRED
 					</Link> */}
-					<Link className={`${styles.link}`} href="/collections/kurtas">
+					<Link
+						className={`${styles.link}`}
+						href="/collections/kurtas"
+					>
 						KURTA
 					</Link>
-					<Link className={`${styles.link}`} href="/collections/sherwani">
+					<Link
+						className={`${styles.link}`}
+						href="/collections/sherwani"
+					>
 						SHERWANI
 					</Link>
-					<Link className={`${styles.link}`} href="/collections/prince-coat">
+					<Link
+						className={`${styles.link}`}
+						href="/collections/prince-coat"
+					>
 						PRINCE COAT
 					</Link>
-					<Link className={`${styles.link}`} href="/collections/waist-coat">
+					<Link
+						className={`${styles.link}`}
+						href="/collections/waist-coat"
+					>
 						WAIST COAT
 					</Link>
-					<Link className={`${styles.link}`} href="/collections/accessories">
+					<Link
+						className={`${styles.link}`}
+						href="/collections/accessories"
+					>
 						ACCESSORIES
 					</Link>
 				</div>
 			</nav>
 			{isHidden ? null : <SideNav></SideNav>}
-			<AccountPanel isOpen={showAccountPanel} onClose={() => setShowAccountPanel(false)} />
+			<AccountPanel
+				isOpen={showAccountPanel}
+				onClose={() => setShowAccountPanel(false)}
+			/>
 		</div>
 	);
 };

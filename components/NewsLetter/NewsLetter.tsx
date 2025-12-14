@@ -6,7 +6,9 @@ import styles from './NewsLetter.module.scss';
 
 const NewsLetter = () => {
 	const [email, setEmail] = React.useState('');
-	const [status, setStatus] = React.useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+	const [status, setStatus] = React.useState<
+		'idle' | 'loading' | 'success' | 'error'
+	>('idle');
 	const [message, setMessage] = React.useState('');
 
 	const handleSubmit = async (e: React.FormEvent) => {

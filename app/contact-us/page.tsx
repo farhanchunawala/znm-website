@@ -10,7 +10,6 @@ import { log } from 'console';
 // const inter = Inter({ subsets: ['latin'] });
 
 export default function ContactUs() {
-
 	return (
 		<>
 			<Head>
@@ -31,20 +30,46 @@ export default function ContactUs() {
 				</div>
 				<div className={`${styles.booking}`}>
 					<h1>Appointment / Online Ordering</h1>
-					<p><span className={`${styles.span}`}>Online Order: WhatsApp / Call:</span> 9769735377</p>
-					<p><span className={`${styles.span}`}>studio appointment:</span> 9820978696</p>
+					<p>
+						<span className={`${styles.span}`}>
+							Online Order: WhatsApp / Call:
+						</span>{' '}
+						9769735377
+					</p>
+					<p>
+						<span className={`${styles.span}`}>
+							studio appointment:
+						</span>{' '}
+						9820978696
+					</p>
 				</div>
 				<div className={`${styles.social}`}>
 					<h1>Social Presence</h1>
-					<p><span className={`${styles.span}`}>Email: </span>faizanchunawala4@gmail.com</p>
-					<p><span className={`${styles.span}`}>phone: </span>9820978696</p>
-					<p><span className={`${styles.span}`}>Instagram: </span>https://www.instagram.com/zollandmeter</p>
-					<p><span className={`${styles.span}`}>Address: </span>Shop no. 10, Abba Apartment, Jogeshwari West, Mumbai - 400102</p>
+					<p>
+						<span className={`${styles.span}`}>Email: </span>
+						faizanchunawala4@gmail.com
+					</p>
+					<p>
+						<span className={`${styles.span}`}>phone: </span>
+						9820978696
+					</p>
+					<p>
+						<span className={`${styles.span}`}>Instagram: </span>
+						https://www.instagram.com/zollandmeter
+					</p>
+					<p>
+						<span className={`${styles.span}`}>Address: </span>Shop
+						no. 10, Abba Apartment, Jogeshwari West, Mumbai - 400102
+					</p>
 				</div>
 				<form className={`${styles.inquiry_form}`}>
-				{/* onSubmit={saveProduct}  */}
-					
-					<input type="text" className={`${styles.personal_detail}`} placeholder='Phone' name="mobileNo" // value={formData.mobileNo} // onChange={handleChange}
+					{/* onSubmit={saveProduct}  */}
+
+					<input
+						type="text"
+						className={`${styles.personal_detail}`}
+						placeholder="Phone"
+						name="mobileNo" // value={formData.mobileNo} // onChange={handleChange}
 					/>
 					{/* <textarea
 						className={`${styles.message}`}

@@ -2,105 +2,135 @@ import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/UserModel';
 import Customer from '@/models/CustomerModel';
-import bcrypt from 'bcryptjs';
-import { createToken, setAuthCookie } from '@/lib/auth';
+import {
+	createAccessToken,
+	createRefreshToken,
+	setAccessCookie,
+	setRefreshCookie,
+} from '@/lib/auth';
+import { hashPassword, validatePasswordStrength } from '@/lib/utils/password';
+import { successResponse, ErrorResponses } from '@/lib/utils/response';
+import { withErrorHandler } from '@/lib/middleware/error-handler';
+import { rateLimiters } from '@/lib/middleware/rate-limiter';
 import { sendWelcomeEmail } from '@/lib/email';
 
-export async function POST(request: NextRequest) {
-    try {
-        const body = await request.json();
-        const { username, email, phone, phoneCode, password } = body;
+export const POST = withErrorHandler(async (request: NextRequest) => {
+	// Rate limiting - prevent spam signups
+	const rateLimitCheck = await rateLimiters.auth(request);
+	if (!rateLimitCheck.allowed) {
+		return rateLimitCheck.error;
+	}
 
-        // Validate input
-        if (!username || !email || !password || !phone) {
-            return NextResponse.json(
-                { error: 'All fields are required' },
-                { status: 400 }
-            );
-        }
+	const body = await request.json();
+	const { username, email, phone, phoneCode, password } = body;
 
-        if (password.length < 8) {
-            return NextResponse.json(
-                { error: 'Password must be at least 8 characters long' },
-                { status: 400 }
-            );
-        }
+	// Validate required fields
+	if (!username || !email || !password || !phone) {
+		return ErrorResponses.badRequest('All fields are required');
+	}
 
-        // Connect to database
-        await dbConnect();
+	// Validate email format
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	if (!emailRegex.test(email)) {
+		return ErrorResponses.badRequest('Invalid email format');
+	}
 
-        // Check if user already exists
-        const existingUser = await User.findOne({
-            $or: [{ email }, { phone }]
-        });
+	// Validate password strength
+	const passwordValidation = validatePasswordStrength(password);
+	if (!passwordValidation.isValid) {
+		return ErrorResponses.badRequest(passwordValidation.errors.join('. '));
+	}
 
-        if (existingUser) {
-            return NextResponse.json(
-                { error: 'User with this email or phone already exists' },
-                { status: 409 }
-            );
-        }
+	// Connect to database
+	await dbConnect();
 
-        // Generate customer ID
-        const customerCount = await Customer.countDocuments();
-        const customerId = `ZNM-${String(customerCount + 1).padStart(4, '0')}`;
+	// Check if user already exists
+	const existingUser = await User.findOne({
+		$or: [{ email: email.toLowerCase() }, { phone }],
+	});
 
-        // Hash password
-        const passwordHash = await bcrypt.hash(password, 10);
+	if (existingUser) {
+		return ErrorResponses.conflict(
+			'User with this email or phone already exists'
+		);
+	}
 
-        // Create new user with customer ID
-        const newUser = await User.create({
-            name: {
-                firstName: username,
-                middleName: '',
-                lastName: '',
-            },
-            email,
-            phone,
-            passwordHash,
-            customerId,
-        });
+	// Generate customer ID
+	const customerCount = await Customer.countDocuments();
+	const customerId = `ZNM-${String(customerCount + 1).padStart(4, '0')}`;
 
-        // Create customer record
-        await Customer.create({
-            customerId,
-            userId: newUser._id,
-            emails: [email],
-            phoneCode: phoneCode || '+91',
-            phone,
-            firstName: username,
-            lastName: '',
-        });
+	// Hash password with bcrypt (12 rounds)
+	const passwordHash = await hashPassword(password);
 
-        // Create JWT token
-        const token = await createToken({
-            userId: newUser._id.toString(),
-            email: newUser.email,
-        });
+	// Get device info for refresh token tracking
+	const deviceInfo = {
+		userAgent: request.headers.get('user-agent') || undefined,
+		ip:
+			request.headers.get('x-forwarded-for')?.split(',')[0] ||
+			request.headers.get('x-real-ip') ||
+			undefined,
+	};
 
-        // Set cookie
-        await setAuthCookie(token);
+	// Create new user
+	const newUser = await User.create({
+		name: {
+			firstName: username,
+			middleName: '',
+			lastName: '',
+		},
+		email: email.toLowerCase(),
+		phone,
+		passwordHash,
+		customerId,
+		roles: ['customer'],
+		emailVerified: false,
+		status: 'active',
+	});
 
-        // Send welcome email (non-blocking)
-        sendWelcomeEmail(email, username).catch(err =>
-            console.error('Failed to send welcome email:', err)
-        );
+	// Create customer record
+	await Customer.create({
+		customerId,
+		userId: newUser._id,
+		name: username,
+		email: email.toLowerCase(),
+		phone,
+		status: 'active',
+		tags: [],
+		addresses: [],
+	});
 
-        return NextResponse.json({
-            success: true,
-            message: 'Thank you for joining us! Welcome to Zoll & Metér.',
-            user: {
-                id: newUser._id,
-                email: newUser.email,
-                name: newUser.name,
-                customerId: newUser.customerId,
-            },
-        }, { status: 201 });
-    } catch (error) {
-        console.error('Signup error:', error);
-        return NextResponse.json(
-            { error: 'Internal server error' },
-            { status: 500 }
-        );
-    }
-}
+	// Generate access and refresh tokens
+	const accessToken = await createAccessToken({
+		userId: newUser._id.toString(),
+		email: newUser.email,
+		roles: newUser.roles,
+	});
+
+	const refreshToken = await createRefreshToken(
+		newUser._id.toString(),
+		deviceInfo
+	);
+
+	// Set auth cookies
+	await setAccessCookie(accessToken);
+	await setRefreshCookie(refreshToken);
+
+	// Send welcome email (non-blocking)
+	sendWelcomeEmail(email, username).catch((err) =>
+		console.error('Failed to send welcome email:', err)
+	);
+
+	// Return success response
+	return successResponse(
+		{
+			message: 'Thank you for joining us! Welcome to Zoll & Metér.',
+			user: {
+				id: newUser._id.toString(),
+				email: newUser.email,
+				name: `${newUser.name.firstName} ${newUser.name.middleName} ${newUser.name.lastName}`.trim(),
+				customerId: newUser.customerId,
+			},
+		},
+		201
+	);
+});

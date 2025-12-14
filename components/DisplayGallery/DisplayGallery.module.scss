@@ -2,7 +2,7 @@
 
 .main {
 	position: relative;
-	background-color: #FAFAFA;
+	background-color: #fafafa;
 	padding-top: 4px;
 	h2 {
 		color: #000;
@@ -17,7 +17,6 @@
 		// top: 21px;
 		// left: 0;
 		// right: 0;
-		
 	}
 	.container {
 		display: flex;
@@ -44,7 +43,7 @@
 		}
 	}
 	.viewall {
-		color: #FAFAFA;
+		color: #fafafa;
 		text-align: center;
 		font-size: 16px;
 		font-weight: 400;
@@ -57,7 +56,8 @@
 	}
 }
 
-@media (min-width: $screen-sm) and (max-width: $screen-lg) {}
+@media (min-width: $screen-sm) and (max-width: $screen-lg) {
+}
 
 @media (min-width: $screen-lg) {
 	.main {

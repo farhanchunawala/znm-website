@@ -25,7 +25,9 @@ const FabricRollSchema = new mongoose.Schema(
 FabricRollSchema.plugin(AutoIncrement(mongoose), { inc_field: 'fabricRollId' });
 
 // const FabricRoll = mongoose.models.FabricRoll || mongoose.model('FabricRoll', FabricRollSchema);
-const FabricRoll = mongoose.models.FabricRoll || mongoose.model('FabricRoll', FabricRollSchema, 'fabricRolls');
+const FabricRoll =
+	mongoose.models.FabricRoll ||
+	mongoose.model('FabricRoll', FabricRollSchema, 'fabricRolls');
 // const FabricRoll = mongoose.model('FabricRoll', FabricRollSchema, 'fabricRolls');
 
 export default FabricRoll;

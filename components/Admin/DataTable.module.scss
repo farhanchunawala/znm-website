@@ -1,0 +1,103 @@
+.tableContainer {
+	background: #ffffff;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	overflow: auto;
+
+	&::-webkit-scrollbar {
+		height: 6px;
+	}
+
+	&::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background: #d0d0d0;
+		border-radius: 3px;
+
+		&:hover {
+			background: #b0b0b0;
+		}
+	}
+}
+
+.table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 13px;
+
+	thead {
+		background: #f8f8f8;
+		border-bottom: 1px solid #e0e0e0;
+		position: sticky;
+		top: 0;
+		z-index: 2;
+	}
+
+	th {
+		padding: 12px 16px;
+		text-align: left;
+		font-weight: 600;
+		color: #595959;
+		white-space: nowrap;
+		text-transform: uppercase;
+		letter-spacing: 0.3px;
+		font-size: 11px;
+		user-select: none;
+	}
+
+	td {
+		padding: 12px 16px;
+		border-bottom: 1px solid #f0f0f0;
+		color: #333333;
+		font-weight: 500;
+
+		a {
+			color: #000000;
+			text-decoration: none;
+			font-weight: 600;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+
+	tbody {
+		tr {
+			transition: all 0.15s;
+
+			&:hover {
+				background: #f8f8f8;
+			}
+
+			&:last-child td {
+				border-bottom: none;
+			}
+		}
+	}
+}
+
+.actionsHeader {
+	text-align: right;
+	padding-right: 20px;
+}
+
+.actions {
+	text-align: right;
+	padding-right: 20px;
+	white-space: nowrap;
+}
+
+.loading,
+.empty {
+	text-align: center;
+	padding: 48px 16px;
+	color: #a0a0a0;
+	font-weight: 500;
+}
+
+.loading {
+	color: #808080;
+}

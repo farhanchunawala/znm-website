@@ -1,37 +1,36 @@
-.main{
-    padding: 45px 13px 54px;
-    .header {
-        h1 {
-            text-align: center;
-            font-size: 25px;
-            font-weight: 400;
-            // margin-bottom: 23px;
-        }
-    }
-    .booking {
-        h1 {
-            font-size: 25px;
-            font-weight: 400
-            ;
-        }
-        p {
-            font-size: 13px;
-            .span {
-                font-weight: bold;
-            }
-        }
-    }
-    .social {
-        h1 {
-            font-size: 18px;
-            font-weight: bold;
-        }
-        p {
-            font-size: 13px;
-            .span {
-                font-weight: bold;
-            }
-        }
+.main {
+	padding: 45px 13px 54px;
+	.header {
+		h1 {
+			text-align: center;
+			font-size: 25px;
+			font-weight: 400;
+			// margin-bottom: 23px;
+		}
+	}
+	.booking {
+		h1 {
+			font-size: 25px;
+			font-weight: 400;
+		}
+		p {
+			font-size: 13px;
+			.span {
+				font-weight: bold;
+			}
+		}
+	}
+	.social {
+		h1 {
+			font-size: 18px;
+			font-weight: bold;
+		}
+		p {
+			font-size: 13px;
+			.span {
+				font-weight: bold;
+			}
+		}
 		.inquiry_form {
 			margin: 13px;
 			// width: 100%;
@@ -58,7 +57,6 @@
 			border: 1px black;
 			margin-left: 13px;
 			margin-top: 8px;
-
 		}
-    }
+	}
 }

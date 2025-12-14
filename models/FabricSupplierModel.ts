@@ -13,10 +13,14 @@ const FabricSupplierSchema = new mongoose.Schema(
 	{ timestamps: true }
 );
 
-FabricSupplierSchema.plugin(AutoIncrement(mongoose), { inc_field: 'fabricSupplierId' });
+FabricSupplierSchema.plugin(AutoIncrement(mongoose), {
+	inc_field: 'fabricSupplierId',
+});
 
 // const FabricSupplier = mongoose.models.FabricSupplier || mongoose.model('FabricSupplier', FabricSupplierSchema);
-const FabricSupplier = mongoose.models.FabricSupplier || mongoose.model('FabricSupplier', FabricSupplierSchema, 'fabricSuppliers');
+const FabricSupplier =
+	mongoose.models.FabricSupplier ||
+	mongoose.model('FabricSupplier', FabricSupplierSchema, 'fabricSuppliers');
 // const FabricSupplier = mongoose.model('FabricSupplier', FabricSupplierSchema, 'fabricSuppliers');
 
 export default FabricSupplier;

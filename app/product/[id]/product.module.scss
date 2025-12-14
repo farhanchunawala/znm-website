@@ -1,7 +1,6 @@
 @import '/app/styles/mixins';
 
 .main {
-
 	.images_holder {
 		padding: 0 14px;
 
@@ -54,7 +53,7 @@
 			.size {
 				border: 1px solid $b82;
 				height: 40px;
-				font-size: .8125rem;
+				font-size: 0.8125rem;
 				display: flex;
 				justify-content: center;
 				align-items: center;
@@ -92,7 +91,7 @@
 			}
 
 			.txt {
-				color: #FFF;
+				color: #fff;
 				text-align: center;
 				font-size: 16px;
 				font-weight: 400;
@@ -134,7 +133,7 @@
 		}
 
 		.dnf {
-			border-top: solid #D0D0D0 1px;
+			border-top: solid #d0d0d0 1px;
 
 			.collapse {
 				display: flex;
@@ -188,7 +187,6 @@
 			border: 1px black;
 			margin-left: 13px;
 			margin-top: 8px;
-
 		}
 	}
 }
@@ -247,8 +245,8 @@
 				height: 102px;
 
 				.size {
-					border: 1px solid #D0D0D0;
-					background: #E4E4E4;
+					border: 1px solid #d0d0d0;
+					background: #e4e4e4;
 				}
 			}
 
@@ -287,7 +285,6 @@
 					height: 265px;
 				}
 			}
-
 		}
 	}
 }

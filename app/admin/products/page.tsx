@@ -1,0 +1,180 @@
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import styles from './products.module.scss';
+
+interface Product {
+	_id: string;
+	title: string;
+	slug: string;
+	status: 'draft' | 'active' | 'archived';
+	variants: Array<{ price: number }>;
+	createdAt: string;
+}
+
+export default function ProductsPage() {
+	const router = useRouter();
+	const [products, setProducts] = useState<Product[]>([]);
+	const [loading, setLoading] = useState(true);
+	const [search, setSearch] = useState('');
+	const [status, setStatus] = useState<
+		'all' | 'draft' | 'active' | 'archived'
+	>('all');
+	const [page, setPage] = useState(1);
+	const [total, setTotal] = useState(0);
+	const limit = 10;
+
+	useEffect(() => {
+		fetchProducts();
+	}, [search, status, page]);
+
+	async function fetchProducts() {
+		try {
+			setLoading(true);
+			const params = new URLSearchParams();
+			if (search) params.append('q', search);
+			if (status !== 'all') params.append('status', status);
+			params.append('page', page.toString());
+			params.append('limit', limit.toString());
+
+			const res = await fetch(`/api/products?${params}`);
+			const result = await res.json();
+
+			if (result.success) {
+				setProducts(result.data);
+				setTotal(result.meta.total);
+			}
+		} catch (error) {
+			console.error('Failed to fetch products:', error);
+		} finally {
+			setLoading(false);
+		}
+	}
+
+	const pages = Math.ceil(total / limit);
+
+	return (
+		<div className={styles.container}>
+			<div className={styles.header}>
+				<h1>Products</h1>
+				<Link href="/admin/products/new" className={styles.createBtn}>
+					+ New Product
+				</Link>
+			</div>
+
+			<div className={styles.filters}>
+				<input
+					type="text"
+					placeholder="Search products..."
+					value={search}
+					onChange={(e) => {
+						setSearch(e.target.value);
+						setPage(1);
+					}}
+					className={styles.searchInput}
+				/>
+
+				<select
+					value={status}
+					onChange={(e) => {
+						setStatus(e.target.value as any);
+						setPage(1);
+					}}
+					className={styles.filterSelect}
+				>
+					<option value="all">All Status</option>
+					<option value="draft">Draft</option>
+					<option value="active">Active</option>
+					<option value="archived">Archived</option>
+				</select>
+			</div>
+
+			{loading ? (
+				<div className={styles.loading}>Loading...</div>
+			) : products.length === 0 ? (
+				<div className={styles.empty}>
+					<p>No products found</p>
+					<Link href="/admin/products/new">Create one now</Link>
+				</div>
+			) : (
+				<>
+					<table className={styles.table}>
+						<thead>
+							<tr>
+								<th>Title</th>
+								<th>Status</th>
+								<th>Price Range</th>
+								<th>Created</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							{products.map((product) => (
+								<tr key={product._id}>
+									<td className={styles.titleCell}>
+										<Link
+											href={`/admin/products/${product._id}`}
+										>
+											{product.title}
+										</Link>
+									</td>
+									<td>
+										<span
+											className={`${styles.badge} ${styles[product.status]}`}
+										>
+											{product.status}
+										</span>
+									</td>
+									<td>
+										{product.variants.length > 0
+											? `₹${Math.min(...product.variants.map((v) => v.price))} - ₹${Math.max(...product.variants.map((v) => v.price))}`
+											: 'No variants'}
+									</td>
+									<td>
+										{new Date(
+											product.createdAt
+										).toLocaleDateString()}
+									</td>
+									<td>
+										<Link
+											href={`/admin/products/${product._id}`}
+											className={styles.editBtn}
+										>
+											Edit
+										</Link>
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+
+					{pages > 1 && (
+						<div className={styles.pagination}>
+							<button
+								onClick={() => setPage(Math.max(1, page - 1))}
+								disabled={page === 1}
+								className={styles.pageBtn}
+							>
+								← Previous
+							</button>
+							<span>
+								Page {page} of {pages}
+							</span>
+							<button
+								onClick={() =>
+									setPage(Math.min(pages, page + 1))
+								}
+								disabled={page === pages}
+								className={styles.pageBtn}
+							>
+								Next →
+							</button>
+						</div>
+					)}
+				</>
+			)}
+		</div>
+	);
+}

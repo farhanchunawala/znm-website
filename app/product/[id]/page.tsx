@@ -27,7 +27,10 @@ export default function Product({ params }: Props) {
 
 	const dispatch = useAppDispatch();
 	const [selectedSize, setSelectedSize] = useState('');
-	const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+	const [feedback, setFeedback] = useState<{
+		type: 'success' | 'error';
+		message: string;
+	} | null>(null);
 
 	const handleAddToCart = () => {
 		if (!selectedSize) {
@@ -69,7 +72,9 @@ export default function Product({ params }: Props) {
 
 			const data = await response.json();
 			if (response.ok && data.emailSent) {
-				window.alert('Inquiry sent successfully! We will contact you soon.');
+				window.alert(
+					'Inquiry sent successfully! We will contact you soon.'
+				);
 				// Reset form
 				setFormData({
 					name: '',
@@ -86,7 +91,9 @@ export default function Product({ params }: Props) {
 		}
 	};
 
-	const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+	const handleChange = (
+		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
 		const { name, value } = event.target;
 		setFormData((prev) => ({
 			...prev,
@@ -112,7 +119,10 @@ export default function Product({ params }: Props) {
 				<>
 					<div className={`${styles.images_holder}`}>
 						{productData.images.map((imageSrc, index) => (
-							<div key={index} className={`${styles.image_wrapper}`}>
+							<div
+								key={index}
+								className={`${styles.image_wrapper}`}
+							>
 								<Image
 									className={`${styles.product_image}`}
 									src={imageSrc}
@@ -138,19 +148,25 @@ export default function Product({ params }: Props) {
 						</div>
 						<p className={`${styles.sizes_text}`}>sizes</p>
 						<div className={`${styles.sizes}`}>
-							{productData.sizes.map((size, index) => (
-								size && (
-									<div
-										key={index}
-										className={`${styles.size} ${selectedSize === size ? styles.selected : ''}`}
-										onClick={() => setSelectedSize(size)}
-									>
-										{size}
-									</div>
-								)
-							))}
+							{productData.sizes.map(
+								(size, index) =>
+									size && (
+										<div
+											key={index}
+											className={`${styles.size} ${selectedSize === size ? styles.selected : ''}`}
+											onClick={() =>
+												setSelectedSize(size)
+											}
+										>
+											{size}
+										</div>
+									)
+							)}
 						</div>
-						<div className={`${styles.notify}`} onClick={handleAddToCart}>
+						<div
+							className={`${styles.notify}`}
+							onClick={handleAddToCart}
+						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								width="13"
@@ -166,7 +182,9 @@ export default function Product({ params }: Props) {
 							<p className={`${styles.txt}`}>ADD TO CART</p>
 						</div>
 						{feedback && (
-							<div className={`${styles.feedback} ${styles[feedback.type]}`}>
+							<div
+								className={`${styles.feedback} ${styles[feedback.type]}`}
+							>
 								{feedback.message}
 							</div>
 						)}

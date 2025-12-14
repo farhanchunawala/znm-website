@@ -1,65 +1,100 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/UserModel';
-import bcrypt from 'bcryptjs';
-import { createToken, setAuthCookie } from '@/lib/auth';
+import { comparePassword } from '@/lib/utils/password';
+import {
+	createAccessToken,
+	createRefreshToken,
+	setAccessCookie,
+	setRefreshCookie,
+} from '@/lib/auth';
+import { successResponse, ErrorResponses } from '@/lib/utils/response';
+import { withErrorHandler } from '@/lib/middleware/error-handler';
+import { rateLimiters } from '@/lib/middleware/rate-limiter';
 
-export async function POST(request: NextRequest) {
-    try {
-        const body = await request.json();
-        const { email, phone, password } = body;
+export const POST = withErrorHandler(async (request: NextRequest) => {
+	// Rate limiting - prevent brute force attacks
+	const rateLimitCheck = await rateLimiters.auth(request);
+	if (!rateLimitCheck.allowed) {
+		return rateLimitCheck.error;
+	}
 
-        // Validate input
-        if (!email || !password) {
-            return NextResponse.json(
-                { error: 'Email and password are required' },
-                { status: 400 }
-            );
-        }
+	const body = await request.json();
+	const { email, phone, password } = body;
 
-        // Connect to database
-        await dbConnect();
+	// Validate input
+	if (!email || !password) {
+		return ErrorResponses.badRequest('Email and password are required');
+	}
 
-        // Check if user exists
-        const existingUser = await User.findOne({ email });
-        if (!existingUser) {
-            return NextResponse.json(
-                { error: 'Invalid credentials' },
-                { status: 401 }
-            );
-        }
+	// Connect to database
+	await dbConnect();
 
-        // Verify password
-        const isValidPassword = await bcrypt.compare(password, existingUser.passwordHash);
-        if (!isValidPassword) {
-            return NextResponse.json(
-                { error: 'Invalid credentials' },
-                { status: 401 }
-            );
-        }
+	// Find user by email
+	const user = await User.findOne({ email: email.toLowerCase() });
 
-        // Create JWT token
-        const token = await createToken({
-            userId: existingUser._id.toString(),
-            email: existingUser.email,
-        });
+	if (!user) {
+		// Use generic error message to prevent user enumeration
+		return ErrorResponses.unauthorized('Invalid credentials');
+	}
 
-        // Set cookie
-        await setAuthCookie(token);
+	// Check account status
+	if (user.status === 'suspended') {
+		return ErrorResponses.forbidden(
+			'Your account has been suspended. Please contact support.'
+		);
+	}
 
-        return NextResponse.json({
-            success: true,
-            user: {
-                id: existingUser._id,
-                email: existingUser.email,
-                name: existingUser.name,
-            },
-        });
-    } catch (error) {
-        console.error('Login error:', error);
-        return NextResponse.json(
-            { error: 'Internal server error' },
-            { status: 500 }
-        );
-    }
-}
+	if (user.status === 'deleted') {
+		return ErrorResponses.forbidden('This account no longer exists');
+	}
+
+	// Verify password
+	const isValidPassword = await comparePassword(password, user.passwordHash);
+
+	if (!isValidPassword) {
+		return ErrorResponses.unauthorized('Invalid credentials');
+	}
+
+	// Get device info for refresh token tracking
+	const deviceInfo = {
+		userAgent: request.headers.get('user-agent') || undefined,
+		ip:
+			request.headers.get('x-forwarded-for')?.split(',')[0] ||
+			request.headers.get('x-real-ip') ||
+			undefined,
+	};
+
+	// Generate access and refresh tokens
+	// Generate access and refresh tokens
+	const accessToken = await createAccessToken({
+		userId: user._id.toString(),
+		email: user.email,
+		roles: Array.from(user.roles || []),
+	});
+
+	const refreshToken = await createRefreshToken(
+		user._id.toString(),
+		deviceInfo
+	);
+
+	// Set auth cookies
+	await setAccessCookie(accessToken);
+	await setRefreshCookie(refreshToken);
+
+	// Update last login
+	user.lastLogin = new Date();
+	await user.save();
+
+	return successResponse({
+		user: {
+			id: user._id.toString(),
+			email: user.email,
+			name: user.name,
+			roles: Array.from(user.roles || []),
+			customerId: user.customerId,
+		},
+		accessToken,
+		refreshToken,
+	});
+});

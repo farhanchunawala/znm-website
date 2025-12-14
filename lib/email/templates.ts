@@ -1,43 +1,47 @@
 interface Order {
-    orderId: string;
-    items: Array<{
-        title: string;
-        quantity: number;
-        size: string;
-        price: number;
-    }>;
-    total: number;
-    invoiceNumber?: string;
-    shippingInfo: {
-        firstName: string;
-        lastName: string;
-        address: string;
-        city: string;
-        state: string;
-        zipCode: string;
-    };
+	orderId: string;
+	items: Array<{
+		title: string;
+		quantity: number;
+		size: string;
+		price: number;
+	}>;
+	total: number;
+	invoiceNumber?: string;
+	shippingInfo: {
+		firstName: string;
+		lastName: string;
+		address: string;
+		city: string;
+		state: string;
+		zipCode: string;
+	};
 }
 
 interface Customer {
-    firstName: string;
-    lastName: string;
-    email?: string;
-    emails?: string[];
+	firstName: string;
+	lastName: string;
+	email?: string;
+	emails?: string[];
 }
 
 const getCustomerEmail = (customer: Customer): string => {
-    return customer.email || customer.emails?.[0] || '';
+	return customer.email || customer.emails?.[0] || '';
 };
 
 const getCustomerName = (customer: Customer): string => {
-    return `${customer.firstName} ${customer.lastName}`;
+	return `${customer.firstName} ${customer.lastName}`;
 };
 
-export function orderFulfilledEmail(order: Order, customer: Customer, invoiceUrl?: string): string {
-    const customerEmail = getCustomerEmail(customer);
-    const customerName = getCustomerName(customer);
+export function orderFulfilledEmail(
+	order: Order,
+	customer: Customer,
+	invoiceUrl?: string
+): string {
+	const customerEmail = getCustomerEmail(customer);
+	const customerName = getCustomerName(customer);
 
-    return `
+	return `
 <!DOCTYPE html>
 <html>
 <head>
@@ -64,12 +68,16 @@ export function orderFulfilledEmail(order: Order, customer: Customer, invoiceUrl
             
             <div class="order-details">
                 <h3>Order Details</h3>
-                ${order.items.map(item => `
+                ${order.items
+					.map(
+						(item) => `
                     <div class="item">
                         <strong>${item.title}</strong><br>
                         Size: ${item.size} | Quantity: ${item.quantity} | ₹${item.price.toLocaleString()}
                     </div>
-                `).join('')}
+                `
+					)
+					.join('')}
                 <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #667eea;">
                     <strong>Total: ₹${order.total.toLocaleString()}</strong>
                 </div>
@@ -95,10 +103,14 @@ export function orderFulfilledEmail(order: Order, customer: Customer, invoiceUrl
     `;
 }
 
-export function orderShippedEmail(order: Order, customer: Customer, trackingInfo?: { trackingId?: string; carrier?: string }): string {
-    const customerName = getCustomerName(customer);
+export function orderShippedEmail(
+	order: Order,
+	customer: Customer,
+	trackingInfo?: { trackingId?: string; carrier?: string }
+): string {
+	const customerName = getCustomerName(customer);
 
-    return `
+	return `
 <!DOCTYPE html>
 <html>
 <head>
@@ -121,13 +133,17 @@ export function orderShippedEmail(order: Order, customer: Customer, trackingInfo
             <p>Dear ${customerName},</p>
             <p>Excellent news! Your order <strong>#${order.orderId}</strong> has been shipped and is on its way to you.</p>
             
-            ${trackingInfo?.trackingId ? `
+            ${
+				trackingInfo?.trackingId
+					? `
                 <div class="tracking-box">
                     <p>Tracking Number:</p>
                     <div class="tracking-id">${trackingInfo.trackingId}</div>
                     ${trackingInfo.carrier ? `<p>Carrier: ${trackingInfo.carrier}</p>` : ''}
                 </div>
-            ` : ''}
+            `
+					: ''
+			}
 
             <p>Your package will be out for delivery soon. Thank you for your patience!</p>
             
@@ -143,10 +159,13 @@ export function orderShippedEmail(order: Order, customer: Customer, trackingInfo
     `;
 }
 
-export function orderInLogisticsEmail(order: Order, customer: Customer): string {
-    const customerName = getCustomerName(customer);
+export function orderInLogisticsEmail(
+	order: Order,
+	customer: Customer
+): string {
+	const customerName = getCustomerName(customer);
 
-    return `
+	return `
 <!DOCTYPE html>
 <html>
 <head>
@@ -193,10 +212,14 @@ export function orderInLogisticsEmail(order: Order, customer: Customer): string 
     `;
 }
 
-export function orderDeliveredEmail(order: Order, customer: Customer, feedbackLink: string): string {
-    const customerName = getCustomerName(customer);
+export function orderDeliveredEmail(
+	order: Order,
+	customer: Customer,
+	feedbackLink: string
+): string {
+	const customerName = getCustomerName(customer);
 
-    return `
+	return `
 <!DOCTYPE html>
 <html>
 <head>

@@ -4,56 +4,58 @@ import nodemailer from 'nodemailer';
 // For production, you need to provide actual SMTP credentials
 // For development/demo, we'll use a mock configuration or just log to console if no creds
 const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.example.com',
-    port: parseInt(process.env.SMTP_PORT || '587'),
-    secure: process.env.SMTP_SECURE === 'true',
-    auth: {
-        user: process.env.SMTP_USER || 'user',
-        pass: process.env.SMTP_PASS || 'pass',
-    },
+	host: process.env.SMTP_HOST || 'smtp.example.com',
+	port: parseInt(process.env.SMTP_PORT || '587'),
+	secure: process.env.SMTP_SECURE === 'true',
+	auth: {
+		user: process.env.SMTP_USER || 'user',
+		pass: process.env.SMTP_PASS || 'pass',
+	},
 });
 
 interface EmailOptions {
-    to: string;
-    subject: string;
-    text?: string;
-    html?: string;
+	to: string;
+	subject: string;
+	text?: string;
+	html?: string;
 }
 
 export const sendEmail = async ({ to, subject, text, html }: EmailOptions) => {
-    try {
-        // If no real credentials are provided (checking a dummy value), just log
-        if (!process.env.SMTP_HOST && !process.env.SMTP_USER) {
-            console.log('---------------------------------------------------');
-            console.log(`[MOCK EMAIL] To: ${to}`);
-            console.log(`[MOCK EMAIL] Subject: ${subject}`);
-            console.log(`[MOCK EMAIL] Body: ${text || 'HTML Content'}`);
-            console.log('---------------------------------------------------');
-            return { success: true, message: 'Mock email sent' };
-        }
+	try {
+		// If no real credentials are provided (checking a dummy value), just log
+		if (!process.env.SMTP_HOST && !process.env.SMTP_USER) {
+			console.log('---------------------------------------------------');
+			console.log(`[MOCK EMAIL] To: ${to}`);
+			console.log(`[MOCK EMAIL] Subject: ${subject}`);
+			console.log(`[MOCK EMAIL] Body: ${text || 'HTML Content'}`);
+			console.log('---------------------------------------------------');
+			return { success: true, message: 'Mock email sent' };
+		}
 
-        const info = await transporter.sendMail({
-            from: process.env.SMTP_FROM || '"Zoll & Metér" <noreply@zollandmeter.com>',
-            to,
-            subject,
-            text,
-            html,
-        });
+		const info = await transporter.sendMail({
+			from:
+				process.env.SMTP_FROM ||
+				'"Zoll & Metér" <noreply@zollandmeter.com>',
+			to,
+			subject,
+			text,
+			html,
+		});
 
-        console.log('Message sent: %s', info.messageId);
-        return { success: true, messageId: info.messageId };
-    } catch (error) {
-        console.error('Error sending email:', error);
-        // Don't throw error to prevent blocking the main flow
-        return { success: false, error };
-    }
+		console.log('Message sent: %s', info.messageId);
+		return { success: true, messageId: info.messageId };
+	} catch (error) {
+		console.error('Error sending email:', error);
+		// Don't throw error to prevent blocking the main flow
+		return { success: false, error };
+	}
 };
 
 export const sendWelcomeEmail = async (email: string, name: string) => {
-    const subject = 'Welcome to Zoll & Metér!';
-    const text = `Dear ${name},\n\nThank you for joining Zoll & Metér. We are delighted to have you with us.\n\nExplore our latest collection of Sherwanis and more at our website.\n\nBest Regards,\nThe Zoll & Metér Team`;
+	const subject = 'Welcome to Zoll & Metér!';
+	const text = `Dear ${name},\n\nThank you for joining Zoll & Metér. We are delighted to have you with us.\n\nExplore our latest collection of Sherwanis and more at our website.\n\nBest Regards,\nThe Zoll & Metér Team`;
 
-    const html = `
+	const html = `
     <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto;">
       <h1 style="color: #000;">Welcome to Zoll & Metér</h1>
       <p>Dear ${name},</p>
@@ -67,14 +69,19 @@ export const sendWelcomeEmail = async (email: string, name: string) => {
     </div>
   `;
 
-    return sendEmail({ to: email, subject, text, html });
+	return sendEmail({ to: email, subject, text, html });
 };
 
-export const sendNewsletterAdminNotification = async (subscriberEmail: string) => {
-    const adminEmail = process.env.ADMIN_EMAIL || process.env.SMTP_USER || 'admin@zollandmeter.com';
-    const subject = 'New Newsletter Subscription';
-    const text = `A new user has subscribed to the newsletter: ${subscriberEmail}`;
-    const html = `
+export const sendNewsletterAdminNotification = async (
+	subscriberEmail: string
+) => {
+	const adminEmail =
+		process.env.ADMIN_EMAIL ||
+		process.env.SMTP_USER ||
+		'admin@zollandmeter.com';
+	const subject = 'New Newsletter Subscription';
+	const text = `A new user has subscribed to the newsletter: ${subscriberEmail}`;
+	const html = `
         <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee;">
             <h2>New Newsletter Subscriber</h2>
             <p><strong>Email:</strong> ${subscriberEmail}</p>
@@ -82,13 +89,13 @@ export const sendNewsletterAdminNotification = async (subscriberEmail: string) =
         </div>
     `;
 
-    return sendEmail({ to: adminEmail, subject, text, html });
+	return sendEmail({ to: adminEmail, subject, text, html });
 };
 
 export const sendNewsletterUserThankYou = async (email: string) => {
-    const subject = 'Thank you for subscribing to Zoll & Metér';
-    const text = `Thank you for subscribing to our newsletter. We'll keep you updated with our latest collections and offers.`;
-    const html = `
+	const subject = 'Thank you for subscribing to Zoll & Metér';
+	const text = `Thank you for subscribing to our newsletter. We'll keep you updated with our latest collections and offers.`;
+	const html = `
         <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto;">
             <h1 style="color: #000;">Welcome to our Newsletter</h1>
             <p>Thank you for subscribing to Zoll & Metér updates.</p>
@@ -105,21 +112,25 @@ export const sendNewsletterUserThankYou = async (email: string) => {
         </div>
     `;
 
-    return sendEmail({ to: email, subject, text, html });
+	return sendEmail({ to: email, subject, text, html });
 };
 
-export const sendBroadcastEmail = async (emails: string[], subject: string, message: string) => {
-    try {
-        // Send emails in batches to avoid overwhelming the SMTP server
-        const batchSize = 50;
-        const results = [];
+export const sendBroadcastEmail = async (
+	emails: string[],
+	subject: string,
+	message: string
+) => {
+	try {
+		// Send emails in batches to avoid overwhelming the SMTP server
+		const batchSize = 50;
+		const results = [];
 
-        for (let i = 0; i < emails.length; i += batchSize) {
-            const batch = emails.slice(i, i + batchSize);
+		for (let i = 0; i < emails.length; i += batchSize) {
+			const batch = emails.slice(i, i + batchSize);
 
-            // Send to each email in the batch
-            const batchPromises = batch.map(email => {
-                const html = `
+			// Send to each email in the batch
+			const batchPromises = batch.map((email) => {
+				const html = `
                     <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto;">
                         <div style="padding: 20px; border-bottom: 2px solid #000;">
                             <h1 style="color: #000; margin: 0;">Zoll & Metér</h1>
@@ -134,49 +145,56 @@ export const sendBroadcastEmail = async (emails: string[], subject: string, mess
                     </div>
                 `;
 
-                return sendEmail({
-                    to: email,
-                    subject,
-                    text: message,
-                    html,
-                });
-            });
+				return sendEmail({
+					to: email,
+					subject,
+					text: message,
+					html,
+				});
+			});
 
-            const batchResults = await Promise.allSettled(batchPromises);
-            results.push(...batchResults);
+			const batchResults = await Promise.allSettled(batchPromises);
+			results.push(...batchResults);
 
-            // Add a small delay between batches to avoid rate limiting
-            if (i + batchSize < emails.length) {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-            }
-        }
+			// Add a small delay between batches to avoid rate limiting
+			if (i + batchSize < emails.length) {
+				await new Promise((resolve) => setTimeout(resolve, 1000));
+			}
+		}
 
-        const successful = results.filter(r => r.status === 'fulfilled').length;
-        const failed = results.filter(r => r.status === 'rejected').length;
+		const successful = results.filter(
+			(r) => r.status === 'fulfilled'
+		).length;
+		const failed = results.filter((r) => r.status === 'rejected').length;
 
-        console.log(`Broadcast sent: ${successful} successful, ${failed} failed out of ${emails.length} total`);
+		console.log(
+			`Broadcast sent: ${successful} successful, ${failed} failed out of ${emails.length} total`
+		);
 
-        return {
-            success: true,
-            total: emails.length,
-            successful,
-            failed,
-        };
-    } catch (error) {
-        console.error('Error sending broadcast email:', error);
-        return { success: false, error };
-    }
+		return {
+			success: true,
+			total: emails.length,
+			successful,
+			failed,
+		};
+	} catch (error) {
+		console.error('Error sending broadcast email:', error);
+		return { success: false, error };
+	}
 };
 
-export const sendOrderShippedEmail = async (orderDetails: any, trackingId?: string) => {
-    const { shippingInfo, orderId, items } = orderDetails;
-    const subject = `Your Order #${orderId} Has Been Shipped!`;
-    
-    const trackingInfo = trackingId 
-        ? `<p><strong>Tracking ID:</strong> ${trackingId}</p>`
-        : '<p>You will receive tracking information shortly.</p>';
-    
-    const html = `
+export const sendOrderShippedEmail = async (
+	orderDetails: any,
+	trackingId?: string
+) => {
+	const { shippingInfo, orderId, items } = orderDetails;
+	const subject = `Your Order #${orderId} Has Been Shipped!`;
+
+	const trackingInfo = trackingId
+		? `<p><strong>Tracking ID:</strong> ${trackingId}</p>`
+		: '<p>You will receive tracking information shortly.</p>';
+
+	const html = `
         <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto;">
             <div style="padding: 20px; border-bottom: 2px solid #000;">
                 <h1 style="color: #000; margin: 0;">Zoll & Metér</h1>
@@ -199,22 +217,28 @@ export const sendOrderShippedEmail = async (orderDetails: any, trackingId?: stri
             </div>
         </div>
     `;
-    
-    return sendEmail({
-        to: shippingInfo.email,
-        subject,
-        text: `Your order #${orderId} has been shipped!`,
-        html,
-    });
+
+	return sendEmail({
+		to: shippingInfo.email,
+		subject,
+		text: `Your order #${orderId} has been shipped!`,
+		html,
+	});
 };
 
-export const sendTrackingAvailableEmail = async (orderDetails: any, trackingId: string, carrier?: string) => {
-    const { shippingInfo, orderId } = orderDetails;
-    const subject = `Track Your Order #${orderId}`;
-    
-    const carrierInfo = carrier ? `<p><strong>Carrier:</strong> ${carrier}</p>` : '';
-    
-    const html = `
+export const sendTrackingAvailableEmail = async (
+	orderDetails: any,
+	trackingId: string,
+	carrier?: string
+) => {
+	const { shippingInfo, orderId } = orderDetails;
+	const subject = `Track Your Order #${orderId}`;
+
+	const carrierInfo = carrier
+		? `<p><strong>Carrier:</strong> ${carrier}</p>`
+		: '';
+
+	const html = `
         <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto;">
             <div style="padding: 20px; border-bottom: 2px solid #000;">
                 <h1 style="color: #000; margin: 0;">Zoll & Metér</h1>
@@ -234,20 +258,20 @@ export const sendTrackingAvailableEmail = async (orderDetails: any, trackingId: 
             </div>
         </div>
     `;
-    
-    return sendEmail({
-        to: shippingInfo.email,
-        subject,
-        text: `Track your order #${orderId} with tracking ID: ${trackingId}`,
-        html,
-    });
+
+	return sendEmail({
+		to: shippingInfo.email,
+		subject,
+		text: `Track your order #${orderId} with tracking ID: ${trackingId}`,
+		html,
+	});
 };
 
 export const sendOrderDeliveredEmail = async (orderDetails: any) => {
-    const { shippingInfo, orderId } = orderDetails;
-    const subject = `Your Order #${orderId} Has Been Delivered`;
-    
-    const html = `
+	const { shippingInfo, orderId } = orderDetails;
+	const subject = `Your Order #${orderId} Has Been Delivered`;
+
+	const html = `
         <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto;">
             <div style="padding: 20px; border-bottom: 2px solid #000;">
                 <h1 style="color: #000; margin: 0;">Zoll & Metér</h1>
@@ -266,11 +290,11 @@ export const sendOrderDeliveredEmail = async (orderDetails: any) => {
             </div>
         </div>
     `;
-    
-    return sendEmail({
-        to: shippingInfo.email,
-        subject,
-        text: `Your order #${orderId} has been delivered!`,
-        html,
-    });
+
+	return sendEmail({
+		to: shippingInfo.email,
+		subject,
+		text: `Your order #${orderId} has been delivered!`,
+		html,
+	});
 };

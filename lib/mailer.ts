@@ -4,62 +4,68 @@ import nodemailer from 'nodemailer';
  * Send an email for a product inquiry.
  */
 export async function sendInquiryEmail(data: any) {
-  const { name, email, mobileNo, message, product } = data;
-  const user = process.env.EMAIL_USER;
-  const pass = process.env.EMAIL_PASS;
-  if (!user || !pass) {
-    console.warn('Email credentials not configured; skipping inquiry email send.');
-    return;
-  }
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: { user, pass },
-  });
-  const mailOptions = {
-    from: user,
-    to: 'zollandmeter@gmail.com',
-    subject: `New product inquiry for ${product}`,
-    text: `You have received a new inquiry:\n\nName: ${name}\nEmail: ${email}\nPhone: ${mobileNo}\nProduct: ${product}\nMessage: ${message}`,
-  };
-  try {
-    await transporter.sendMail(mailOptions);
-  } catch (err) {
-    console.error('Failed to send inquiry email:', err);
-  }
+	const { name, email, mobileNo, message, product } = data;
+	const user = process.env.EMAIL_USER;
+	const pass = process.env.EMAIL_PASS;
+	if (!user || !pass) {
+		console.warn(
+			'Email credentials not configured; skipping inquiry email send.'
+		);
+		return;
+	}
+	const transporter = nodemailer.createTransport({
+		service: 'gmail',
+		auth: { user, pass },
+	});
+	const mailOptions = {
+		from: user,
+		to: 'zollandmeter@gmail.com',
+		subject: `New product inquiry for ${product}`,
+		text: `You have received a new inquiry:\n\nName: ${name}\nEmail: ${email}\nPhone: ${mobileNo}\nProduct: ${product}\nMessage: ${message}`,
+	};
+	try {
+		await transporter.sendMail(mailOptions);
+	} catch (err) {
+		console.error('Failed to send inquiry email:', err);
+	}
 }
 
 /**
  * Send an email for a new order.
  */
 export async function sendOrderEmail(data: any) {
-  const { orderId, customerId, email, items, total, shippingInfo } = data;
-  const user = process.env.EMAIL_USER;
-  const pass = process.env.EMAIL_PASS;
-  if (!user || !pass) {
-    console.warn('Email credentials not configured; skipping order email send.');
-    return;
-  }
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: { user, pass },
-  });
-  const itemList = items
-    .map((it: any) => `- ${it.title} x${it.quantity} (${it.size})`)
-    .join('\n');
+	const { orderId, customerId, email, items, total, shippingInfo } = data;
+	const user = process.env.EMAIL_USER;
+	const pass = process.env.EMAIL_PASS;
+	if (!user || !pass) {
+		console.warn(
+			'Email credentials not configured; skipping order email send.'
+		);
+		return;
+	}
+	const transporter = nodemailer.createTransport({
+		service: 'gmail',
+		auth: { user, pass },
+	});
+	const itemList = items
+		.map((it: any) => `- ${it.title} x${it.quantity} (${it.size})`)
+		.join('\n');
 
-  const shippingAddress = shippingInfo ? `
+	const shippingAddress = shippingInfo
+		? `
 Shipping Address:
 ${shippingInfo.firstName} ${shippingInfo.lastName}
 ${shippingInfo.address}
 ${shippingInfo.city}, ${shippingInfo.state} ${shippingInfo.zipCode}
 ${shippingInfo.country || 'N/A'}
-Phone: ${shippingInfo.phoneCode || ''}${shippingInfo.phone}` : '';
+Phone: ${shippingInfo.phoneCode || ''}${shippingInfo.phone}`
+		: '';
 
-  const mailOptions = {
-    from: user,
-    to: 'zollandmeter@gmail.com',
-    subject: `New Order ${orderId}`,
-    text: `Order ID: ${orderId}
+	const mailOptions = {
+		from: user,
+		to: 'zollandmeter@gmail.com',
+		subject: `New Order ${orderId}`,
+		text: `Order ID: ${orderId}
 Customer ID: ${customerId}
 Email: ${email}
 ${shippingAddress}
@@ -68,43 +74,47 @@ Items:
 ${itemList}
 
 Total: Rs. ${total}`,
-  };
-  try {
-    await transporter.sendMail(mailOptions);
-  } catch (err) {
-    console.error('Failed to send order email:', err);
-  }
+	};
+	try {
+		await transporter.sendMail(mailOptions);
+	} catch (err) {
+		console.error('Failed to send order email:', err);
+	}
 }
 
 /**
  * Send a thank you email to the customer after order placement.
  */
 export async function sendCustomerThankYouEmail(data: any) {
-  const { orderId, customerId, email, items, total, shippingInfo } = data;
-  const user = process.env.EMAIL_USER;
-  const pass = process.env.EMAIL_PASS;
-  if (!user || !pass) {
-    console.warn('Email credentials not configured; skipping customer thank you email.');
-    return;
-  }
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: { user, pass },
-  });
+	const { orderId, customerId, email, items, total, shippingInfo } = data;
+	const user = process.env.EMAIL_USER;
+	const pass = process.env.EMAIL_PASS;
+	if (!user || !pass) {
+		console.warn(
+			'Email credentials not configured; skipping customer thank you email.'
+		);
+		return;
+	}
+	const transporter = nodemailer.createTransport({
+		service: 'gmail',
+		auth: { user, pass },
+	});
 
-  // Format items for display
-  const itemsHtml = items
-    .map((item: any) => `
+	// Format items for display
+	const itemsHtml = items
+		.map(
+			(item: any) => `
       <tr>
         <td style="padding: 10px; border-bottom: 1px solid #eee;">${item.title}</td>
         <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: center;">${item.size}</td>
         <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: center;">${item.quantity}</td>
         <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;">Rs. ${item.price}</td>
       </tr>
-    `)
-    .join('');
+    `
+		)
+		.join('');
 
-  const htmlContent = `
+	const htmlContent = `
 <!DOCTYPE html>
 <html>
 <head>
@@ -247,17 +257,17 @@ export async function sendCustomerThankYouEmail(data: any) {
 </html>
   `;
 
-  const mailOptions = {
-    from: user,
-    to: email,
-    subject: `Thank You for Your Order ${orderId} - Zoll & Meter`,
-    html: htmlContent,
-  };
+	const mailOptions = {
+		from: user,
+		to: email,
+		subject: `Thank You for Your Order ${orderId} - Zoll & Meter`,
+		html: htmlContent,
+	};
 
-  try {
-    await transporter.sendMail(mailOptions);
-    console.log(`Thank you email sent to customer: ${email}`);
-  } catch (err) {
-    console.error('Failed to send customer thank you email:', err);
-  }
+	try {
+		await transporter.sendMail(mailOptions);
+		console.log(`Thank you email sent to customer: ${email}`);
+	} catch (err) {
+		console.error('Failed to send customer thank you email:', err);
+	}
 }

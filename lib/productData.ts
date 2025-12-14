@@ -17,7 +17,7 @@ export const PRODUCTS = {
 			'/kurta/1.png',
 		],
 	},
-	'nahua': {
+	nahua: {
 		id: 'nahua',
 		title: 'Nahua Kurta',
 		mrp: 5499,
@@ -49,7 +49,7 @@ export const PRODUCTS = {
 			'/kurta/3.png',
 		],
 	},
-	'brunette': {
+	brunette: {
 		id: 'brunette',
 		title: 'Brunette Kurta',
 		mrp: 5299,
@@ -65,7 +65,7 @@ export const PRODUCTS = {
 			'/kurta/4.png',
 		],
 	},
-	'lapis': {
+	lapis: {
 		id: 'lapis',
 		title: 'Lapis Kurta',
 		mrp: 4799,
@@ -81,7 +81,7 @@ export const PRODUCTS = {
 			'/kurta/5.png',
 		],
 	},
-	'gwalior': {
+	gwalior: {
 		id: 'gwalior',
 		title: 'Gwalior Kurta',
 		mrp: 6499,
@@ -113,7 +113,7 @@ export const PRODUCTS = {
 			'/kurta/7.png',
 		],
 	},
-	'zuhal': {
+	zuhal: {
 		id: 'zuhal',
 		title: 'Zuhal Kurta',
 		mrp: 4999,
@@ -129,7 +129,7 @@ export const PRODUCTS = {
 			'/kurta/8.png',
 		],
 	},
-	'ilia': {
+	ilia: {
 		id: 'ilia',
 		title: 'Ilia Kurta',
 		mrp: 5399,
@@ -145,7 +145,7 @@ export const PRODUCTS = {
 			'/kurta/9.png',
 		],
 	},
-	'iyad': {
+	iyad: {
 		id: 'iyad',
 		title: 'Iyad Kurta',
 		mrp: 5599,

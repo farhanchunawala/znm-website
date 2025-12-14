@@ -1,0 +1,125 @@
+// Admin Button Styles
+.primaryBtn {
+	background: #000000;
+	color: #ffffff;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 6px;
+	font-size: 13px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.15s;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	white-space: nowrap;
+
+	&:hover {
+		background: #2a2a2a;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	}
+
+	&:active {
+		transform: scale(0.98);
+	}
+
+	&:disabled {
+		background: #d0d0d0;
+		cursor: not-allowed;
+		opacity: 0.6;
+	}
+}
+
+.secondaryBtn {
+	background: #ffffff;
+	color: #000000;
+	border: 1px solid #d0d0d0;
+	padding: 10px 20px;
+	border-radius: 6px;
+	font-size: 13px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.15s;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	white-space: nowrap;
+
+	&:hover {
+		background: #f8f8f8;
+		border-color: #b0b0b0;
+	}
+
+	&:active {
+		transform: scale(0.98);
+	}
+
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+}
+
+.dangerBtn {
+	background: #ffffff;
+	color: #d32f2f;
+	border: 1px solid #d32f2f;
+	padding: 10px 20px;
+	border-radius: 6px;
+	font-size: 13px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.15s;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	white-space: nowrap;
+
+	&:hover {
+		background: #d32f2f;
+		color: #ffffff;
+	}
+
+	&:active {
+		transform: scale(0.98);
+	}
+
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+}
+
+.ghostBtn {
+	background: transparent;
+	color: #595959;
+	border: none;
+	padding: 10px 16px;
+	border-radius: 6px;
+	font-size: 13px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.15s;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	white-space: nowrap;
+
+	&:hover {
+		background: #f0f0f0;
+		color: #2a2a2a;
+	}
+
+	&:active {
+		transform: scale(0.98);
+	}
+
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+}

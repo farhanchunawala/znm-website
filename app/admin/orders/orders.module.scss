@@ -1,483 +1,801 @@
 .ordersPage {
-    padding: 20px;
+	padding: 20px;
 }
 
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 30px;
 }
 
 .header h1 {
-    font-size: 28px;
-    font-weight: 600;
-    color: #000;
+	font-size: 28px;
+	font-weight: 600;
+	color: #000;
 }
 
 .actions {
-    display: flex;
-    gap: 10px;
+	display: flex;
+	gap: 10px;
 }
 
 .addBtn,
 .importBtn,
 .exportBtn,
 .archiveBtn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    border: 2px solid #000;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-decoration: none;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 10px 16px;
+	border: 2px solid #000;
+	font-size: 14px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.2s;
+	text-decoration: none;
 }
 
 .addBtn {
-    background: #000;
-    color: #fff;
+	background: #000;
+	color: #fff;
 }
 
 .addBtn:hover {
-    background: #262626;
+	background: #262626;
 }
 
 .importBtn {
-    background: #fff;
-    color: #000;
+	background: #fff;
+	color: #000;
 }
 
 .importBtn:hover {
-    background: #fafafa;
+	background: #fafafa;
 }
 
 .exportBtn {
-    background: #fff;
-    color: #000;
+	background: #fff;
+	color: #000;
 }
 
 .exportBtn:hover {
-    background: #fafafa;
+	background: #fafafa;
 }
 
 .archiveBtn {
-    background: #525252;
-    color: #fff;
-    border-color: #525252;
+	background: #525252;
+	color: #fff;
+	border-color: #525252;
 }
 
 .archiveBtn:hover {
-    background: #404040;
-    border-color: #404040;
+	background: #404040;
+	border-color: #404040;
 }
 
 .tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #e5e5e5;
+	display: flex;
+	gap: 10px;
+	margin-bottom: 20px;
+	border-bottom: 2px solid #e5e5e5;
 }
 
 .tab {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 12px 20px;
-    border: none;
-    background: none;
-    font-size: 14px;
-    font-weight: 500;
-    color: #737373;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -2px;
-    transition: all 0.2s;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 12px 20px;
+	border: none;
+	background: none;
+	font-size: 14px;
+	font-weight: 500;
+	color: #737373;
+	cursor: pointer;
+	border-bottom: 2px solid transparent;
+	margin-bottom: -2px;
+	transition: all 0.2s;
 }
 
 .tab:hover {
-    color: #000;
+	color: #000;
 }
 
 .tab.active {
-    color: #000;
-    border-bottom-color: #000;
+	color: #000;
+	border-bottom-color: #000;
 }
 
 .filters {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 20px;
+	display: flex;
+	gap: 15px;
+	margin-bottom: 20px;
 }
 
 .searchInput {
-    flex: 1;
-    padding: 10px 16px;
-    border: 2px solid #d4d4d4;
-    font-size: 14px;
+	flex: 1;
+	padding: 10px 16px;
+	border: 2px solid #d4d4d4;
+	font-size: 14px;
 }
 
 .searchInput:focus {
-    outline: none;
-    border-color: #000;
+	outline: none;
+	border-color: #000;
 }
 
 .sortSelect {
-    padding: 10px 16px;
-    border: 2px solid #d4d4d4;
-    font-size: 14px;
-    background: white;
-    cursor: pointer;
+	padding: 10px 16px;
+	border: 2px solid #d4d4d4;
+	font-size: 14px;
+	background: white;
+	cursor: pointer;
 }
 
 .sortSelect:focus {
-    outline: none;
-    border-color: #000;
+	outline: none;
+	border-color: #000;
 }
 
 .bulkActionsBar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 20px;
-    background: #fafafa;
-    border: 2px solid #000;
-    margin-bottom: 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 12px 20px;
+	background: #fafafa;
+	border: 2px solid #000;
+	margin-bottom: 20px;
 }
 
 .bulkActionsBar span {
-    font-weight: 600;
-    color: #000;
+	font-weight: 600;
+	color: #000;
 }
 
 .bulkButtons {
-    display: flex;
-    gap: 10px;
+	display: flex;
+	gap: 10px;
 }
 
 .bulkBtn,
 .bulkBtnDanger {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 14px;
-    border: 2px solid #000;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 8px 14px;
+	border: 2px solid #000;
+	font-size: 13px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.2s;
 }
 
 .bulkBtn {
-    background: white;
-    color: #000;
+	background: white;
+	color: #000;
 }
 
 .bulkBtn:hover {
-    background: #000;
-    color: #fff;
+	background: #000;
+	color: #fff;
 }
 
 .bulkBtnDanger {
-    background: #000;
-    color: white;
+	background: #000;
+	color: white;
 }
 
 .bulkBtnDanger:hover {
-    background: #262626;
+	background: #262626;
 }
 
 .groupSelector {
-    display: flex;
-    gap: 10px;
-    align-items: center;
+	display: flex;
+	gap: 10px;
+	align-items: center;
 }
 
 .groupSelect {
-    padding: 8px 14px;
-    border: 2px solid #d4d4d4;
-    font-size: 13px;
-    background: #fff;
-    cursor: pointer;
-    min-width: 150px;
+	padding: 8px 14px;
+	border: 2px solid #d4d4d4;
+	font-size: 13px;
+	background: #fff;
+	cursor: pointer;
+	min-width: 150px;
 }
 
 .groupSelect:focus {
-    outline: none;
-    border-color: #000;
+	outline: none;
+	border-color: #000;
 }
 
 .bulkBtn:disabled {
-    background: #e5e5e5;
-    color: #a3a3a3;
-    cursor: not-allowed;
-    border-color: #d4d4d4;
+	background: #e5e5e5;
+	color: #a3a3a3;
+	cursor: not-allowed;
+	border-color: #d4d4d4;
 }
 
 .stats {
-    display: flex;
-    justify-content: space-between;
-    padding: 15px 0;
-    font-size: 14px;
-    color: #525252;
+	display: flex;
+	justify-content: space-between;
+	padding: 15px 0;
+	font-size: 14px;
+	color: #525252;
 }
 
 .tableContainer {
-    overflow-x: auto;
-    border: 2px solid #e5e5e5;
+	overflow-x: auto;
+	border: 2px solid #e5e5e5;
 }
 
 .table {
-    width: 100%;
-    border-collapse: collapse;
+	width: 100%;
+	border-collapse: collapse;
 }
 
 .table thead {
-    background: #fafafa;
+	background: #fafafa;
 }
 
 .table th {
-    padding: 12px 16px;
-    text-align: left;
-    font-size: 13px;
-    font-weight: 600;
-    color: #000;
-    border-bottom: 2px solid #e5e5e5;
+	padding: 12px 16px;
+	text-align: left;
+	font-size: 13px;
+	font-weight: 600;
+	color: #000;
+	border-bottom: 2px solid #e5e5e5;
 }
 
 .table td {
-    padding: 12px 16px;
-    font-size: 14px;
-    border-bottom: 1px solid #f3f3f3;
+	padding: 12px 16px;
+	font-size: 14px;
+	border-bottom: 1px solid #f3f3f3;
 }
 
 .table tbody tr:hover {
-    background: #fafafa;
+	background: #fafafa;
 }
 
 .orderId {
-    font-weight: 500;
+	font-weight: 500;
 }
 
 .orderLink {
-    color: #000;
-    text-decoration: none;
-    font-weight: 600;
+	color: #000;
+	text-decoration: none;
+	font-weight: 600;
 }
 
 .orderLink:hover {
-    text-decoration: underline;
+	text-decoration: underline;
 }
 
 .customerInfo {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
 }
 
 .customerId {
-    font-size: 12px;
-    color: #737373;
-    text-decoration: none;
+	font-size: 12px;
+	color: #737373;
+	text-decoration: none;
 }
 
 .customerId:hover {
-    color: #000;
-    text-decoration: underline;
+	color: #000;
+	text-decoration: underline;
 }
 
 .customerName {
-    font-size: 14px;
-    color: #000;
+	font-size: 14px;
+	color: #000;
 }
 
 .total {
-    font-weight: 600;
-    color: #000;
+	font-weight: 600;
+	color: #000;
 }
 
 .paymentStatus {
-    padding: 6px 12px;
-    border: 2px solid #d4d4d4;
-    font-size: 13px;
-    cursor: pointer;
-    background: #fff;
+	padding: 6px 12px;
+	border: 2px solid #d4d4d4;
+	font-size: 13px;
+	cursor: pointer;
+	background: #fff;
 }
 
 .paymentStatus:focus {
-    outline: none;
-    border-color: #000;
+	outline: none;
+	border-color: #000;
 }
 
 .paymentStatus.prepaid {
-    background: #000;
-    color: #fff;
-    border-color: #000;
+	background: #000;
+	color: #fff;
+	border-color: #000;
 }
 
 .paymentStatus.unpaid {
-    background: #fff;
-    color: #000;
-    border-color: #000;
+	background: #fff;
+	color: #000;
+	border-color: #000;
 }
 
 .statusBadge {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    font-weight: 500;
-    text-transform: capitalize;
-    color: #000;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 13px;
+	font-weight: 500;
+	text-transform: capitalize;
+	color: #000;
 }
 
 .statusIcon {
-    flex-shrink: 0;
+	flex-shrink: 0;
 }
 
 .trackingCell {
-    font-size: 13px;
+	font-size: 13px;
 }
 
 .trackingInfo {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
 }
 
 .trackingId {
-    font-family: monospace;
-    font-weight: 600;
-    color: #000;
+	font-family: monospace;
+	font-weight: 600;
+	color: #000;
 }
 
 .carrier {
-    font-size: 12px;
-    color: #737373;
+	font-size: 12px;
+	color: #737373;
 }
 
 .noTracking {
-    color: #d4d4d4;
+	color: #d4d4d4;
 }
 
 .actionButtons {
-    display: flex;
-    gap: 8px;
+	display: flex;
+	gap: 8px;
 }
 
 .editAction,
 .deleteAction {
-    padding: 6px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    color: #737373;
-    transition: color 0.2s;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
+	padding: 6px;
+	border: none;
+	background: none;
+	cursor: pointer;
+	color: #737373;
+	transition: color 0.2s;
+	text-decoration: none;
+	display: flex;
+	align-items: center;
 }
 
 .editAction:hover {
-    color: #000;
+	color: #000;
 }
 
 .deleteAction:hover {
-    color: #000;
+	color: #000;
 }
 
 .loading {
-    text-align: center;
-    padding: 40px;
-    color: #737373;
+	text-align: center;
+	padding: 40px;
+	color: #737373;
 }
 
 /* Import page styles */
 .importContainer {
-    max-width: 600px;
-    margin: 0 auto;
+	max-width: 600px;
+	margin: 0 auto;
 }
 
 .importSection {
-    background: white;
-    padding: 30px;
-    border: 2px solid #e5e5e5;
-    margin-bottom: 20px;
+	background: white;
+	padding: 30px;
+	border: 2px solid #e5e5e5;
+	margin-bottom: 20px;
 }
 
 .importSection h3 {
-    margin: 0 0 10px 0;
-    font-size: 18px;
-    color: #000;
+	margin: 0 0 10px 0;
+	font-size: 18px;
+	color: #000;
 }
 
 .importSection p {
-    color: #737373;
-    margin-bottom: 15px;
+	color: #737373;
+	margin-bottom: 15px;
 }
 
 .downloadBtn,
 .importBtn {
-    padding: 12px 24px;
-    border: 2px solid #000;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
+	padding: 12px 24px;
+	border: 2px solid #000;
+	font-size: 14px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.2s;
 }
 
 .downloadBtn {
-    background: #000;
-    color: #fff;
+	background: #000;
+	color: #fff;
 }
 
 .downloadBtn:hover {
-    background: #262626;
+	background: #262626;
 }
 
 .importBtn {
-    background: #000;
-    color: #fff;
+	background: #000;
+	color: #fff;
 }
 
 .importBtn:hover {
-    background: #262626;
+	background: #262626;
 }
 
 .importBtn:disabled {
-    background: #d4d4d4;
-    border-color: #d4d4d4;
-    cursor: not-allowed;
+	background: #d4d4d4;
+	border-color: #d4d4d4;
+	cursor: not-allowed;
 }
 
 .fileInput {
-    width: 100%;
-    padding: 10px;
-    border: 2px dashed #d4d4d4;
-    cursor: pointer;
+	width: 100%;
+	padding: 10px;
+	border: 2px dashed #d4d4d4;
+	cursor: pointer;
 }
 
 .fileName {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #000;
-    font-weight: 600;
+	margin-top: 10px;
+	font-size: 14px;
+	color: #000;
+	font-weight: 600;
 }
 
 .error {
-    padding: 15px;
-    background: #f5f5f5;
-    color: #000;
-    border: 2px solid #000;
-    margin-top: 20px;
+	padding: 15px;
+	background: #f5f5f5;
+	color: #000;
+	border: 2px solid #000;
+	margin-top: 20px;
 }
 
 .success {
-    padding: 15px;
-    background: #fafafa;
-    color: #000;
-    border: 2px solid #000;
-    margin-top: 20px;
+	padding: 15px;
+	background: #fafafa;
+	color: #000;
+	border: 2px solid #000;
+	margin-top: 20px;
+}
+
+// ============================================================================
+// ORDER ITEM MANAGEMENT STYLES
+// ============================================================================
+
+.itemsHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 15px;
+
+	h3 {
+		margin: 0;
+		font-size: 18px;
+		font-weight: 600;
+	}
+}
+
+.addItemBtn {
+	padding: 8px 16px;
+	background: #000;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	font-size: 14px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.2s;
+
+	&:hover {
+		background: #262626;
+	}
+
+	&:disabled {
+		background: #d4d4d4;
+		cursor: not-allowed;
+	}
+}
+
+.emptyItems {
+	padding: 20px;
+	text-align: center;
+	color: #737373;
+	font-size: 14px;
+}
+
+.itemsTable {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 20px;
+
+	thead {
+		background: #fafafa;
+		border: 1px solid #e5e5e5;
+	}
+
+	th {
+		padding: 12px;
+		text-align: left;
+		font-size: 14px;
+		font-weight: 600;
+		color: #000;
+	}
+
+	td {
+		padding: 12px;
+		border-bottom: 1px solid #e5e5e5;
+		font-size: 14px;
+		color: #000;
+	}
+
+	tr:hover {
+		background: #fafafa;
+	}
+}
+
+.actions {
+	display: flex;
+	gap: 8px;
+
+	button {
+		padding: 6px 12px;
+		border: 1px solid #d4d4d4;
+		border-radius: 4px;
+		font-size: 12px;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+}
+
+.editBtn {
+	background: #007bff;
+	color: #fff;
+	border-color: #007bff;
+
+	&:hover {
+		background: #0056b3;
+		border-color: #0056b3;
+	}
+
+	&:disabled {
+		background: #d4d4d4;
+		border-color: #d4d4d4;
+		cursor: not-allowed;
+	}
+}
+
+.deleteBtn {
+	background: #dc3545;
+	color: #fff;
+	border-color: #dc3545;
+
+	&:hover {
+		background: #c82333;
+		border-color: #c82333;
+	}
+
+	&:disabled {
+		background: #d4d4d4;
+		border-color: #d4d4d4;
+		cursor: not-allowed;
+	}
+}
+
+// ============================================================================
+// MODAL STYLES
+// ============================================================================
+
+.modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+}
+
+.modalContent {
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+	max-width: 500px;
+	width: 90%;
+	max-height: 90vh;
+	overflow-y: auto;
+	padding: 0;
+}
+
+.modalHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 20px;
+	border-bottom: 1px solid #e5e5e5;
+
+	h2 {
+		margin: 0;
+		font-size: 20px;
+		font-weight: 600;
+		color: #000;
+	}
+}
+
+.closeBtn {
+	background: none;
+	border: none;
+	font-size: 24px;
+	cursor: pointer;
+	color: #737373;
+	padding: 0;
+	width: 30px;
+	height: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: color 0.2s;
+
+	&:hover {
+		color: #000;
+	}
+}
+
+.formGroup {
+	padding: 15px 20px;
+	border-bottom: 1px solid #f0f0f0;
+
+	label {
+		display: block;
+		font-size: 14px;
+		font-weight: 500;
+		color: #000;
+		margin-bottom: 8px;
+	}
+
+	input {
+		width: 100%;
+		padding: 10px 12px;
+		border: 1px solid #d4d4d4;
+		border-radius: 4px;
+		font-size: 14px;
+		color: #000;
+		box-sizing: border-box;
+		transition: border-color 0.2s;
+
+		&:focus {
+			outline: none;
+			border-color: #000;
+		}
+
+		&:disabled {
+			background: #f5f5f5;
+			color: #999;
+		}
+	}
+}
+
+.error {
+	padding: 12px 20px;
+	background: #fee;
+	color: #c33;
+	border: 1px solid #f99;
+	border-radius: 4px;
+	margin: 15px 20px 0 20px;
+	font-size: 14px;
+}
+
+.modalActions {
+	display: flex;
+	gap: 10px;
+	padding: 20px;
+	border-top: 1px solid #e5e5e5;
+	justify-content: flex-end;
+}
+
+.cancelBtn,
+.submitBtn {
+	padding: 10px 20px;
+	border: 1px solid #d4d4d4;
+	border-radius: 4px;
+	font-size: 14px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.2s;
+}
+
+.cancelBtn {
+	background: #fff;
+	color: #000;
+	border-color: #d4d4d4;
+
+	&:hover {
+		background: #f5f5f5;
+	}
+
+	&:disabled {
+		background: #f5f5f5;
+		color: #999;
+		cursor: not-allowed;
+	}
+}
+
+.submitBtn {
+	background: #000;
+	color: #fff;
+	border-color: #000;
+
+	&:hover {
+		background: #262626;
+		border-color: #262626;
+	}
+
+	&:disabled {
+		background: #d4d4d4;
+		border-color: #d4d4d4;
+		cursor: not-allowed;
+	}
+}
+
+// ============================================================================
+// RESPONSIVE STYLES
+// ============================================================================
+
+@media (max-width: 768px) {
+	.itemsTable {
+		font-size: 12px;
+
+		th,
+		td {
+			padding: 8px;
+		}
+	}
+
+	.actions {
+		flex-direction: column;
+
+		button {
+			width: 100%;
+		}
+	}
+
+	.modalContent {
+		width: 95%;
+	}
+
+	.itemsHeader {
+		flex-direction: column;
+		gap: 10px;
+		align-items: flex-start;
+
+		button {
+			width: 100%;
+		}
+	}
 }

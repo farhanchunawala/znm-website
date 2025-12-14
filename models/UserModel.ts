@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose from 'mongoose';
 import AutoIncrement from 'mongoose-sequence';
 
 const UserSchema = new mongoose.Schema(
@@ -9,9 +9,22 @@ const UserSchema = new mongoose.Schema(
 			middleName: String,
 			lastName: String,
 		},
-		email: { type: String, required: true, unique: true },
-		phone: { type: String, unique: true },
+		email: { type: String, required: true, unique: true, lowercase: true },
+		phone: { type: String, unique: true, sparse: true },
 		passwordHash: { type: String, required: true },
+		roles: {
+			type: [String],
+			enum: ['customer', 'admin', 'manager', 'worker', 'vendor'],
+			default: ['customer'],
+		},
+		emailVerified: { type: Boolean, default: false },
+		status: {
+			type: String,
+			enum: ['active', 'suspended', 'deleted'],
+			default: 'active',
+		},
+		lastLogin: { type: Date },
+		passwordChangedAt: { type: Date }, // For invalidating sessions
 		birthdate: { type: Date },
 		birthdateLastChanged: { type: Date },
 		referralCode: { type: String, unique: true },
@@ -31,6 +44,7 @@ const UserSchema = new mongoose.Schema(
 
 UserSchema.plugin(AutoIncrement(mongoose), { inc_field: 'userId' });
 
-const User = mongoose.models.User || mongoose.model('User', UserSchema, 'users');
+const User =
+	mongoose.models.User || mongoose.model('User', UserSchema, 'users');
 
 export default User;
