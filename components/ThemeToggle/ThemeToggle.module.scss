@@ -1,0 +1,42 @@
+@import '../../app/styles/variables';
+
+.toggleBtn {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	width: 100%;
+	padding: 10px 24px;
+	background: none;
+	border: none;
+	color: $text-secondary;
+	cursor: pointer;
+	transition: all 0.2s;
+	font-size: 13px;
+	font-weight: 500;
+	text-align: left;
+
+	.icon {
+		width: 18px;
+		height: 18px;
+		flex-shrink: 0;
+	}
+
+	.label {
+		flex: 1;
+	}
+
+	&:hover {
+		background-color: $bg-secondary;
+		color: $text-primary;
+	}
+}
+
+// Dark mode specific styles
+[data-theme='dark'] .toggleBtn {
+	color: var(--text-secondary);
+
+	&:hover {
+		background-color: var(--bg-secondary);
+		color: var(--text-primary);
+	}
+}

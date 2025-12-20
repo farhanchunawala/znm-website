@@ -1,9 +1,11 @@
+@import '../styles/variables';
+
 .dashboard {
 	h2 {
 		margin: 40px 0 24px 0;
 		font-size: 18px;
 		font-weight: 700;
-		color: #000000;
+		color: $text-primary;
 		letter-spacing: -0.3px;
 	}
 }
@@ -16,22 +18,22 @@
 }
 
 .statCard {
-	background: #ffffff;
+	background: $bg-primary;
 	padding: 24px;
 	border-radius: 8px;
-	border: 1px solid #e0e0e0;
+	border: 1px solid $border-medium;
 	display: flex;
 	align-items: center;
 	gap: 16px;
 	transition: all 0.15s;
 
 	&:hover {
-		border-color: #c0c0c0;
+		border-color: $border-strong;
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 	}
 
 	.statIcon {
-		background: #f0f0f0;
+		background: $bg-secondary;
 		width: 56px;
 		height: 56px;
 		border-radius: 8px;
@@ -39,12 +41,12 @@
 		align-items: center;
 		justify-content: center;
 		flex-shrink: 0;
-		border: 1px solid #e0e0e0;
+		border: 1px solid $border-medium;
 
 		svg {
 			width: 28px;
 			height: 28px;
-			color: #595959;
+			color: $text-secondary;
 		}
 	}
 
@@ -55,7 +57,7 @@
 		h3 {
 			margin: 0 0 6px 0;
 			font-size: 12px;
-			color: #808080;
+			color: $text-tertiary;
 			font-weight: 600;
 			text-transform: uppercase;
 			letter-spacing: 0.4px;
@@ -65,7 +67,7 @@
 			margin: 0;
 			font-size: 26px;
 			font-weight: 700;
-			color: #000000;
+			color: $text-primary;
 			line-height: 1.2;
 		}
 	}
@@ -90,11 +92,11 @@
 	justify-content: center;
 	gap: 12px;
 	padding: 24px 16px;
-	background: #ffffff;
-	border: 1px solid #e0e0e0;
+	background: $bg-primary;
+	border: 1px solid $border-medium;
 	border-radius: 8px;
 	text-decoration: none;
-	color: #595959;
+	color: $text-secondary;
 	font-size: 13px;
 	font-weight: 600;
 	transition: all 0.15s;
@@ -102,16 +104,16 @@
 	svg {
 		width: 28px;
 		height: 28px;
-		color: #595959;
+		color: $text-secondary;
 	}
 
 	&:hover {
-		border-color: #b0b0b0;
-		background: #f8f8f8;
-		color: #000000;
+		border-color: $border-strong;
+		background: $bg-secondary;
+		color: $text-primary;
 
 		svg {
-			color: #000000;
+			color: $text-primary;
 		}
 
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -121,6 +123,6 @@
 .loading {
 	text-align: center;
 	padding: 60px 20px;
-	color: #a0a0a0;
+	color: $text-tertiary;
 	font-size: 14px;
 }

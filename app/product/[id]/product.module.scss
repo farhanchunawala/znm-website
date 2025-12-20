@@ -1,4 +1,5 @@
-@import '/app/styles/mixins';
+@import '../../styles/mixins';
+@import '../../styles/variables';
 
 .main {
 	.images_holder {
@@ -19,10 +20,11 @@
 				font-weight: 500;
 				margin: 8px 0;
 				line-height: 1.25;
+				color: $text-primary;
 			}
 
 			.mrp {
-				color: #707070;
+				color: $text-tertiary;
 				font-size: 13px;
 				font-weight: 400;
 				line-height: 1.23;
@@ -30,15 +32,15 @@
 			}
 
 			.price {
-				color: #222;
+				color: $text-primary;
 				font-size: 16px;
-				font-weight: 4 00;
+				font-weight: 400;
 				line-height: 1.25;
 			}
 		}
 
 		.sizes_text {
-			color: #222;
+			color: $text-primary;
 			font-size: 13px;
 			font-weight: 400;
 			line-height: 1.23;
@@ -51,7 +53,7 @@
 			padding: 0 24px;
 
 			.size {
-				border: 1px solid $b82;
+				border: 1px solid $border-medium;
 				height: 40px;
 				font-size: 0.8125rem;
 				display: flex;
@@ -62,21 +64,22 @@
 				max-width: calc(25% - 8px);
 				cursor: pointer;
 				transition: all 0.2s;
+				color: $text-primary;
 
 				&:hover {
-					border-color: #000;
+					border-color: $border-strong;
 				}
 
 				&.selected {
-					background-color: #000;
-					color: #fff;
-					border-color: #000;
+					background-color: $bg-inverse;
+					color: $text-inverse;
+					border-color: $border-strong;
 				}
 			}
 		}
 
 		.notify {
-			background: #222;
+			background: $bg-inverse;
 			width: calc(100% - 48px);
 			height: 48px;
 			margin: 16px auto;
@@ -91,7 +94,7 @@
 			}
 
 			.txt {
-				color: #fff;
+				color: $text-inverse;
 				text-align: center;
 				font-size: 16px;
 				font-weight: 400;
@@ -108,15 +111,15 @@
 			animation: fadeIn 0.3s ease-in-out;
 
 			&.success {
-				background-color: #e8f5e9;
-				color: #2e7d32;
-				border: 1px solid #c8e6c9;
+				background-color: $bg-inverse;
+				color: $text-inverse;
+				border: 1px solid $border-strong;
 			}
 
 			&.error {
-				background-color: #ffebee;
-				color: #c62828;
-				border: 1px solid #ffcdd2;
+				background-color: $bg-secondary;
+				color: $text-primary;
+				border: 1px solid $border-strong;
 			}
 		}
 
@@ -133,13 +136,13 @@
 		}
 
 		.dnf {
-			border-top: solid #d0d0d0 1px;
+			border-top: solid $border-light 1px;
 
 			.collapse {
 				display: flex;
 
 				.txt_dnf {
-					color: #222;
+					color: $text-primary;
 					font-size: 16px;
 					font-weight: 400;
 					line-height: 16px;
@@ -150,11 +153,13 @@
 					float: right;
 					margin: 16px 24px;
 					margin-left: auto;
+					color: $text-primary;
 				}
 			}
 
 			.description {
 				padding: 0 24px;
+				color: $text-secondary;
 			}
 		}
 
@@ -167,6 +172,9 @@
 				width: 100%;
 				margin-bottom: 13px;
 				padding-left: 14px;
+				border: 1px solid $border-medium;
+				background-color: $bg-primary;
+				color: $text-primary;
 			}
 
 			.message {
@@ -174,6 +182,9 @@
 				height: 200px;
 				padding-left: 14px;
 				padding-top: 16px;
+				border: 1px solid $border-medium;
+				background-color: $bg-primary;
+				color: $text-primary;
 				// font-family: ;
 			}
 		}
@@ -182,11 +193,17 @@
 			height: 45px;
 			// width: 60%;
 			width: 250px;
-			background-color: black;
-			color: white;
-			border: 1px black;
+			background-color: $btn-primary-bg;
+			color: $btn-primary-text;
+			border: 1px solid $btn-primary-bg;
 			margin-left: 13px;
 			margin-top: 8px;
+			cursor: pointer;
+
+			&:hover {
+				background-color: $text-secondary;
+				border-color: $text-secondary;
+			}
 		}
 	}
 }
@@ -212,7 +229,7 @@
 
 			.title {
 				.product_name {
-					color: #222;
+					color: $text-primary;
 					font-size: 16px;
 					font-weight: 400;
 					line-height: 20px;
@@ -226,7 +243,7 @@
 				}
 
 				.price {
-					color: #222;
+					color: $text-primary;
 					font-size: 20px;
 					font-weight: 400;
 					line-height: 24px;
@@ -234,7 +251,7 @@
 			}
 
 			.sizes_text {
-				color: #222;
+				color: $text-primary;
 				font-size: 13px;
 				font-weight: 400;
 				line-height: 16px;
@@ -245,8 +262,8 @@
 				height: 102px;
 
 				.size {
-					border: 1px solid #d0d0d0;
-					background: #e4e4e4;
+					border: 1px solid $border-medium;
+					background: $bg-secondary;
 				}
 			}
 
@@ -266,7 +283,7 @@
 			.dnf {
 				.collapse {
 					.txt_dnf {
-						color: #222;
+						color: $text-primary;
 						font-size: 16px;
 						font-weight: 400;
 						line-height: 16px;

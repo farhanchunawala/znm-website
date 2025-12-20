@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useInvoices, useInvoiceAction } from '@/lib/invoice/hooks';
-import styles from '@/app/admin/admin-layout.module.scss';
+import styles from './invoices.module.scss';
 
 interface Invoice {
 	_id: string;
@@ -27,7 +27,6 @@ interface Invoice {
 export default function InvoiceList() {
 	const { invoices, loading, error, fetch } = useInvoices();
 	const { regenerate, cancel, downloadPDF } = useInvoiceAction();
-	const [selectedInvoiceId, setSelectedInvoiceId] = useState<string | null>(null);
 	const [filters, setFilters] = useState({
 		status: '',
 		paymentStatus: '',
@@ -66,6 +65,21 @@ export default function InvoiceList() {
 				console.error('Failed to cancel:', err);
 			}
 		}
+	};
+
+	const getBadgeClass = (status: string, type: 'status' | 'payment') => {
+		const baseClass = styles.badge;
+		if (type === 'status') {
+			if (status === 'generated') return `${baseClass} ${styles.badgeGenerated}`;
+			if (status === 'cancelled') return `${baseClass} ${styles.badgeCancelled}`;
+			if (status === 'regenerated') return `${baseClass} ${styles.badgeRegenerated}`;
+		} else {
+			if (status === 'paid') return `${baseClass} ${styles.badgePaid}`;
+			if (status === 'pending') return `${baseClass} ${styles.badgePending}`;
+			if (status === 'failed') return `${baseClass} ${styles.badgeFailed}`;
+			if (status === 'refunded') return `${baseClass} ${styles.badgeRefunded}`;
+		}
+		return baseClass;
 	};
 
 	return (
@@ -155,14 +169,12 @@ export default function InvoiceList() {
 									</td>
 									<td>₹{invoice.totalsSnapshot.grandTotal.toLocaleString('en-IN')}</td>
 									<td>
-										<span className={`badge badge-${invoice.status}`}>
+										<span className={getBadgeClass(invoice.status, 'status')}>
 											{invoice.status}
 										</span>
 									</td>
 									<td>
-										<span
-											className={`badge badge-${invoice.paymentStatus.toLowerCase()}`}
-										>
+										<span className={getBadgeClass(invoice.paymentStatus, 'payment')}>
 											{invoice.paymentStatus}
 										</span>
 									</td>
@@ -202,45 +214,6 @@ export default function InvoiceList() {
 					</table>
 				)}
 			</div>
-
-			<style jsx>{`
-				.badge {
-					display: inline-block;
-					padding: 4px 8px;
-					border-radius: 4px;
-					font-size: 11px;
-					font-weight: 600;
-					text-transform: uppercase;
-				}
-				.badge-generated {
-					background: #d4edda;
-					color: #155724;
-				}
-				.badge-cancelled {
-					background: #f8d7da;
-					color: #721c24;
-				}
-				.badge-regenerated {
-					background: #cfe2ff;
-					color: #084298;
-				}
-				.badge-pending {
-					background: #fff3cd;
-					color: #856404;
-				}
-				.badge-paid {
-					background: #d4edda;
-					color: #155724;
-				}
-				.badge-failed {
-					background: #f8d7da;
-					color: #721c24;
-				}
-				.badge-refunded {
-					background: #cfe2ff;
-					color: #084298;
-				}
-			`}</style>
 		</div>
 	);
 }

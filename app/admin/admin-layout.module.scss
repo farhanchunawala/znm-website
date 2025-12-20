@@ -1,14 +1,16 @@
+@import '../styles/variables';
+
 .adminLayout {
 	display: flex;
 	min-height: 100vh;
-	background: #f5f5f5;
+	background: var(--bg-secondary);
 	position: relative;
 }
 
 .sidebar {
 	width: 280px;
-	background: #ffffff;
-	border-right: 1px solid #d0d0d0;
+	background: var(--bg-primary);
+	border-right: 1px solid var(--border-medium);
 	position: sticky;
 	top: 0;
 	height: 100vh;
@@ -21,7 +23,7 @@
 
 	.logo {
 		padding: 28px 24px;
-		border-bottom: 1px solid #e8e8e8;
+		border-bottom: 1px solid var(--border-light);
 		flex-shrink: 0;
 		display: flex;
 		align-items: center;
@@ -30,8 +32,8 @@
 		.logoIcon {
 			width: 40px;
 			height: 40px;
-			background: #000000;
-			color: #ffffff;
+			background: var(--bg-inverse);
+			color: var(--text-inverse);
 			border-radius: 8px;
 			display: flex;
 			align-items: center;
@@ -47,14 +49,14 @@
 				margin: 0;
 				font-size: 16px;
 				font-weight: 700;
-				color: #000000;
+				color: var(--text-primary);
 				letter-spacing: -0.3px;
 			}
 
 			p {
 				margin: 2px 0 0 0;
 				font-size: 12px;
-				color: #909090;
+				color: var(--text-tertiary);
 				font-weight: 500;
 			}
 		}
@@ -73,7 +75,7 @@
 			padding: 12px 24px;
 			font-size: 11px;
 			font-weight: 700;
-			color: #a0a0a0;
+			color: var(--text-tertiary);
 			text-transform: uppercase;
 			letter-spacing: 0.5px;
 			margin-top: 12px;
@@ -85,7 +87,7 @@
 		display: flex;
 		align-items: center;
 		padding: 10px 24px;
-		color: #595959;
+		color: var(--text-secondary);
 		text-decoration: none;
 		transition: all 0.15s;
 		border-left: 3px solid transparent;
@@ -100,16 +102,21 @@
 		}
 
 		&:hover {
-			background-color: #f8f8f8;
-			color: #2a2a2a;
+			background-color: var(--bg-secondary);
+			color: var(--text-primary);
 		}
 
 		&.active {
-			background-color: #f0f0f0;
-			border-left-color: #000000;
-			color: #000000;
+			background-color: var(--bg-secondary);
+			border-left-color: var(--border-strong);
+			color: var(--text-primary);
 			font-weight: 600;
 		}
+	}
+
+	.sidebarFooter {
+		flex-shrink: 0;
+		border-top: 1px solid var(--border-light);
 	}
 
 	.logoutBtn {
@@ -118,15 +125,13 @@
 		padding: 10px 24px;
 		background: none;
 		border: none;
-		color: #595959;
+		color: var(--text-secondary);
 		cursor: pointer;
 		transition: all 0.15s;
-		border-top: 1px solid #e8e8e8;
 		width: 100%;
 		text-align: left;
 		font-size: 13px;
 		font-weight: 500;
-		flex-shrink: 0;
 		gap: 10px;
 
 		.icon {
@@ -136,8 +141,8 @@
 		}
 
 		&:hover {
-			background-color: #2a2a2a;
-			color: #ffffff;
+			background-color: var(--bg-inverse);
+			color: var(--text-inverse);
 		}
 	}
 
@@ -151,11 +156,11 @@
 	}
 
 	&::-webkit-scrollbar-thumb {
-		background: #d0d0d0;
+		background: var(--border-medium);
 		border-radius: 3px;
 
 		&:hover {
-			background: #b0b0b0;
+			background: var(--text-tertiary);
 		}
 	}
 }
@@ -180,11 +185,11 @@
 	}
 
 	&::-webkit-scrollbar-thumb {
-		background: #d0d0d0;
+		background: var(--border-medium);
 		border-radius: 4px;
 
 		&:hover {
-			background: #b0b0b0;
+			background: var(--text-tertiary);
 		}
 	}
 }

@@ -2,8 +2,10 @@
 	text-decoration: underline;
 }
 
+@import 'variables';
+
 .link {
-	color: #704cb6;
+	color: $text-primary;
 }
 
 .link.active {

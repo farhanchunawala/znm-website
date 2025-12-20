@@ -16,13 +16,11 @@ import {
 	CheckCircleIcon,
 	CurrencyDollarIcon,
 } from '@heroicons/react/24/outline';
+import { ThemeProvider } from '@/lib/contexts/ThemeContext';
+import ThemeToggle from '@/components/ThemeToggle/ThemeToggle';
 import styles from './admin-layout.module.scss';
 
-export default function AdminLayout({
-	children,
-}: {
-	children: React.ReactNode;
-}) {
+function AdminLayoutContent({ children }: { children: React.ReactNode }) {
 	const router = useRouter();
 	const pathname = usePathname();
 
@@ -117,13 +115,28 @@ export default function AdminLayout({
 					))}
 				</nav>
 
-				<button onClick={handleLogout} className={styles.logoutBtn}>
-					<ArrowLeftOnRectangleIcon className={styles.icon} />
-					<span>Logout</span>
-				</button>
+				<div className={styles.sidebarFooter}>
+					<ThemeToggle />
+					<button onClick={handleLogout} className={styles.logoutBtn}>
+						<ArrowLeftOnRectangleIcon className={styles.icon} />
+						<span>Logout</span>
+					</button>
+				</div>
 			</aside>
 
 			<main className={styles.mainContent}>{children}</main>
 		</div>
+	);
+}
+
+export default function AdminLayout({
+	children,
+}: {
+	children: React.ReactNode;
+}) {
+	return (
+		<ThemeProvider>
+			<AdminLayoutContent>{children}</AdminLayoutContent>
+		</ThemeProvider>
 	);
 }

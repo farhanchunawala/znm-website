@@ -52,3 +52,8 @@ export async function destroyAdminSession() {
 	const cookieStore = await cookies();
 	cookieStore.delete(SESSION_COOKIE_NAME);
 }
+
+/**
+ * Alias for isAdminAuthenticated - for backward compatibility
+ */
+export const verifyAdminAuth = isAdminAuthenticated;

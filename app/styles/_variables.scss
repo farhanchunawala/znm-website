@@ -116,3 +116,24 @@ $b97: hsl(0, 0%, 97%);
 $b98: hsl(0, 0%, 98%);
 $b99: hsl(0, 0%, 99%);
 $b100: hsl(0, 0%, 100%);
+
+// Theme Semantics - Monochrome
+$bg-primary: $b100;
+$bg-secondary: $b98;
+$bg-tertiary: $b95;
+$bg-inverse: $b0;
+
+$text-primary: $b0;
+$text-secondary: $b40;
+$text-tertiary: $b60;
+$text-inverse: $b100;
+
+$border-light: $b90;
+$border-medium: $b80;
+$border-strong: $b0;
+
+$btn-primary-bg: $b0;
+$btn-primary-text: $b100;
+$btn-secondary-bg: $b100;
+$btn-secondary-text: $b0;
+$btn-secondary-border: $b0;

@@ -10,7 +10,7 @@ import mongoose from 'mongoose';
  */
 export async function GET(
 	req: NextRequest,
-	{ params }: { params: { orderId: string } }
+	{ params }: { params: { id: string } }
 ) {
 	try {
 		await connectDB();
@@ -23,7 +23,7 @@ export async function GET(
 
 		let orderId: mongoose.Types.ObjectId;
 		try {
-			orderId = new mongoose.Types.ObjectId(params.orderId);
+			orderId = new mongoose.Types.ObjectId(params.id);
 		} catch {
 			return NextResponse.json(
 				{ error: 'Invalid orderId format' },

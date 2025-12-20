@@ -163,65 +163,36 @@
 	}
 }
 
-    &:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-    }
-  }
-
-  .dangerBtn {
-    flex: 1;
-    min-width: 100px;
-    padding: 0.75rem 1.5rem;
-    background: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.2s;
-
-    &:hover:not(:disabled) {
-      background: #c82333;
-    }
-
-    &:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-    }
-  }
-}
-
 @media (max-width: 768px) {
-  .container {
-    padding: 1rem;
+	.container {
+		padding: 1rem;
 
-    h1 {
-      font-size: 1.5rem;
-    }
-  }
+		h1 {
+			font-size: 1.5rem;
+		}
+	}
 
-  .filterBar {
-    flex-direction: column;
+	.filterBar {
+		flex-direction: column;
 
-    .select,
-    .primaryBtn {
-      width: 100%;
-    }
-  }
+		.select,
+		.primaryBtn {
+			width: 100%;
+		}
+	}
 
-  .table {
-    font-size: 0.9rem;
+	.table {
+		font-size: 0.9rem;
 
-    thead th,
-    tbody td {
-      padding: 0.75rem;
-    }
-  }
+		thead th,
+		tbody td {
+			padding: 0.75rem;
+		}
+	}
 
-  .modal {
-    .modalContent {
-      width: 95%;
-    }
-  }
+	.modal {
+		.modalContent {
+			width: 95%;
+		}
+	}
 }

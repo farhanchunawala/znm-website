@@ -115,3 +115,6 @@ export default dbConnect;
 
 // Export as named export for compatibility
 export { dbConnect };
+
+// Export alias for backward compatibility
+export { dbConnect as connectDB };

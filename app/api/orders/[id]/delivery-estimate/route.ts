@@ -8,16 +8,16 @@ import DeliveryReminderService from '@/lib/services/deliveryReminderService';
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { orderId: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     const user = await verifyCustomerAuth(request);
     if (!user)
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const { orderId } = params;
+    const { id } = params;
 
-    const estimate = await DeliveryReminderService.calculateEstimatedDelivery(orderId);
+    const estimate = await DeliveryReminderService.calculateEstimatedDelivery(id);
 
     if (!estimate) {
       return NextResponse.json(

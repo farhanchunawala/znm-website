@@ -1,9 +1,63 @@
+@import 'variables';
+
+// ============================================================================
+// CSS CUSTOM PROPERTIES FOR DYNAMIC THEMING
+// ============================================================================
+
+:root {
+	// Light mode (default)
+	--bg-primary: #{$b100};
+	--bg-secondary: #{$b98};
+	--bg-tertiary: #{$b95};
+	--bg-inverse: #{$b0};
+
+	--text-primary: #{$b0};
+	--text-secondary: #{$b40};
+	--text-tertiary: #{$b60};
+	--text-inverse: #{$b100};
+
+	--border-light: #{$b90};
+	--border-medium: #{$b80};
+	--border-strong: #{$b0};
+
+	--btn-primary-bg: #{$b0};
+	--btn-primary-text: #{$b100};
+	--btn-secondary-bg: #{$b100};
+	--btn-secondary-text: #{$b0};
+	--btn-secondary-border: #{$b0};
+}
+
+// Dark mode
+[data-theme='dark'] {
+	--bg-primary: #{$b5};
+	--bg-secondary: #{$b10};
+	--bg-tertiary: #{$b15};
+	--bg-inverse: #{$b100};
+
+	--text-primary: #{$b95};
+	--text-secondary: #{$b70};
+	--text-tertiary: #{$b50};
+	--text-inverse: #{$b0};
+
+	--border-light: #{$b20};
+	--border-medium: #{$b30};
+	--border-strong: #{$b90};
+
+	--btn-primary-bg: #{$b95};
+	--btn-primary-text: #{$b5};
+	--btn-secondary-bg: #{$b10};
+	--btn-secondary-text: #{$b95};
+	--btn-secondary-border: #{$b90};
+}
+
 html,
 body {
 	min-height: 100vh;
 	padding: 0;
 	margin: 0;
 	font-family: system-ui, sans-serif;
+	background-color: $bg-primary;
+	color: $text-primary;
 }
 
 a {
