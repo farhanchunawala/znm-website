@@ -40,19 +40,14 @@ export default function CheckoutPage() {
 
 	const [isLoading, setIsLoading] = useState(false);
 
-	// Check authentication on mount
+	// Check authentication on mount (allow guest checkout)
 	useEffect(() => {
 		const checkAuth = async () => {
 			try {
 				const response = await fetch('/api/user/profile');
 				setIsAuthenticated(response.ok);
-				if (!response.ok) {
-					// Redirect to login
-					router.push('/login?redirect=/checkout');
-				}
 			} catch (error) {
 				setIsAuthenticated(false);
-				router.push('/login?redirect=/checkout');
 			} finally {
 				setCheckingAuth(false);
 			}

@@ -1,12 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import styles from './login.module.scss';
-import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function LoginPage() {
-	const router = useRouter();
+	return (
+		<div style={{ padding: '40px', textAlign: 'center' }}>
+			<h1>Login Temporarily Disabled</h1>
+			<p style={{ fontSize: '18px', marginTop: '20px' }}>
+				Login is currently disabled. You can still proceed with guest checkout.
+			</p>
+		</div>
+	);
 	const searchParams = useSearchParams();
 	const [showPassword, setShowPassword] = useState(false);
 	const [error, setError] = useState('');
