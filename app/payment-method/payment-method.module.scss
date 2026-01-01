@@ -1,0 +1,372 @@
+@import '../../app/styles/variables';
+
+.main {
+	padding: 120px 20px 60px;
+	min-height: 80vh;
+	max-width: 1200px;
+	margin: 0 auto;
+	font-family: 'Inter', sans-serif;
+
+	h1 {
+		font-size: 2.5rem;
+		font-weight: 300;
+		margin-bottom: 40px;
+		text-align: center;
+		letter-spacing: 1px;
+		color: $text-primary;
+	}
+}
+
+.loading {
+	text-align: center;
+	padding: 60px;
+	font-size: 1.2rem;
+	color: $text-tertiary;
+}
+
+.container {
+	display: flex;
+	gap: 40px;
+
+	@media (max-width: 768px) {
+		flex-direction: column;
+	}
+}
+
+.paymentOptions {
+	flex: 2;
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+}
+
+.paymentOption {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	padding: 25px;
+	border: 2px solid $border-light;
+	background-color: $bg-primary;
+	cursor: pointer;
+	transition: all 0.2s ease;
+
+	&:hover {
+		border-color: $border-medium;
+		background-color: $bg-secondary;
+	}
+
+	&.selected {
+		border-color: $border-strong;
+		background-color: $bg-secondary;
+	}
+
+	.optionIcon {
+		font-size: 2rem;
+		width: 50px;
+		text-align: center;
+	}
+
+	.optionContent {
+		flex: 1;
+
+		h3 {
+			font-size: 1.1rem;
+			font-weight: 500;
+			margin: 0 0 5px 0;
+			color: $text-primary;
+		}
+
+		p {
+			font-size: 0.9rem;
+			margin: 0;
+			color: $text-tertiary;
+		}
+	}
+
+	.radioCircle {
+		width: 24px;
+		height: 24px;
+		border: 2px solid $border-medium;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: border-color 0.2s;
+
+		.radioFill {
+			width: 12px;
+			height: 12px;
+			background-color: $text-primary;
+			border-radius: 50%;
+		}
+	}
+
+	&.selected .radioCircle {
+		border-color: $border-strong;
+	}
+}
+
+.orderSummary {
+	flex: 1;
+	background-color: $bg-secondary;
+	padding: 30px;
+	height: fit-content;
+	position: sticky;
+	top: 120px;
+
+	h2 {
+		font-size: 1.3rem;
+		font-weight: 500;
+		margin: 0 0 20px 0;
+		color: $text-primary;
+	}
+}
+
+.summaryItem {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	margin-bottom: 15px;
+
+	img {
+		width: 50px;
+		height: 65px;
+		object-fit: cover;
+	}
+
+	.itemDetails {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		gap: 3px;
+
+		.itemTitle {
+			font-size: 0.9rem;
+			font-weight: 500;
+			color: $text-primary;
+		}
+
+		.itemMeta {
+			font-size: 0.8rem;
+			color: $text-tertiary;
+		}
+	}
+
+	.itemPrice {
+		font-size: 0.9rem;
+		font-weight: 600;
+		color: $text-primary;
+	}
+}
+
+.summaryDivider {
+	height: 1px;
+	background-color: $border-medium;
+	margin: 20px 0;
+}
+
+.summaryRow {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 12px;
+	font-size: 0.95rem;
+	color: $text-secondary;
+
+	&.discount {
+		color: $text-primary;
+	}
+
+	&.total {
+		border-top: 1px solid $border-medium;
+		padding-top: 15px;
+		margin-top: 15px;
+		font-weight: 600;
+		font-size: 1.1rem;
+		color: $text-primary;
+	}
+}
+
+.errorMessage {
+	margin: 20px 0;
+	padding: 15px;
+	background-color: $bg-secondary;
+	border: 1px solid $border-strong;
+	color: $text-primary;
+	text-align: center;
+	font-size: 0.95rem;
+}
+
+.actionButtons {
+	display: flex;
+	justify-content: space-between;
+	gap: 20px;
+	margin-top: 40px;
+	padding-top: 30px;
+	border-top: 1px solid $border-light;
+
+	@media (max-width: 576px) {
+		flex-direction: column;
+	}
+}
+
+.backButton {
+	padding: 15px 30px;
+	background-color: transparent;
+	color: $text-primary;
+	border: 1px solid $border-medium;
+	font-size: 1rem;
+	cursor: pointer;
+	transition: all 0.2s;
+
+	&:hover:not(:disabled) {
+		background-color: $bg-secondary;
+		border-color: $border-strong;
+	}
+
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+}
+
+.proceedButton {
+	padding: 15px 50px;
+	background-color: $btn-primary-bg;
+	color: $btn-primary-text;
+	border: none;
+	font-size: 1rem;
+	cursor: pointer;
+	transition: all 0.3s;
+	flex: 1;
+	max-width: 300px;
+
+	&:hover:not(:disabled) {
+		background-color: $text-secondary;
+	}
+
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
+	&.loading {
+		background-color: $text-tertiary;
+		cursor: wait;
+	}
+
+	@media (max-width: 576px) {
+		max-width: none;
+	}
+}
+
+// Disabled payment option styling
+.paymentOption.disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+
+	&:hover {
+		border-color: $border-light;
+		background-color: $bg-primary;
+	}
+
+	.optionContent h3 {
+		color: $text-tertiary;
+	}
+}
+
+// Coming Soon badge
+.comingSoon {
+	display: inline-block;
+	font-size: 0.65rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	padding: 3px 8px;
+	background-color: $bg-secondary;
+	color: $text-tertiary;
+	border: 1px solid $border-medium;
+	border-radius: 3px;
+	margin-left: 10px;
+	vertical-align: middle;
+}
+
+// Modal styles
+.modalOverlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.6);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+	animation: fadeIn 0.2s ease;
+}
+
+.modal {
+	background-color: $bg-primary;
+	padding: 40px;
+	max-width: 450px;
+	width: 90%;
+	text-align: center;
+	animation: slideIn 0.3s ease;
+
+	.modalIcon {
+		font-size: 4rem;
+		margin-bottom: 20px;
+	}
+
+	h2 {
+		font-size: 1.5rem;
+		font-weight: 500;
+		margin: 0 0 15px 0;
+		color: $text-primary;
+	}
+
+	p {
+		font-size: 1rem;
+		color: $text-secondary;
+		line-height: 1.6;
+		margin: 0 0 25px 0;
+
+		strong {
+			color: $text-primary;
+		}
+	}
+}
+
+.modalButton {
+	padding: 12px 40px;
+	background-color: $btn-primary-bg;
+	color: $btn-primary-text;
+	border: none;
+	font-size: 1rem;
+	cursor: pointer;
+	transition: background-color 0.2s;
+
+	&:hover {
+		background-color: $text-secondary;
+	}
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes slideIn {
+	from {
+		opacity: 0;
+		transform: translateY(-20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+

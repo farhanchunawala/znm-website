@@ -10,7 +10,7 @@ const SESSION_COOKIE_NAME = 'znm_admin_session';
 export async function verifyAdminPassword(password: string): Promise<boolean> {
 	// For simplicity, using direct comparison with env variable
 	// In production, you'd use bcrypt.compare with a hashed password
-	const adminPassword = process.env.ADMIN_PASSWORD || 'Chunawala';
+	const adminPassword = process.env.ADMIN_PASSWORD || 'Admin@123!';
 	return password === adminPassword;
 }
 

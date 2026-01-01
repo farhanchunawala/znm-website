@@ -1,0 +1,292 @@
+.container {
+	min-height: 100vh;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	padding: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.paymentWrapper {
+	width: 100%;
+	max-width: 1200px;
+}
+
+.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 30px;
+	color: white;
+
+	h1 {
+		font-size: 32px;
+		margin: 0;
+	}
+}
+
+.backButton {
+	background: rgba(255, 255, 255, 0.2);
+	color: white;
+	border: 2px solid white;
+	padding: 10px 20px;
+	border-radius: 8px;
+	cursor: pointer;
+	font-size: 14px;
+	font-weight: 500;
+	transition: all 0.3s ease;
+
+	&:hover {
+		background: rgba(255, 255, 255, 0.3);
+		transform: translateY(-2px);
+	}
+}
+
+.paymentContainer {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 30px;
+	margin-bottom: 30px;
+
+	@media (max-width: 768px) {
+		grid-template-columns: 1fr;
+	}
+}
+
+.orderSummary {
+	background: white;
+	padding: 30px;
+	border-radius: 12px;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+	h2 {
+		font-size: 24px;
+		margin: 0 0 20px 0;
+		color: #333;
+		border-bottom: 2px solid #667eea;
+		padding-bottom: 10px;
+	}
+
+	h3 {
+		font-size: 16px;
+		margin: 20px 0 10px 0;
+		color: #333;
+	}
+
+	p {
+		margin: 5px 0;
+		color: #666;
+		font-size: 14px;
+	}
+}
+
+.customerInfo {
+	margin-bottom: 20px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid #eee;
+}
+
+.itemsDetails {
+	margin-bottom: 20px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid #eee;
+}
+
+.cartItem {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 0;
+	font-size: 14px;
+	border-bottom: 1px solid #f0f0f0;
+
+	&:last-child {
+		border-bottom: none;
+	}
+}
+
+.itemName {
+	flex: 1;
+	color: #333;
+	font-weight: 500;
+}
+
+.itemQuantity {
+	margin: 0 10px;
+	color: #666;
+}
+
+.itemPrice {
+	font-weight: 600;
+	color: #667eea;
+	min-width: 80px;
+	text-align: right;
+}
+
+.pricingSummary {
+	margin-top: 20px;
+}
+
+.summaryRow {
+	display: flex;
+	justify-content: space-between;
+	padding: 10px 0;
+	font-size: 14px;
+	color: #333;
+
+	&.discount {
+		color: #27ae60;
+
+		span:last-child {
+			color: #27ae60;
+			font-weight: 600;
+		}
+	}
+
+	&.total {
+		border-top: 2px solid #667eea;
+		padding-top: 15px;
+		font-size: 18px;
+		font-weight: 700;
+		color: #333;
+
+		span:last-child {
+			color: #667eea;
+		}
+	}
+}
+
+.paymentMethods {
+	background: white;
+	padding: 30px;
+	border-radius: 12px;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: fit-content;
+
+	h2 {
+		font-size: 24px;
+		margin: 0 0 20px 0;
+		color: #333;
+		border-bottom: 2px solid #667eea;
+		padding-bottom: 10px;
+	}
+}
+
+.razorpayContainer {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.razorpayInfo {
+	background: #f8f9fa;
+	padding: 15px;
+	border-radius: 8px;
+	border-left: 4px solid #667eea;
+
+	h3 {
+		margin: 0 0 5px 0;
+		color: #333;
+		font-size: 16px;
+	}
+
+	p {
+		margin: 0;
+		color: #666;
+		font-size: 14px;
+	}
+}
+
+.paymentButton {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	color: white;
+	border: none;
+	padding: 15px 30px;
+	font-size: 16px;
+	font-weight: 700;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+
+	&:hover:not(:disabled) {
+		transform: translateY(-2px);
+		box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+	}
+
+	&:active:not(:disabled) {
+		transform: translateY(0);
+	}
+
+	&.loading,
+	&:disabled {
+		opacity: 0.7;
+		cursor: not-allowed;
+	}
+}
+
+.securityInfo {
+	background: #e8f5e9;
+	padding: 15px;
+	border-radius: 8px;
+	text-align: center;
+
+	p {
+		margin: 5px 0;
+		color: #2e7d32;
+		font-size: 13px;
+
+		&:first-child {
+			margin: 0 0 5px 0;
+		}
+	}
+}
+
+.notificationBar {
+	padding: 15px 20px;
+	border-radius: 8px;
+	margin-top: 20px;
+	font-weight: 500;
+	animation: slideIn 0.3s ease;
+
+	&.success {
+		background: #e8f5e9;
+		color: #2e7d32;
+		border-left: 4px solid #27ae60;
+	}
+
+	&.error {
+		background: #ffebee;
+		color: #c62828;
+		border-left: 4px solid #e74c3c;
+	}
+}
+
+.loading {
+	text-align: center;
+	padding: 60px 20px;
+	color: white;
+	font-size: 18px;
+}
+
+.error {
+	text-align: center;
+	padding: 60px 20px;
+	background: white;
+	color: #e74c3c;
+	font-size: 18px;
+	border-radius: 12px;
+}
+
+@keyframes slideIn {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

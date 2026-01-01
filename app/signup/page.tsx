@@ -1,8 +1,15 @@
 'use client';
 
+import { useState, useMemo } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { Country } from 'country-state-city';
 import styles from '../login/login.module.scss';
 
 export default function SignupPage() {
+	const router = useRouter();
+
+	/*
 	return (
 		<div style={{ padding: '40px', textAlign: 'center' }}>
 			<h1>Signup Temporarily Disabled</h1>
@@ -11,6 +18,7 @@ export default function SignupPage() {
 			</p>
 		</div>
 	);
+	*/
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 	const [error, setError] = useState('');

@@ -136,18 +136,23 @@ export default function CheckoutPage() {
 		e.preventDefault();
 		setIsLoading(true);
 		try {
-			const response = await fetch('/api/orders/create', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ formData, cartItems, total }),
+			// Store checkout data in sessionStorage to use on payment page
+			sessionStorage.setItem('checkoutData', JSON.stringify({
+				formData,
+				cartItems,
+				total,
+				appliedCoupon,
+			}));
+			router.push('/payment');
+		} catch (error) {
+			setNotification({
+				message: 'An error occurred. Please try again.',
+				type: 'error',
 			});
-			const data = await response.json();
-			if (response.ok && data.emailSent) {
-				setNotification({
-					message:
-						'Order placed successfully! Check your email for details.',
-					type: 'success',
-				});
+		} finally {
+			setIsLoading(false);
+		}
+	};
 				setTimeout(() => setNotification(null), 5000);
 				// TODO: clear cart if needed (dispatch clearCart)
 				// router.push('/order-confirmation');
