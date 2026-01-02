@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import styles from './payment-method.module.scss';
+import { useAppDispatch } from '@/lib/hooks';
+import { clearCart } from '@/lib/features/cartSlice';
 
 interface CheckoutData {
 	formData: {
@@ -34,11 +36,13 @@ type PaymentMethod = 'cod' | 'upi' | 'bank' | 'card';
 
 export default function PaymentMethodPage() {
 	const router = useRouter();
+	const dispatch = useAppDispatch();
 	const [checkoutData, setCheckoutData] = useState<CheckoutData | null>(null);
 	const [selectedMethod, setSelectedMethod] = useState<PaymentMethod | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState('');
 	const [showUnderConstruction, setShowUnderConstruction] = useState(false);
+	const [orderSuccess, setOrderSuccess] = useState<{ orderId: string } | null>(null);
 
 	useEffect(() => {
 		// Retrieve checkout data from sessionStorage
@@ -115,13 +119,46 @@ export default function PaymentMethodPage() {
 
 			if (response.ok) {
 				const order = await response.json();
-				// Clear checkout data
+				// Clear checkout data and cart
 				sessionStorage.removeItem('checkoutData');
+				dispatch(clearCart());
 				// Store order ID for confirmation page
 				sessionStorage.setItem('lastOrderId', order._id);
-				// Redirect to success/confirmation
-				alert('Order placed successfully!');
-				router.push('/');
+				
+				// Send confirmation emails via API
+				try {
+					await fetch('/api/orders/send-emails', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({
+							orderId: order._id || order.orderNumber,
+							customerEmail: checkoutData.formData.email,
+							customerName: `${checkoutData.formData.firstName} ${checkoutData.formData.lastName}`,
+							customerPhone: `${checkoutData.formData.phoneCode}${checkoutData.formData.phone}`,
+							items: checkoutData.cartItems.map((item) => ({
+								title: item.title,
+								quantity: item.quantity,
+								size: item.size,
+								price: item.price * item.quantity,
+							})),
+							total: checkoutData.total,
+							paymentMethod: paymentMethod,
+							shippingAddress: {
+								address: checkoutData.formData.address,
+								city: checkoutData.formData.city,
+								state: checkoutData.formData.state,
+								zipCode: checkoutData.formData.zipCode,
+								country: checkoutData.formData.country,
+							},
+						}),
+					});
+				} catch (emailErr) {
+					console.error('Failed to send emails:', emailErr);
+					// Don't block order success if emails fail
+				}
+				
+				// Show success screen
+				setOrderSuccess({ orderId: order._id || order.orderNumber });
 			} else {
 				const errorData = await response.json();
 				setError(errorData.error || 'Failed to place order');
@@ -166,6 +203,31 @@ export default function PaymentMethodPage() {
 		return (
 			<div className={styles.main}>
 				<div className={styles.loading}>Loading...</div>
+			</div>
+		);
+	}
+
+	// Show success screen
+	if (orderSuccess) {
+		return (
+			<div className={styles.main}>
+				<div className={styles.successContainer}>
+					<div className={styles.successIcon}>✓</div>
+					<h1>Order Placed Successfully!</h1>
+					<p className={styles.orderId}>Order ID: {orderSuccess.orderId}</p>
+					<p>
+						Thank you for your order! We&apos;ve sent a confirmation email to your registered email address.
+					</p>
+					<p className={styles.note}>
+						Your order will be processed shortly. You can pay cash on delivery.
+					</p>
+					<button
+						className={styles.homeButton}
+						onClick={() => router.push('/')}
+					>
+						Continue Shopping
+					</button>
+				</div>
 			</div>
 		);
 	}

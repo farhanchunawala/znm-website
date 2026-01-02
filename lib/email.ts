@@ -298,3 +298,174 @@ export const sendOrderDeliveredEmail = async (orderDetails: any) => {
 		html,
 	});
 };
+
+// Order confirmation email to customer
+export const sendOrderThankYouEmail = async (orderDetails: {
+	orderId: string;
+	customerEmail: string;
+	customerName: string;
+	items: Array<{ title: string; quantity: number; size: string; price: number }>;
+	total: number;
+	paymentMethod: string;
+	shippingAddress: {
+		address: string;
+		city: string;
+		state: string;
+		zipCode: string;
+		country: string;
+	};
+}) => {
+	const { orderId, customerEmail, customerName, items, total, paymentMethod, shippingAddress } = orderDetails;
+	const subject = `Thank you for your order #${orderId}`;
+
+	const itemsHtml = items.map(item => `
+		<tr>
+			<td style="padding: 10px; border-bottom: 1px solid #eee;">${item.title}</td>
+			<td style="padding: 10px; border-bottom: 1px solid #eee; text-align: center;">${item.size}</td>
+			<td style="padding: 10px; border-bottom: 1px solid #eee; text-align: center;">${item.quantity}</td>
+			<td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;">Rs. ${item.price.toLocaleString()}</td>
+		</tr>
+	`).join('');
+
+	const html = `
+		<div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto;">
+			<div style="padding: 20px; border-bottom: 2px solid #000;">
+				<h1 style="color: #000; margin: 0;">Zoll & Metér</h1>
+			</div>
+			<div style="padding: 30px 20px;">
+				<h2 style="color: #000;">Thank You for Your Order!</h2>
+				<p>Dear ${customerName},</p>
+				<p>We've received your order and are getting it ready. Your order details are below.</p>
+				
+				<div style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin: 20px 0;">
+					<p style="margin: 5px 0;"><strong>Order Number:</strong> ${orderId}</p>
+					<p style="margin: 5px 0;"><strong>Payment Method:</strong> ${paymentMethod}</p>
+				</div>
+				
+				<h3>Order Items</h3>
+				<table style="width: 100%; border-collapse: collapse;">
+					<thead>
+						<tr style="background: #f5f5f5;">
+							<th style="padding: 10px; text-align: left;">Item</th>
+							<th style="padding: 10px; text-align: center;">Size</th>
+							<th style="padding: 10px; text-align: center;">Qty</th>
+							<th style="padding: 10px; text-align: right;">Price</th>
+						</tr>
+					</thead>
+					<tbody>
+						${itemsHtml}
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="3" style="padding: 15px 10px; text-align: right;"><strong>Total:</strong></td>
+							<td style="padding: 15px 10px; text-align: right;"><strong>Rs. ${total.toLocaleString()}</strong></td>
+						</tr>
+					</tfoot>
+				</table>
+				
+				<h3>Shipping Address</h3>
+				<div style="background: #f5f5f5; padding: 15px; border-radius: 4px;">
+					<p style="margin: 5px 0;">${shippingAddress.address}</p>
+					<p style="margin: 5px 0;">${shippingAddress.city}, ${shippingAddress.state} ${shippingAddress.zipCode}</p>
+					<p style="margin: 5px 0;">${shippingAddress.country}</p>
+				</div>
+				
+				<p style="margin-top: 20px;">We'll notify you when your order ships.</p>
+			</div>
+			<div style="padding: 20px; border-top: 1px solid #eee; color: #666; font-size: 12px;">
+				<p>Thank you for shopping with Zoll & Metér</p>
+			</div>
+		</div>
+	`;
+
+	return sendEmail({
+		to: customerEmail,
+		subject,
+		text: `Thank you for your order #${orderId}. Total: Rs. ${total}`,
+		html,
+	});
+};
+
+// New order notification email to admin
+export const sendNewOrderNotificationEmail = async (orderDetails: {
+	orderId: string;
+	customerName: string;
+	customerEmail: string;
+	customerPhone: string;
+	items: Array<{ title: string; quantity: number; size: string; price: number }>;
+	total: number;
+	paymentMethod: string;
+	shippingAddress: {
+		address: string;
+		city: string;
+		state: string;
+		zipCode: string;
+		country: string;
+	};
+}) => {
+	const adminEmail = process.env.ADMIN_EMAIL || process.env.SMTP_USER || 'admin@zollandmeter.com';
+	const { orderId, customerName, customerEmail, customerPhone, items, total, paymentMethod, shippingAddress } = orderDetails;
+	const subject = `🛒 New Order #${orderId} - Rs. ${total.toLocaleString()}`;
+
+	const itemsHtml = items.map(item => `
+		<tr>
+			<td style="padding: 10px; border-bottom: 1px solid #eee;">${item.title}</td>
+			<td style="padding: 10px; border-bottom: 1px solid #eee; text-align: center;">${item.size}</td>
+			<td style="padding: 10px; border-bottom: 1px solid #eee; text-align: center;">${item.quantity}</td>
+			<td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;">Rs. ${item.price.toLocaleString()}</td>
+		</tr>
+	`).join('');
+
+	const html = `
+		<div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto;">
+			<div style="padding: 20px; background: #000; color: #fff;">
+				<h1 style="margin: 0;">New Order Received!</h1>
+			</div>
+			<div style="padding: 30px 20px;">
+				<div style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
+					<p style="margin: 5px 0;"><strong>Order ID:</strong> ${orderId}</p>
+					<p style="margin: 5px 0;"><strong>Total:</strong> Rs. ${total.toLocaleString()}</p>
+					<p style="margin: 5px 0;"><strong>Payment Method:</strong> ${paymentMethod}</p>
+					<p style="margin: 5px 0;"><strong>Date:</strong> ${new Date().toLocaleString()}</p>
+				</div>
+				
+				<h3>Customer Details</h3>
+				<div style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
+					<p style="margin: 5px 0;"><strong>Name:</strong> ${customerName}</p>
+					<p style="margin: 5px 0;"><strong>Email:</strong> ${customerEmail}</p>
+					<p style="margin: 5px 0;"><strong>Phone:</strong> ${customerPhone}</p>
+				</div>
+				
+				<h3>Shipping Address</h3>
+				<div style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
+					<p style="margin: 5px 0;">${shippingAddress.address}</p>
+					<p style="margin: 5px 0;">${shippingAddress.city}, ${shippingAddress.state} ${shippingAddress.zipCode}</p>
+					<p style="margin: 5px 0;">${shippingAddress.country}</p>
+				</div>
+				
+				<h3>Order Items</h3>
+				<table style="width: 100%; border-collapse: collapse;">
+					<thead>
+						<tr style="background: #f5f5f5;">
+							<th style="padding: 10px; text-align: left;">Item</th>
+							<th style="padding: 10px; text-align: center;">Size</th>
+							<th style="padding: 10px; text-align: center;">Qty</th>
+							<th style="padding: 10px; text-align: right;">Price</th>
+						</tr>
+					</thead>
+					<tbody>
+						${itemsHtml}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	`;
+
+	return sendEmail({
+		to: adminEmail,
+		subject,
+		text: `New order #${orderId} from ${customerName}. Total: Rs. ${total}. Payment: ${paymentMethod}`,
+		html,
+	});
+};
+

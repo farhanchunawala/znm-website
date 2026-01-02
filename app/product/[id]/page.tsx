@@ -2,6 +2,7 @@
 
 import Head from 'next/head';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import styles from './product.module.scss';
 import { useState } from 'react';
 import { useAppDispatch } from '@/lib/hooks';
@@ -25,6 +26,7 @@ export default function Product({ params }: Props) {
 		message: '',
 	});
 
+	const router = useRouter();
 	const dispatch = useAppDispatch();
 	const [selectedSize, setSelectedSize] = useState('');
 	const [feedback, setFeedback] = useState<{
@@ -52,6 +54,27 @@ export default function Product({ params }: Props) {
 		setFeedback({ type: 'success', message: 'Added to cart!' });
 		setTimeout(() => setFeedback(null), 3000);
 		setSelectedSize(''); // Reset size selection
+	};
+
+	const handleBuyNow = () => {
+		if (!selectedSize) {
+			setFeedback({ type: 'error', message: 'Please select a size' });
+			setTimeout(() => setFeedback(null), 3000);
+			return;
+		}
+
+		dispatch(
+			addToCart({
+				id: productData.id,
+				title: productData.title,
+				price: productData.mrp,
+				size: selectedSize,
+				quantity: 1,
+				image: productData.images[0],
+			})
+		);
+		// Redirect directly to checkout
+		router.push('/checkout');
 	};
 
 	const saveProduct = async (event: React.FormEvent) => {
@@ -163,23 +186,31 @@ export default function Product({ params }: Props) {
 									)
 							)}
 						</div>
-						<div
-							className={`${styles.notify}`}
-							onClick={handleAddToCart}
-						>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								width="13"
-								height="14"
-								viewBox="0 0 13 14"
-								fill="none"
+						<div className={`${styles.buttonGroup}`}>
+							<div
+								className={`${styles.notify}`}
+								onClick={handleAddToCart}
 							>
-								<path
-									d="M9.35986 4V5.5H8.36086V4H4.36286V5.5H3.35986V4H2.35986V5.119C2.35986 5.985 2.20286 7.019 1.96286 8.488L1.83286 9.263C1.49286 11.241 1.44486 11.543 1.39286 12.135C1.38186 12.258 1.37486 12.366 1.37186 12.461C1.74386 12.535 2.15986 12.609 2.60586 12.679C3.89586 12.879 5.17986 13 6.35986 13C6.46986 13 6.57986 12.999 6.69386 12.996C7.66386 12.974 8.69786 12.863 9.85186 12.679C9.92086 12.669 10.7249 12.526 11.3469 12.427C11.3424 12.3289 11.3358 12.2308 11.3269 12.133C11.2759 11.54 11.2269 11.23 10.8879 9.258L10.7579 8.488C10.5179 7.018 10.3599 5.985 10.3599 5.118V4H9.35986V4ZM3.35986 3V2.256C3.35986 0.71 4.48286 0 6.35986 0C8.24486 0 9.35986 0.723 9.35986 2.288V3H11.3599V5.119C11.3599 8 13.0169 13.333 12.0519 13.333C11.6229 13.333 8.93686 14 6.35986 14C3.52586 14 0.663863 13.333 0.663863 13.333C-0.293137 13.333 1.35986 8 1.35986 5.12V3H3.35986ZM4.36286 3H8.35986V2.288C8.35986 1.393 7.75586 1 6.35986 1C4.96786 1 4.36186 1.388 4.36186 2.256V3H4.36286Z"
-									fill="white"
-								/>
-							</svg>
-							<p className={`${styles.txt}`}>ADD TO CART</p>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="13"
+									height="14"
+									viewBox="0 0 13 14"
+									fill="none"
+								>
+									<path
+										d="M9.35986 4V5.5H8.36086V4H4.36286V5.5H3.35986V4H2.35986V5.119C2.35986 5.985 2.20286 7.019 1.96286 8.488L1.83286 9.263C1.49286 11.241 1.44486 11.543 1.39286 12.135C1.38186 12.258 1.37486 12.366 1.37186 12.461C1.74386 12.535 2.15986 12.609 2.60586 12.679C3.89586 12.879 5.17986 13 6.35986 13C6.46986 13 6.57986 12.999 6.69386 12.996C7.66386 12.974 8.69786 12.863 9.85186 12.679C9.92086 12.669 10.7249 12.526 11.3469 12.427C11.3424 12.3289 11.3358 12.2308 11.3269 12.133C11.2759 11.54 11.2269 11.23 10.8879 9.258L10.7579 8.488C10.5179 7.018 10.3599 5.985 10.3599 5.118V4H9.35986V4ZM3.35986 3V2.256C3.35986 0.71 4.48286 0 6.35986 0C8.24486 0 9.35986 0.723 9.35986 2.288V3H11.3599V5.119C11.3599 8 13.0169 13.333 12.0519 13.333C11.6229 13.333 8.93686 14 6.35986 14C3.52586 14 0.663863 13.333 0.663863 13.333C-0.293137 13.333 1.35986 8 1.35986 5.12V3H3.35986ZM4.36286 3H8.35986V2.288C8.35986 1.393 7.75586 1 6.35986 1C4.96786 1 4.36186 1.388 4.36186 2.256V3H4.36286Z"
+										fill="white"
+									/>
+								</svg>
+								<p className={`${styles.txt}`}>ADD TO CART</p>
+							</div>
+							<div
+								className={`${styles.buyNow}`}
+								onClick={handleBuyNow}
+							>
+								<p className={`${styles.txt}`}>BUY NOW</p>
+							</div>
 						</div>
 						{feedback && (
 							<div
