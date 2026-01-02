@@ -143,33 +143,12 @@ export default function CheckoutPage() {
 				total,
 				appliedCoupon,
 			}));
-			router.push('/payment');
+			router.push('/payment-method');
 		} catch (error) {
 			setNotification({
 				message: 'An error occurred. Please try again.',
 				type: 'error',
 			});
-		} finally {
-			setIsLoading(false);
-		}
-	};
-				setTimeout(() => setNotification(null), 5000);
-				// TODO: clear cart if needed (dispatch clearCart)
-				// router.push('/order-confirmation');
-			} else {
-				setNotification({
-					message: 'Failed to place order. Please try again.',
-					type: 'error',
-				});
-				setTimeout(() => setNotification(null), 5000);
-			}
-		} catch (err) {
-			console.error('Error placing order:', err);
-			setNotification({
-				message: 'An error occurred while placing the order.',
-				type: 'error',
-			});
-			setTimeout(() => setNotification(null), 5000);
 		} finally {
 			setIsLoading(false);
 		}
@@ -481,7 +460,7 @@ export default function CheckoutPage() {
 						className={`${styles.placeOrderButton} ${isLoading ? styles.loading : ''}`}
 						disabled={isLoading}
 					>
-						{isLoading ? 'PROCESSING...' : 'PLACE ORDER'}
+						{isLoading ? 'PROCESSING...' : 'CHOOSE PAYMENT METHOD'}
 					</button>
 				</div>
 			</div>
