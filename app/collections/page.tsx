@@ -13,43 +13,53 @@ export const metadata: Metadata = {
 const collections = [
 	{
 		title: 'Kurtas',
-		image: '/display-photo/dp4-kurtas.png',
+		image: '/display-photo/kurtas_thumb.png',
 		link: '/collections/kurtas',
 	},
 	{
 		title: 'Sherwanis',
-		image: '/display-photo/dp5-sherwani.png',
+		image: '/display-photo/sherwanis_thumb.png',
 		link: '/collections/sherwani',
 	},
 	{
 		title: 'Suits',
-		image: '/display-photo/dp3.1-suits.png',
+		image: '/display-photo/suits_thumb.png',
 		link: '/collections/suits',
 	},
 	{
 		title: 'Shirts',
-		image: '/display-photo/dp2.1-shirts.png',
+		image: '/display-photo/shirts_thumb.png',
 		link: '/collections/shirts',
 	},
 	{
 		title: 'Waist Coats',
-		image: '/display-photo/dp6-vest.png',
+		image: '/display-photo/waist_coats_thumb.png',
 		link: '/collections/waist-coat',
 	},
 	{
 		title: 'Prince Coats',
-		image: '/display-photo/dp3.1-suits.png', // Reusing suit image as placeholder
+		image: '/display-photo/prince_coats_thumb.png',
 		link: '/collections/prince-coat',
 	},
 	{
 		title: 'Trousers',
-		image: '/display-photo/dp1.1-thobes.png', // Using thobes image as placeholder/fallback
+		image: '/display-photo/trousers_thumb.png',
 		link: '/collections/trousers',
 	},
 	{
 		title: 'Festive Collection',
-		image: '/display-photo/dp5-sherwani.png', // Reusing sherwani image
+		image: '/display-photo/festive_thumb.png',
 		link: '/collections/festive-collection',
+	},
+	{
+		title: 'Best Sellers',
+		image: '/display-photo/bestsellers_thumb.png',
+		link: '/collections/best-sellers',
+	},
+	{
+		title: 'Menswear 26',
+		image: '/display-photo/menswear26_thumb.png',
+		link: '/collections/menswear-26',
 	},
 ];
 
