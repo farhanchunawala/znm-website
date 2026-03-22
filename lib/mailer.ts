@@ -215,11 +215,11 @@ export async function sendCustomerThankYouEmail(data: any) {
                 <strong>Zoll & Meter</strong><br>
                 Shop no. 10, Abba Apartment<br>
                 Jogeshwari West, Mumbai - 400102<br>
-                Phone: +91 7718819099<br>
+                Phone: +91 8291943457<br>
                 Email: zollandmeter@gmail.com
               </p>
               <div style="margin-top: 20px;">
-                <a href="https://wa.me/919769735377?text=Hi" style="display: inline-block; margin: 5px 10px 5px 0; padding: 10px 20px; background-color: #25D366; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: 600;">WhatsApp</a>
+                <a href="https://wa.me/918291943457?text=Hi" style="display: inline-block; margin: 5px 10px 5px 0; padding: 10px 20px; background-color: #25D366; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: 600;">WhatsApp</a>
                 <a href="https://www.instagram.com/zollandmeter/?ref=app" style="display: inline-block; margin: 5px 10px 5px 0; padding: 10px 20px; background-color: #E4405F; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: 600;">Instagram</a>
               </div>
             </td>

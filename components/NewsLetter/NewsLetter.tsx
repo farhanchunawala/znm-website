@@ -85,7 +85,7 @@ const NewsLetter = () => {
 					</a>
 					<a
 						className={`${styles.app} `}
-						href="https://wa.me/919769735377?text=Hi"
+						href="https://wa.me/918291943457?text=Hi"
 						target="_blank"
 					>
 						<svg

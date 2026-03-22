@@ -34,13 +34,13 @@ export default function ContactUs() {
 						<span className={`${styles.span}`}>
 							Online Order: WhatsApp / Call:
 						</span>{' '}
-						9769735377
+						8291943457
 					</p>
 					<p>
 						<span className={`${styles.span}`}>
 							studio appointment:
 						</span>{' '}
-						9820978696
+						8291943457
 					</p>
 				</div>
 				<div className={`${styles.social}`}>
@@ -51,7 +51,7 @@ export default function ContactUs() {
 					</p>
 					<p>
 						<span className={`${styles.span}`}>phone: </span>
-						9820978696
+						8291943457
 					</p>
 					<p>
 						<span className={`${styles.span}`}>Instagram: </span>

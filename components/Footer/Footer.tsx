@@ -34,7 +34,7 @@ const Footer = () => {
 							Facebook
 						</a> */}
 						<a
-							href="https://wa.me/9820978696?text=Hi"
+							href="https://wa.me/8291943457?text=Hi"
 							target="_blank"
 							rel="noopener noreferrer"
 						>
@@ -48,7 +48,7 @@ const Footer = () => {
 							</svg>
 							WhatsApp
 						</a>
-						<a href="tel:+919820978696">
+						<a href="tel:+918291943457">
 							<svg
 								width="20"
 								height="20"
