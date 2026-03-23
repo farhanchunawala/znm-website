@@ -12,6 +12,11 @@
 .header h1 {
 	font-size: 28px;
 	font-weight: 600;
+	color: #000000;
+
+	:global([data-theme='dark']) & {
+		color: #ffffff;
+	}
 }
 
 .actions {
@@ -68,8 +73,13 @@
 .feedbackCard {
 	background: white;
 	border: 1px solid #e5e7eb;
-	border-radius: 8px;
+	border-radius: 12px;
 	padding: 24px;
+
+	:global([data-theme='dark']) & {
+		background: #000000;
+		border-color: #333333;
+	}
 }
 
 .feedbackHeader {
@@ -79,24 +89,40 @@
 	margin-bottom: 20px;
 	padding-bottom: 20px;
 	border-bottom: 1px solid #f3f4f6;
+
+	:global([data-theme='dark']) & {
+		border-bottom-color: #222222;
+	}
 }
 
 .feedbackHeader h3 {
 	margin: 0 0 8px 0;
 	font-size: 18px;
 	color: #111827;
+
+	:global([data-theme='dark']) & {
+		color: #ffffff;
+	}
 }
 
 .customer {
 	margin: 4px 0;
 	font-size: 14px;
 	color: #374151;
+
+	:global([data-theme='dark']) & {
+		color: #ffffff;
+	}
 }
 
 .date {
 	margin: 4px 0;
 	font-size: 13px;
 	color: #6b7280;
+
+	:global([data-theme='dark']) & {
+		color: #999999;
+	}
 }
 
 .averageRating {
@@ -125,7 +151,12 @@
 .ratingItem {
 	padding: 15px;
 	background: #f9fafb;
-	border-radius: 6px;
+	border-radius: 8px;
+
+	:global([data-theme='dark']) & {
+		background: #111111;
+		border: 1px solid #222222;
+	}
 }
 
 .ratingItem .ratingLabel {
@@ -134,6 +165,10 @@
 	font-size: 13px;
 	color: #374151;
 	font-weight: 600;
+
+	:global([data-theme='dark']) & {
+		color: #aaaaaa;
+	}
 }
 
 .ratingDisplay {
@@ -156,6 +191,10 @@
 	font-size: 14px;
 	font-weight: 600;
 	color: #374151;
+
+	:global([data-theme='dark']) & {
+		color: #ffffff;
+	}
 }
 
 .comment {
