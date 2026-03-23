@@ -5,8 +5,12 @@
 		margin: 40px 0 24px 0;
 		font-size: 18px;
 		font-weight: 700;
-		color: #000000 !important;
+		color: #000000;
 		letter-spacing: -0.3px;
+
+		:global([data-theme='dark']) & {
+			color: #ffffff;
+		}
 	}
 }
 
@@ -26,6 +30,11 @@
 	align-items: center;
 	gap: 16px;
 	transition: all 0.15s;
+
+	:global([data-theme='dark']) & {
+		background: #111111;
+		border-color: #333333;
+	}
 
 	&:hover {
 		border-color: $border-strong;
@@ -47,6 +56,10 @@
 			width: 28px;
 			height: 28px;
 			color: #333333;
+
+			:global([data-theme='dark']) & {
+				color: #ffffff;
+			}
 		}
 	}
 
@@ -61,6 +74,10 @@
 			font-weight: 600;
 			text-transform: uppercase;
 			letter-spacing: 0.4px;
+
+			:global([data-theme='dark']) & {
+				color: #aaaaaa;
+			}
 		}
 
 		.statValue {
@@ -69,6 +86,10 @@
 			font-weight: 700;
 			color: #000000;
 			line-height: 1.2;
+
+			:global([data-theme='dark']) & {
+				color: #ffffff;
+			}
 		}
 	}
 }
@@ -101,10 +122,20 @@
 	font-weight: 600;
 	transition: all 0.15s;
 
+	:global([data-theme='dark']) & {
+		background: #111111;
+		border-color: #333333;
+		color: #ffffff;
+	}
+
 	svg {
 		width: 28px;
 		height: 28px;
 		color: #555555;
+
+		:global([data-theme='dark']) & {
+			color: #ffffff;
+		}
 	}
 
 	&:hover {
