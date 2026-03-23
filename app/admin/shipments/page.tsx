@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import styles from './shipments.module.scss';
 import {
@@ -60,6 +60,7 @@ export default function ShipmentsPage() {
 	const [sortBy, setSortBy] = useState('latest');
 	const [selectedShipments, setSelectedShipments] = useState<string[]>([]);
 	const [statusFilter, setStatusFilter] = useState<string>('all');
+	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
 		fetchShipments();
@@ -195,6 +196,23 @@ export default function ShipmentsPage() {
 						<ExportIcon size={18} />
 						Export CSV
 					</button>
+					<button
+						onClick={() => fileInputRef.current?.click()}
+						className={styles.exportBtn}
+					>
+						📤 Import CSV
+					</button>
+					<input type="file" ref={fileInputRef} accept=".csv" style={{ display: 'none' }} onChange={async (e) => {
+						const file = e.target.files?.[0]; if (!file) return;
+						const fd = new FormData(); fd.append('file', file);
+						try {
+							const res = await window.fetch('/api/admin/shipments/import', { method: 'POST', body: fd });
+							const result = await res.json();
+							alert(result.success ? `Import: ${result.created} created, ${result.updated} updated` : result.error);
+							if (result.success) fetchShipments();
+						} catch { alert('Import failed'); }
+						if (fileInputRef.current) fileInputRef.current.value = '';
+					}} />
 					<button
 						onClick={() => setShowArchived(!showArchived)}
 						className={styles.archiveBtn}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styles from './collections.module.scss';
 
 interface Collection {
@@ -35,6 +35,7 @@ export default function CollectionsPage() {
 	});
 
 	const limit = 10;
+	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
 		fetchCollections();
@@ -122,29 +123,64 @@ export default function CollectionsPage() {
 		}
 	}
 
+	const handleExportCSV = async () => {
+		try {
+			const res = await fetch('/api/admin/collections/export');
+			if (!res.ok) throw new Error('Export failed');
+			const blob = await res.blob();
+			const url = window.URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = `collections-${new Date().toISOString().split('T')[0]}.csv`;
+			a.click();
+			window.URL.revokeObjectURL(url);
+		} catch { alert('Failed to export CSV'); }
+	};
+
+	const handleImportCSV = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0];
+		if (!file) return;
+		try {
+			const fd = new FormData();
+			fd.append('file', file);
+			const res = await fetch('/api/admin/collections/import', { method: 'POST', body: fd });
+			const result = await res.json();
+			if (result.success) {
+				alert(`Import: ${result.created} created, ${result.updated} updated`);
+				fetchCollections();
+			} else { alert(result.error || 'Import failed'); }
+		} catch { alert('Failed to import CSV'); }
+		if (fileInputRef.current) fileInputRef.current.value = '';
+	};
+
 	const pages = Math.ceil(total / limit);
 
 	return (
 		<div className={styles.container}>
 			<div className={styles.header}>
 				<h1>Collections</h1>
-				<button
-					onClick={() => {
-						setEditingCollection(null);
-						setFormData({
-							title: '',
-							description: '',
-							type: 'manual',
-							rules: [],
-							priority: 0,
-							status: 'active',
-						});
-						setShowModal(true);
-					}}
-					className={styles.createBtn}
-				>
-					+ New Collection
-				</button>
+				<div className={styles.headerActions}>
+					<button onClick={handleExportCSV} className={styles.csvBtn}>📥 Export CSV</button>
+					<button onClick={() => fileInputRef.current?.click()} className={styles.csvBtn}>📤 Import CSV</button>
+					<input type="file" ref={fileInputRef} accept=".csv" onChange={handleImportCSV} style={{ display: 'none' }} />
+					<button
+						onClick={() => {
+							setEditingCollection(null);
+							setFormData({
+								title: '',
+								description: '',
+								type: 'manual',
+								rules: [],
+								priority: 0,
+								status: 'active',
+							});
+							setShowModal(true);
+						}}
+						className={styles.createBtn}
+					>
+						+ New Collection
+					</button>
+				</div>
 			</div>
 
 			<div className={styles.searchBox}>

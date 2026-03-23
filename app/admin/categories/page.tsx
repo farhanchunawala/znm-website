@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styles from './categories.module.scss';
 
 interface Category {
@@ -25,6 +25,7 @@ export default function CategoriesPage() {
 		description: '',
 		parentId: '',
 	});
+	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
 		fetchCategories();
@@ -84,6 +85,36 @@ export default function CategoriesPage() {
 		}
 	}
 
+	const handleExportCSV = async () => {
+		try {
+			const res = await fetch('/api/admin/categories/export');
+			if (!res.ok) throw new Error('Export failed');
+			const blob = await res.blob();
+			const url = window.URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = `categories-${new Date().toISOString().split('T')[0]}.csv`;
+			a.click();
+			window.URL.revokeObjectURL(url);
+		} catch { alert('Failed to export CSV'); }
+	};
+
+	const handleImportCSV = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0];
+		if (!file) return;
+		try {
+			const formData = new FormData();
+			formData.append('file', file);
+			const res = await fetch('/api/admin/categories/import', { method: 'POST', body: formData });
+			const result = await res.json();
+			if (result.success) {
+				alert(`Import complete: ${result.created} created, ${result.updated} updated`);
+				fetchCategories();
+			} else { alert(result.error || 'Import failed'); }
+		} catch { alert('Failed to import CSV'); }
+		if (fileInputRef.current) fileInputRef.current.value = '';
+	};
+
 	const TreeNode = ({
 		node,
 		level = 0,
@@ -133,20 +164,25 @@ export default function CategoriesPage() {
 		<div className={styles.container}>
 			<div className={styles.header}>
 				<h1>Categories</h1>
-				<button
-					onClick={() => {
-						setSelectedCategory(null);
-						setFormData({
-							name: '',
-							description: '',
-							parentId: '',
-						});
-						setShowModal(true);
-					}}
-					className={styles.createBtn}
-				>
-					+ New Category
-				</button>
+				<div className={styles.headerActions}>
+					<button onClick={handleExportCSV} className={styles.csvBtn}>📥 Export CSV</button>
+					<button onClick={() => fileInputRef.current?.click()} className={styles.csvBtn}>📤 Import CSV</button>
+					<input type="file" ref={fileInputRef} accept=".csv" onChange={handleImportCSV} style={{ display: 'none' }} />
+					<button
+						onClick={() => {
+							setSelectedCategory(null);
+							setFormData({
+								name: '',
+								description: '',
+								parentId: '',
+							});
+							setShowModal(true);
+						}}
+						className={styles.createBtn}
+					>
+						+ New Category
+					</button>
+				</div>
 			</div>
 
 			{loading ? (

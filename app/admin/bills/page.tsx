@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { DocumentTextIcon, PrinterIcon, TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 import PageHeader from '@/components/Admin/PageHeader';
@@ -57,6 +57,7 @@ export default function BillsPage() {
 	});
 
 	const [actionInProgress, setActionInProgress] = useState(false);
+	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	// Fetch bills
 	const fetchBills = async () => {
@@ -263,12 +264,48 @@ export default function BillsPage() {
 				subtitle="Create, manage, and track customer bills"
 				icon={<DocumentTextIcon />}
 				actions={
-					<button
-						onClick={() => setShowCreateModal(true)}
-						className={buttonStyles.primaryBtn}
-					>
-						+ Create Bill
-					</button>
+					<div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+						<button
+							onClick={async () => {
+								try {
+									const res = await window.fetch('/api/admin/bills/export');
+									const blob = await res.blob();
+									const url = window.URL.createObjectURL(blob);
+									const a = document.createElement('a');
+									a.href = url;
+									a.download = `bills-${new Date().toISOString().split('T')[0]}.csv`;
+									a.click();
+								} catch { alert('Export failed'); }
+							}}
+							className={buttonStyles.secondaryBtn}
+						>
+							📥 Export CSV
+						</button>
+						<button
+							onClick={() => fileInputRef.current?.click()}
+							className={buttonStyles.secondaryBtn}
+						>
+							📤 Import CSV
+						</button>
+						<input type="file" ref={fileInputRef} accept=".csv" style={{ display: 'none' }} onChange={async (e) => {
+							const file = e.target.files?.[0];
+							if (!file) return;
+							const fd = new FormData(); fd.append('file', file);
+							try {
+								const res = await window.fetch('/api/admin/bills/import', { method: 'POST', body: fd });
+								const result = await res.json();
+								alert(result.success ? `Import: ${result.created} created` : result.error);
+								if (result.success) fetchBills();
+							} catch { alert('Import failed'); }
+							if (fileInputRef.current) fileInputRef.current.value = '';
+						}} />
+						<button
+							onClick={() => setShowCreateModal(true)}
+							className={buttonStyles.primaryBtn}
+						>
+							+ Create Bill
+						</button>
+					</div>
 				}
 			/>
 

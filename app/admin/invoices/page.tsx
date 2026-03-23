@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useInvoices, useInvoiceAction } from '@/lib/invoice/hooks';
 import styles from './invoices.module.scss';
 
@@ -33,6 +33,7 @@ export default function InvoiceList() {
 		sortBy: 'createdAt',
 		sortOrder: 'desc',
 	});
+	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
 		fetch(filters);
@@ -85,8 +86,34 @@ export default function InvoiceList() {
 	return (
 		<div className={styles.pageContainer}>
 			<div className={styles.header}>
-				<h1>Invoices</h1>
-				<p>Manage and track all customer invoices</p>
+				<div>
+					<h1>Invoices</h1>
+					<p>Manage and track all customer invoices</p>
+				</div>
+				<div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+					<button onClick={async () => {
+						try {
+							const res = await window.fetch('/api/admin/invoices/export');
+							const blob = await res.blob();
+							const url = window.URL.createObjectURL(blob);
+							const a = document.createElement('a'); a.href = url;
+							a.download = `invoices-${new Date().toISOString().split('T')[0]}.csv`;
+							a.click();
+						} catch { alert('Export failed'); }
+					}} className={styles.btnSmall}>📥 Export CSV</button>
+					<button onClick={() => fileInputRef.current?.click()} className={styles.btnSmall}>📤 Import CSV</button>
+					<input type="file" ref={fileInputRef} accept=".csv" style={{ display: 'none' }} onChange={async (e) => {
+						const file = e.target.files?.[0]; if (!file) return;
+						const fd = new FormData(); fd.append('file', file);
+						try {
+							const res = await window.fetch('/api/admin/invoices/import', { method: 'POST', body: fd });
+							const result = await res.json();
+							alert(result.success ? `Updated ${result.updated} invoices` : result.error);
+							if (result.success) fetch(filters);
+						} catch { alert('Import failed'); }
+						if (fileInputRef.current) fileInputRef.current.value = '';
+					}} />
+				</div>
 			</div>
 
 			{error && <div className={styles.errorMessage}>{error}</div>}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import styles from './products.module.scss';
@@ -25,6 +25,7 @@ export default function ProductsPage() {
 	const [page, setPage] = useState(1);
 	const [total, setTotal] = useState(0);
 	const limit = 10;
+	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
 		fetchProducts();
@@ -53,15 +54,68 @@ export default function ProductsPage() {
 		}
 	}
 
+	const handleExportCSV = async () => {
+		try {
+			const res = await fetch('/api/admin/products/export');
+			if (!res.ok) throw new Error('Export failed');
+			const blob = await res.blob();
+			const url = window.URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = `products-${new Date().toISOString().split('T')[0]}.csv`;
+			a.click();
+			window.URL.revokeObjectURL(url);
+		} catch (err) {
+			alert('Failed to export CSV');
+		}
+	};
+
+	const handleImportCSV = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0];
+		if (!file) return;
+		try {
+			const formData = new FormData();
+			formData.append('file', file);
+			const res = await fetch('/api/admin/products/import', { method: 'POST', body: formData });
+			const result = await res.json();
+			if (result.success) {
+				alert(`Import complete: ${result.created} created, ${result.updated} updated${result.errors?.length ? `, ${result.errors.length} errors` : ''}`);
+				fetchProducts();
+			} else {
+				alert(result.error || 'Import failed');
+			}
+		} catch (err) {
+			alert('Failed to import CSV');
+		}
+		if (fileInputRef.current) fileInputRef.current.value = '';
+	};
+
+	const handleDelete = async (id: string) => {
+		if (!confirm('Are you sure you want to delete this product?')) return;
+		try {
+			const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+			const result = await res.json();
+			if (result.success) fetchProducts();
+			else alert(result.error?.message || 'Failed to delete');
+		} catch (err) {
+			alert('Error deleting product');
+		}
+	};
+
 	const pages = Math.ceil(total / limit);
 
 	return (
 		<div className={styles.container}>
 			<div className={styles.header}>
 				<h1>Products</h1>
-				<Link href="/admin/products/new" className={styles.createBtn}>
-					+ New Product
-				</Link>
+				<div className={styles.headerActions}>
+					<button onClick={handleExportCSV} className={styles.csvBtn}>📥 Export CSV</button>
+					<button onClick={() => fileInputRef.current?.click()} className={styles.csvBtn}>📤 Import CSV</button>
+					<input type="file" ref={fileInputRef} accept=".csv" onChange={handleImportCSV} style={{ display: 'none' }} />
+					<Link href="/admin/products/new" className={styles.createBtn}>
+						+ New Product
+					</Link>
+				</div>
 			</div>
 
 			<div className={styles.filters}>
@@ -137,13 +191,19 @@ export default function ProductsPage() {
 											product.createdAt
 										).toLocaleDateString()}
 									</td>
-									<td>
+									<td className={styles.actionCell}>
 										<Link
 											href={`/admin/products/${product._id}`}
 											className={styles.editBtn}
 										>
 											Edit
 										</Link>
+										<button
+											onClick={() => handleDelete(product._id)}
+											className={styles.deleteBtn}
+										>
+											Delete
+										</button>
 									</td>
 								</tr>
 							))}
@@ -178,3 +238,4 @@ export default function ProductsPage() {
 		</div>
 	);
 }
+

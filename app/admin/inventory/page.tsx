@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styles from './inventory.module.scss';
 
 interface InventoryItem {
@@ -47,6 +47,7 @@ export default function InventoryPage() {
     isOpen: false,
     inventoryId: null
   });
+  const invFileRef = useRef<HTMLInputElement>(null);
 
   // Fetch inventories
   useEffect(() => {
@@ -169,6 +170,30 @@ export default function InventoryPage() {
     <div className={styles.container}>
       <div className={styles.header}>
         <h1>📦 Inventory Management</h1>
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          <button onClick={async () => {
+            try {
+              const res = await window.fetch('/api/admin/inventory/export');
+              const blob = await res.blob();
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement('a'); a.href = url;
+              a.download = `inventory-${new Date().toISOString().split('T')[0]}.csv`;
+              a.click();
+            } catch { alert('Export failed'); }
+          }} className={styles.btnSmall}>📥 Export CSV</button>
+          <button onClick={() => invFileRef.current?.click()} className={styles.btnSmall}>📤 Import CSV</button>
+          <input type="file" ref={invFileRef} accept=".csv" style={{ display: 'none' }} onChange={async (e) => {
+            const file = e.target.files?.[0]; if (!file) return;
+            const fd = new FormData(); fd.append('file', file);
+            try {
+              const res = await window.fetch('/api/admin/inventory/import', { method: 'POST', body: fd });
+              const result = await res.json();
+              alert(result.success ? `Import: ${result.created} created, ${result.updated} updated` : result.error);
+              if (result.success) window.location.reload();
+            } catch { alert('Import failed'); }
+            if (invFileRef.current) invFileRef.current.value = '';
+          }} />
+        </div>
         <div className={styles.stats}>
           <div className={styles.stat}>
             <span className={styles.label}>Total Items</span>

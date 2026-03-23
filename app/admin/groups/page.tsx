@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import styles from './groups.module.scss';
 
@@ -24,6 +24,7 @@ export default function GroupsPage() {
 		color: '#000000',
 		description: '',
 	});
+	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
 		fetchGroups();
@@ -107,22 +108,46 @@ export default function GroupsPage() {
 		<div className={styles.groupsPage}>
 			<div className={styles.header}>
 				<h1>Groups Management</h1>
-				<button
-					onClick={() => {
-						setEditingGroup(null);
-						setFormData({
-							name: '',
-							type: 'customer',
-							color: '#000000',
-							description: '',
-						});
-						setShowModal(true);
-					}}
-					className={styles.addBtn}
-				>
-					<PlusIcon />
-					Create Group
-				</button>
+				<div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+					<button onClick={async () => {
+						try {
+							const res = await window.fetch('/api/admin/groups/export');
+							const blob = await res.blob();
+							const url = window.URL.createObjectURL(blob);
+							const a = document.createElement('a'); a.href = url;
+							a.download = `groups-${new Date().toISOString().split('T')[0]}.csv`;
+							a.click();
+						} catch { alert('Export failed'); }
+					}} className={styles.addBtn} style={{ background: '#333' }}>📥 Export CSV</button>
+					<button onClick={() => fileInputRef.current?.click()} className={styles.addBtn} style={{ background: '#333' }}>📤 Import CSV</button>
+					<input type="file" ref={fileInputRef} accept=".csv" style={{ display: 'none' }} onChange={async (e) => {
+						const file = e.target.files?.[0]; if (!file) return;
+						const fd = new FormData(); fd.append('file', file);
+						try {
+							const res = await window.fetch('/api/admin/groups/import', { method: 'POST', body: fd });
+							const result = await res.json();
+							alert(result.success ? `Import: ${result.created} created, ${result.updated} updated` : result.error);
+							if (result.success) fetchGroups();
+						} catch { alert('Import failed'); }
+						if (fileInputRef.current) fileInputRef.current.value = '';
+					}} />
+					<button
+						onClick={() => {
+							setEditingGroup(null);
+							setFormData({
+								name: '',
+								type: 'customer',
+								color: '#000000',
+								description: '',
+							});
+							setShowModal(true);
+						}}
+						className={styles.addBtn}
+					>
+						<PlusIcon />
+						Create Group
+					</button>
+				</div>
 			</div>
 
 			{loading ? (

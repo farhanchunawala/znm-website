@@ -22,6 +22,12 @@
 	}
 }
 
+.headerActions {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+}
+
 .createBtn {
 	padding: 0.75rem 1.5rem;
 	background-color: #000000;
@@ -38,6 +44,53 @@
 
 	&:hover {
 		opacity: 0.8;
+	}
+}
+
+.csvBtn {
+	padding: 0.6rem 1.2rem;
+	background: #ffffff;
+	color: #000000;
+	border: 1px solid #d4d4d4;
+	border-radius: 8px;
+	font-size: 14px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.2s;
+
+	:global([data-theme='dark']) & {
+		background: #111111;
+		color: #ffffff;
+		border-color: #333333;
+	}
+
+	&:hover {
+		background: #f5f5f5;
+		:global([data-theme='dark']) & {
+			background: #222222;
+		}
+	}
+}
+
+.actionCell {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+.deleteBtn {
+	padding: 4px 10px;
+	background: none;
+	border: 1px solid #ef4444;
+	border-radius: 6px;
+	color: #ef4444;
+	cursor: pointer;
+	font-size: 13px;
+	transition: all 0.2s;
+
+	&:hover {
+		background: #ef4444;
+		color: white;
 	}
 }
 
