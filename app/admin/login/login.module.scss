@@ -10,8 +10,13 @@
 .loginBox {
 	background: white;
 	padding: 40px;
-	border-radius: 10px;
+	border-radius: 16px;
 	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+
+	:global([data-theme='dark']) & {
+		background: #000000;
+		border: 1px solid #333333;
+	}
 	max-width: 400px;
 	width: 100%;
 
@@ -20,6 +25,10 @@
 		font-size: 32px;
 		font-weight: 600;
 		color: #333;
+
+		:global([data-theme='dark']) & {
+			color: #ffffff;
+		}
 	}
 
 	p {
@@ -35,10 +44,18 @@
 
 		input {
 			padding: 12px 15px;
-			border: 2px solid #e0e0e0;
-			border-radius: 5px;
+			border: 1px solid #e0e0e0;
+			border-radius: 8px;
 			font-size: 16px;
-			transition: border-color 0.3s;
+			background: #ffffff;
+			color: #000000;
+			transition: all 0.3s;
+
+			:global([data-theme='dark']) & {
+				background: #111111;
+				color: #ffffff;
+				border-color: #333333;
+			}
 
 			&:focus {
 				outline: none;
@@ -48,6 +65,10 @@
 			&:disabled {
 				background-color: #f5f5f5;
 				cursor: not-allowed;
+
+				:global([data-theme='dark']) & {
+					background-color: #222222;
+				}
 			}
 		}
 

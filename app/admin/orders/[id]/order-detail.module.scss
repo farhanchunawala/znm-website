@@ -59,6 +59,10 @@
 			font-weight: 600;
 			color: #000000;
 			letter-spacing: -0.5px;
+
+			:global([data-theme='dark']) & {
+				color: #ffffff;
+			}
 		}
 
 		.date {
@@ -120,8 +124,13 @@
 .card {
 	background: #ffffff;
 	border: 1px solid #e0e0e0;
-	border-radius: 8px;
+	border-radius: 12px;
 	padding: 24px;
+
+	:global([data-theme='dark']) & {
+		background: #000000;
+		border-color: #333333;
+	}
 
 	h3 {
 		margin: 0 0 20px 0;
@@ -130,6 +139,10 @@
 		color: #212121;
 		text-transform: uppercase;
 		letter-spacing: 0.5px;
+
+		:global([data-theme='dark']) & {
+			color: #ffffff;
+		}
 	}
 
 	.subHeader {
@@ -164,6 +177,10 @@
 			text-decoration: none;
 			transition: color 0.2s;
 
+			:global([data-theme='dark']) & {
+				color: #ffffff;
+			}
+
 			&:hover {
 				color: #616161;
 			}
@@ -172,6 +189,10 @@
 		span:not(.label):not(.link) {
 			font-size: 14px;
 			color: #212121;
+
+			:global([data-theme='dark']) & {
+				color: #dddddd;
+			}
 		}
 	}
 

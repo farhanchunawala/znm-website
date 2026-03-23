@@ -63,8 +63,13 @@
 .subscribersList {
 	background: #ffffff;
 	border: 1px solid #e0e0e0;
-	border-radius: 8px;
+	border-radius: 12px;
 	padding: 24px;
+
+	:global([data-theme='dark']) & {
+		background: #000000;
+		border-color: #333333;
+	}
 }
 
 .formGroup {
@@ -85,12 +90,18 @@
 		width: 100%;
 		padding: 12px 16px;
 		border: 1px solid #e0e0e0;
-		border-radius: 6px;
+		border-radius: 8px;
 		font-size: 14px;
 		font-family: inherit;
 		background: #ffffff;
 		color: #212121;
 		transition: all 0.2s;
+
+		:global([data-theme='dark']) & {
+			background: #111111;
+			color: #ffffff;
+			border-color: #333333;
+		}
 
 		&::placeholder {
 			color: #9e9e9e;
@@ -98,8 +109,13 @@
 
 		&:focus {
 			outline: none;
-			border-color: #757575;
+			border-color: #000000;
 			box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+
+			:global([data-theme='dark']) & {
+				border-color: #ffffff;
+				box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+			}
 		}
 	}
 
@@ -124,9 +140,15 @@
 	}
 
 	&.error {
-		background: #ffffff;
-		color: #d32f2f;
-		border: 1px solid #d32f2f;
+		background: #ffebee;
+		color: #c62828;
+		border: 1px solid #ef5350;
+
+		:global([data-theme='dark']) & {
+			background: #2c0b0e;
+			color: #ff8a80;
+			border-color: #d32f2f;
+		}
 	}
 }
 
@@ -263,17 +285,26 @@
 
 .modal {
 	background: #ffffff;
-	border-radius: 8px;
+	border-radius: 16px;
 	padding: 32px;
 	max-width: 500px;
 	width: 90%;
 	box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+
+	:global([data-theme='dark']) & {
+		background: #000000;
+		border: 1px solid #333333;
+	}
 
 	h3 {
 		margin: 0 0 16px 0;
 		font-size: 20px;
 		font-weight: 600;
 		color: #000000;
+
+		:global([data-theme='dark']) & {
+			color: #ffffff;
+		}
 	}
 
 	p {
@@ -282,9 +313,17 @@
 		color: #424242;
 		line-height: 1.6;
 
+		:global([data-theme='dark']) & {
+			color: #aaaaaa;
+		}
+
 		strong {
 			color: #000000;
 			font-weight: 600;
+
+			:global([data-theme='dark']) & {
+				color: #ffffff;
+			}
 		}
 	}
 
@@ -314,9 +353,19 @@
 		color: #616161;
 		border: 1px solid #e0e0e0;
 
+		:global([data-theme='dark']) & {
+			background: #111111;
+			color: #ffffff;
+			border-color: #333333;
+		}
+
 		&:hover:not(:disabled) {
 			background: #f5f5f5;
 			border-color: #bdbdbd;
+
+			:global([data-theme='dark']) & {
+				background: #222222;
+			}
 		}
 	}
 

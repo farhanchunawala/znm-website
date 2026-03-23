@@ -51,12 +51,24 @@
 }
 
 .cancelBtn {
-	background: #fff;
-	color: #000;
-}
+	background: #ffffff;
+	color: #000000;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
 
-.cancelBtn:hover {
-	background: #fafafa;
+	:global([data-theme='dark']) & {
+		background: #111111;
+		color: #ffffff;
+		border-color: #333333;
+	}
+
+	&:hover {
+		background: #f5f5f5;
+
+		:global([data-theme='dark']) & {
+			background: #222222;
+		}
+	}
 }
 
 .saveBtn {
@@ -80,9 +92,15 @@
 }
 
 .section {
-	background: #fff;
-	border: 2px solid #e5e5e5;
+	background: #ffffff;
+	border: 1px solid #e5e5e5;
 	padding: 24px;
+	border-radius: 12px;
+
+	:global([data-theme='dark']) & {
+		background: #000000;
+		border-color: #333333;
+	}
 }
 
 .section h2 {
@@ -115,18 +133,30 @@
 	justify-content: center;
 	gap: 8px;
 	padding: 12px 16px;
-	border: 2px solid #d4d4d4;
-	background: #fff;
+	border: 1px solid #d4d4d4;
+	border-radius: 8px;
+	background: #ffffff;
 	color: #737373;
 	font-size: 14px;
 	font-weight: 500;
 	cursor: pointer;
 	transition: all 0.2s;
+
+	:global([data-theme='dark']) & {
+		background: #111111;
+		color: #aaaaaa;
+		border-color: #333333;
+	}
 }
 
 .statusBtn:hover {
-	border-color: #000;
-	color: #000;
+	border-color: #000000;
+	color: #000000;
+
+	:global([data-theme='dark']) & {
+		border-color: #ffffff;
+		color: #ffffff;
+	}
 }
 
 .statusBtn.active {
@@ -194,8 +224,14 @@
 	align-items: center;
 	gap: 12px;
 	padding: 16px;
-	border: 2px solid #e5e5e5;
+	border: 1px solid #e5e5e5;
 	background: #fafafa;
+	border-radius: 8px;
+
+	:global([data-theme='dark']) & {
+		background: #111111;
+		border-color: #333333;
+	}
 }
 
 .itemNumber {
@@ -223,15 +259,30 @@
 .qtyInput,
 .priceInput {
 	padding: 10px 12px;
-	border: 2px solid #d4d4d4;
+	border: 1px solid #d4d4d4;
+	border-radius: 8px;
 	font-size: 14px;
+	background: #ffffff;
+	color: #000000;
+	transition: all 0.2s;
+
+	:global([data-theme='dark']) & {
+		background: #111111;
+		color: #ffffff;
+		border-color: #333333;
+	}
 }
 
 .itemInput:focus,
 .qtyInput:focus,
 .priceInput:focus {
 	outline: none;
-	border-color: #000;
+	border-color: #000000;
+
+	:global([data-theme='dark']) & {
+		border-color: #ffffff;
+		box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+	}
 }
 
 .itemTotal {

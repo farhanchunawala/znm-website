@@ -327,11 +327,16 @@
 
 .modal {
   background: white;
-  border-radius: 8px;
+  border-radius: 16px;
   width: 90%;
   max-width: 400px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   animation: slideUp 0.2s ease-out;
+
+  :global([data-theme='dark']) & {
+    background: #000000;
+    border: 1px solid #333333;
+  }
 }
 
 @keyframes slideUp {
@@ -352,10 +357,18 @@
   padding: 20px;
   border-bottom: 1px solid #e0e0e0;
 
+  :global([data-theme='dark']) & {
+    border-bottom-color: #222222;
+  }
+
   h2 {
     font-size: 18px;
     margin: 0;
     color: #333;
+
+    :global([data-theme='dark']) & {
+      color: #ffffff;
+    }
   }
 
   .closeBtn {
@@ -370,12 +383,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 4px;
+    border-radius: 8px;
     transition: background-color 0.2s;
 
     &:hover {
       background: #f5f5f5;
       color: #333;
+
+      :global([data-theme='dark']) & {
+        background: #222222;
+        color: #ffffff;
+      }
     }
   }
 }
@@ -393,22 +411,39 @@
     font-weight: 600;
     color: #333;
     font-size: 13px;
+
+    :global([data-theme='dark']) & {
+      color: #aaaaaa;
+    }
   }
 
   input,
   select {
     width: 100%;
-    padding: 10px;
+    padding: 10px 14px;
     border: 1px solid #ddd;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 14px;
     font-family: inherit;
-    transition: border-color 0.2s;
+    transition: all 0.2s;
+    background: #ffffff;
+    color: #000000;
+
+    :global([data-theme='dark']) & {
+      background: #111111;
+      color: #ffffff;
+      border-color: #333333;
+    }
 
     &:focus {
       outline: none;
-      border-color: #2196f3;
-      box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+      border-color: #000000;
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+
+      :global([data-theme='dark']) & {
+        border-color: #ffffff;
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+      }
     }
   }
 
@@ -426,6 +461,12 @@
   padding: 16px 20px;
   border-top: 1px solid #e0e0e0;
   background: #fafafa;
+  border-radius: 0 0 16px 16px;
+
+  :global([data-theme='dark']) & {
+    background: #111111;
+    border-top-color: #222222;
+  }
 }
 
 .btnPrimary,

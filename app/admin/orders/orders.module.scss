@@ -769,14 +769,19 @@
 }
 
 .modalContent {
-	background: $bg-primary;
-	border-radius: 8px;
+	background: #ffffff;
+	border-radius: 16px;
 	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
 	max-width: 500px;
 	width: 90%;
 	max-height: 90vh;
 	overflow-y: auto;
 	padding: 0;
+
+	:global([data-theme='dark']) & {
+		background: #000000;
+		border: 1px solid #333333;
+	}
 }
 
 .modalHeader {
@@ -784,13 +789,21 @@
 	justify-content: space-between;
 	align-items: center;
 	padding: 20px;
-	border-bottom: 1px solid $border-light;
+	border-bottom: 1px solid #e5e5e5;
+
+	:global([data-theme='dark']) & {
+		border-bottom-color: #222222;
+	}
 
 	h2 {
 		margin: 0;
 		font-size: 20px;
 		font-weight: 600;
-		color: $text-primary;
+		color: #000000;
+
+		:global([data-theme='dark']) & {
+			color: #ffffff;
+		}
 	}
 }
 
@@ -821,29 +834,47 @@
 		display: block;
 		font-size: 14px;
 		font-weight: 500;
-		color: $text-primary;
+		color: #000000;
 		margin-bottom: 8px;
+
+		:global([data-theme='dark']) & {
+			color: #aaaaaa;
+		}
 	}
 
 	input {
 		width: 100%;
-		padding: 10px 12px;
-		border: 1px solid $border-medium;
-		border-radius: 4px;
+		padding: 10px 14px;
+		border: 1px solid #e5e5e5;
+		border-radius: 8px;
 		font-size: 14px;
-		color: $text-primary;
-		background: $bg-primary;
+		color: #000000;
+		background: #ffffff;
 		box-sizing: border-box;
-		transition: border-color 0.2s;
+		transition: all 0.2s;
+
+		:global([data-theme='dark']) & {
+			background: #111111;
+			color: #ffffff;
+			border-color: #333333;
+		}
 
 		&:focus {
 			outline: none;
-			border-color: $border-strong;
+			border-color: #000000;
+
+			:global([data-theme='dark']) & {
+				border-color: #ffffff;
+			}
 		}
 
 		&:disabled {
-			background: $bg-secondary;
-			color: $text-tertiary;
+			background: #f5f5f5;
+			color: #999999;
+
+			:global([data-theme='dark']) & {
+				background: #222222;
+			}
 		}
 	}
 }
@@ -869,8 +900,8 @@
 .cancelBtn,
 .submitBtn {
 	padding: 10px 20px;
-	border: 1px solid $border-medium;
-	border-radius: 4px;
+	border: 1px solid #e5e5e5;
+	border-radius: 8px;
 	font-size: 14px;
 	font-weight: 500;
 	cursor: pointer;
@@ -878,35 +909,50 @@
 }
 
 .cancelBtn {
-	background: $bg-primary;
-	color: $text-primary;
-	border-color: $border-medium;
+	background: #ffffff;
+	color: #000000;
+	border-color: #e5e5e5;
+
+	:global([data-theme='dark']) & {
+		background: #111111;
+		color: #ffffff;
+		border-color: #333333;
+	}
 
 	&:hover {
-		background: $bg-secondary;
+		background: #f5f5f5;
+
+		:global([data-theme='dark']) & {
+			background: #222222;
+		}
 	}
 
 	&:disabled {
-		background: $bg-secondary;
-		color: $text-tertiary;
+		background: #f5f5f5;
+		color: #999999;
 		cursor: not-allowed;
 	}
 }
 
 .submitBtn {
-	background: $btn-primary-bg;
-	color: $btn-primary-text;
-	border-color: $border-strong;
+	background: #000000;
+	color: #ffffff;
+	border-color: #000000;
 
 	&:hover {
-		background: $text-secondary;
-		border-color: $text-secondary;
+		background: #333333;
 	}
 
 	&:disabled {
-		background: $bg-secondary;
-		border-color: $border-medium;
+		background: #f5f5f5;
+		border-color: #e5e5e5;
+		color: #999999;
 		cursor: not-allowed;
+
+		:global([data-theme='dark']) & {
+			background: #222222;
+			border-color: #333333;
+		}
 	}
 }
 
