@@ -18,11 +18,33 @@ export const Navbar = () => {
 	const cartCount = useAppSelector(selectCartCount);
 	const [showSearch, setShowSearch] = useState(false);
 	const [searchQuery, setSearchQuery] = useState('');
+	const [isVisible, setIsVisible] = useState(true);
+	const [lastScrollY, setLastScrollY] = useState(0);
 
 	useEffect(() => {
 		// Check if user is logged in
 		checkAuthStatus();
-	}, []);
+
+		const controlNavbar = () => {
+			if (typeof window !== 'undefined') {
+				if (window.scrollY > lastScrollY && window.scrollY > 80) {
+					// scrolling down
+					setIsVisible(false);
+				} else {
+					// scrolling up
+					setIsVisible(true);
+				}
+				setLastScrollY(window.scrollY);
+			}
+		};
+
+		window.addEventListener('scroll', controlNavbar);
+
+		// cleanup function
+		return () => {
+			window.removeEventListener('scroll', controlNavbar);
+		};
+	}, [lastScrollY]);
 
 	const checkAuthStatus = async () => {
 		try {
@@ -62,7 +84,7 @@ export const Navbar = () => {
 	};
 
 	return (
-		<div className={`${styles.main}`}>
+		<div className={`${styles.main} ${!isVisible ? styles.hidden : ''}`}>
 			<div className={`${styles.header}`}>
 				<div className={styles.topBar}>
 					<div className={styles.leftSection}>
@@ -149,56 +171,26 @@ export const Navbar = () => {
 			)}
 			<nav className={styles.mainnav}>
 				<div className={`${styles.navbar}`}>
-					<Link
-						className={`${styles.link}`}
-						href="/collections/suroor"
-					>
-						SUROOR
+					<Link className={`${styles.link}`} href="/collections">
+						ALL COLLECTIONS
 					</Link>
-					<Link
-						className={`${styles.link}`}
-						href="/collections/vault"
-					>
-						VAULT
+					<Link className={`${styles.link}`} href="/collections/kurtas">
+						KURTAS
 					</Link>
-					<Link
-						className={`${styles.link}`}
-						href="/collections/new-in"
-					>
-						NEW IN
+					<Link className={`${styles.link}`} href="/collections/sherwani">
+						SHERWANIS
 					</Link>
-					{/* <Link className={`${styles.link}`} href="/collections/late-checkout">
-						LATE CHECKOUT AT THE FRED
-					</Link> */}
-					<Link
-						className={`${styles.link}`}
-						href="/collections/kurtas"
-					>
-						KURTA
+					<Link className={`${styles.link}`} href="/collections/suits">
+						SUITS
 					</Link>
-					<Link
-						className={`${styles.link}`}
-						href="/collections/sherwani"
-					>
-						SHERWANI
+					<Link className={`${styles.link}`} href="/collections/waist-coat">
+						WAIST COATS
 					</Link>
-					<Link
-						className={`${styles.link}`}
-						href="/collections/prince-coat"
-					>
-						PRINCE COAT
+					<Link className={`${styles.link}`} href="/collections/trousers">
+						TROUSERS
 					</Link>
-					<Link
-						className={`${styles.link}`}
-						href="/collections/waist-coat"
-					>
-						WAIST COAT
-					</Link>
-					<Link
-						className={`${styles.link}`}
-						href="/collections/accessories"
-					>
-						ACCESSORIES
+					<Link className={`${styles.link}`} href="/collections/festive-collection">
+						FESTIVE
 					</Link>
 				</div>
 			</nav>

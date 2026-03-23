@@ -45,52 +45,52 @@ export default function IndexPage() {
 		],
 	};
 
-	const kurtas = {
-		title: 'NEW ARRIVALS: KURTAS',
+	const bestsellers = {
+		title: 'BESTSELLERS',
 		images: [
 			{
 				src: '/kurta/1.png',
 				text: 'Rustic Orange',
 			},
 			{
-				src: '/kurta/2.png',
-				text: 'Nahua',
+				src: '/suit/black-3.png',
+				text: 'Classic Black Suit',
+			},
+			{
+				src: '/thobe/Arabi/1.png',
+				text: 'Arabi Thobe',
 			},
 			{
 				src: '/kurta/3.png',
 				text: 'Aztec Kurta',
 			},
 			{
-				src: '/kurta/4.png',
-				text: 'brunette',
+				src: '/suit/velvet-green-2.png',
+				text: 'Velvet Green Suit',
+			},
+			{
+				src: '/thobe/Arabi/5.png',
+				text: 'Majestic Arabi',
 			},
 			{
 				src: '/kurta/5.png',
 				text: 'Lapis',
 			},
 			{
-				src: '/kurta/6.png',
-				text: 'Gwalior',
+				src: '/suit/rusty-1.png',
+				text: 'Rusty Suit',
 			},
 			{
-				src: '/kurta/7.png',
-				text: 'Asfar Kurta',
-			},
-			{
-				src: '/kurta/8.png',
-				text: 'Zuhal',
-			},
-			{
-				src: '/kurta/9.png',
-				text: 'Ilia',
-			},
-			{
-				src: '/kurta/10.png',
-				text: 'Iyad',
+				src: '/thobe/Arabi/12.png',
+				text: 'Premium Arabi',
 			},
 			{
 				src: '/kurta/11.png',
 				text: 'Deep Water Kurta',
+			},
+			{
+				src: '/thobe/Arabi/20.png',
+				text: 'Classic Arabi',
 			},
 			{
 				src: '/kurta/12.png',
@@ -236,7 +236,7 @@ export default function IndexPage() {
 			</section>
 
 			{/* First Gallery */}
-			<DisplayGallery imageGrid={kurtas} />
+			<DisplayGallery imageGrid={bestsellers} />
 
 			{/* About Section */}
 			<section className={styles.aboutSection}>

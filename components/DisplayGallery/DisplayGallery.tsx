@@ -31,6 +31,13 @@ const DisplayGallery = ({ imageGrid }) => {
 									<p className={`${styles.imgtext}`}>
 										{image.text}
 									</p>
+									<div style={{ color: '#863f01', fontSize: '12px', marginTop: '8px', display: 'flex', justifyContent: 'center', gap: '2px' }}>
+										<i className="fa-solid fa-star"></i>
+										<i className="fa-solid fa-star"></i>
+										<i className="fa-solid fa-star"></i>
+										<i className="fa-solid fa-star"></i>
+										<i className="fa-solid fa-star"></i>
+									</div>
 								</Link>
 							</div>
 						);

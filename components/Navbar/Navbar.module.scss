@@ -4,8 +4,14 @@
 .main {
 	width: 100%;
 	background: $bg-primary;
-	position: relative;
-	z-index: 100;
+	position: sticky;
+	top: 0;
+	z-index: 1000; // Increased z-index to ensure it stays above everything
+	transition: transform 0.3s ease-in-out;
+
+	&.hidden {
+		transform: translateY(-100%);
+	}
 
 	.header {
 		width: 100%;

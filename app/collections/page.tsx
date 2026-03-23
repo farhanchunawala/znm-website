@@ -27,19 +27,9 @@ const collections = [
 		link: '/collections/suits',
 	},
 	{
-		title: 'Shirts',
-		image: '/display-photo/shirts_thumb.png',
-		link: '/collections/shirts',
-	},
-	{
 		title: 'Waist Coats',
 		image: '/display-photo/waist_coats_thumb.png',
 		link: '/collections/waist-coat',
-	},
-	{
-		title: 'Prince Coats',
-		image: '/display-photo/prince_coats_thumb.png',
-		link: '/collections/prince-coat',
 	},
 	{
 		title: 'Trousers',
@@ -50,16 +40,6 @@ const collections = [
 		title: 'Festive Collection',
 		image: '/display-photo/festive_thumb.png',
 		link: '/collections/festive-collection',
-	},
-	{
-		title: 'Best Sellers',
-		image: '/display-photo/bestsellers_thumb.png',
-		link: '/collections/best-sellers',
-	},
-	{
-		title: 'Menswear 26',
-		image: '/display-photo/menswear26_thumb.png',
-		link: '/collections/menswear-26',
 	},
 ];
 
