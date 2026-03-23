@@ -49,6 +49,14 @@ export default function Home() {
 				src: '/thobe/Arabi/10.png',
 				text: 'Classic Arabi 10',
 			},
+			{
+				src: '/thobe/Arabi/11.png',
+				text: 'Classic Arabi 11',
+			},
+			{
+				src: '/thobe/Arabi/12.png',
+				text: 'Classic Arabi 12',
+			},
 		],
 	};
 

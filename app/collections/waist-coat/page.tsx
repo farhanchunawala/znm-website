@@ -41,6 +41,22 @@ export default function Home() {
 				src: '/kurta/57.png',
 				text: 'Midnight Gold',
 			},
+			{
+				src: '/kurta/58.png',
+				text: 'Saffron Velvet',
+			},
+			{
+				src: '/kurta/59.png',
+				text: 'Forest Green Silk',
+			},
+			{
+				src: '/kurta/60.png',
+				text: 'Navy Tradition',
+			},
+			{
+				src: '/kurta/61.png',
+				text: 'Maroon Majesty',
+			},
 		],
 	};
 

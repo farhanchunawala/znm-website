@@ -29,6 +29,30 @@ export default function SherwaniPage() {
 				src: '/kurta/85.png',
 				text: 'Burgundy Prince',
 			},
+			{
+				src: '/kurta/86.png',
+				text: 'Sapphire Elegance',
+			},
+			{
+				src: '/kurta/87.png',
+				text: 'Desert Sand Sherwani',
+			},
+			{
+				src: '/kurta/88.png',
+				text: 'Ruby Traditional',
+			},
+			{
+				src: '/kurta/89.png',
+				text: 'Forest Green Gold',
+			},
+			{
+				src: '/kurta/90.png',
+				text: 'Onyx Luxury',
+			},
+			{
+				src: '/kurta/91.png',
+				text: 'Imperial Gold',
+			},
 		],
 	};
 

@@ -170,6 +170,15 @@
 	padding: 32px 40px;
 	min-height: 100vh;
 	overflow-y: auto;
+	background: #ffffff !important;
+	color: #000000 !important;
+
+	// Ensure all text elements inside main content are black
+	h1, h2, h3, h4, h5, h6, p, span, label, div {
+		&:not([class*="Card"]) { // Try to be selective if possible, but user asked for white/black
+			color: #000000;
+		}
+	}
 
 	@media (max-width: 768px) {
 		padding: 24px 20px;

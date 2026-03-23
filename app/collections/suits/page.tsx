@@ -22,6 +22,26 @@ export default function Home() {
 				text: 'Velvet Green Gala Suit',
 			},
 			{
+				src: '/suit/premium-charcoal.png',
+				text: 'Premium Charcoal Suit',
+			},
+			{
+				src: '/suit/navy-pinstripe.png',
+				text: 'Navy Pinstripe Double-Breasted',
+			},
+			{
+				src: '/suit/burgundy-tuxedo.png',
+				text: 'Burgundy Velvet Tuxedo',
+			},
+			{
+				src: '/suit/beige-linen.png',
+				text: 'Beige Linen Summer Suit',
+			},
+			{
+				src: '/suit/black-peak-lapel.png',
+				text: 'Modern Black Peak Lapel',
+			},
+			{
 				src: '/suit/download.jpeg',
 				text: 'Traditional Suite A',
 			},

@@ -25,6 +25,38 @@ export default function Home() {
 				src: '/kurta/with bg/black-4.png',
 				text: 'Formal Black Bottom',
 			},
+			{
+				src: '/kurta/with bg/black-6.png',
+				text: 'Straight Fit Black',
+			},
+			{
+				src: '/kurta/with bg/black-7.png',
+				text: 'Modern Charcoal',
+			},
+			{
+				src: '/kurta/with bg/black-8.png',
+				text: 'Slim Fit Bottom',
+			},
+			{
+				src: '/kurta/with bg/black-9.png',
+				text: 'Evening Black Trousers',
+			},
+			{
+				src: '/kurta/with bg/black-10.png',
+				text: 'Ebony Luxe Pant',
+			},
+			{
+				src: '/kurta/with bg/black-11.png',
+				text: 'Sleek Black Trousers',
+			},
+			{
+				src: '/kurta/with bg/black-12.png',
+				text: 'Essential Black',
+			},
+			{
+				src: '/kurta/with bg/khaki-5.jpg',
+				text: 'Premium Khaki Bottom',
+			},
 		],
 	};
 

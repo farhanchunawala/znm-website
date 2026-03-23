@@ -33,6 +33,30 @@ export default function Home() {
 				src: '/kurta/3.png',
 				text: 'Traditional Silk',
 			},
+			{
+				src: '/suit/premium-charcoal.png',
+				text: 'Luxe Charcoal Suit',
+			},
+			{
+				src: '/thobe/Arabi/5.png',
+				text: 'Grand Arabi Thobe',
+			},
+			{
+				src: '/kurta/85.png',
+				text: 'Burgundy Prince',
+			},
+			{
+				src: '/suit/navy-pinstripe.png',
+				text: 'Navy Pinstripe Suit',
+			},
+			{
+				src: '/kurta/11.png',
+				text: 'Deep Water Luxury',
+			},
+			{
+				src: '/thobe/Arabi/20.png',
+				text: 'Royal Arabi',
+			},
 		],
 	};
 
