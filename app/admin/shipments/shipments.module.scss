@@ -48,10 +48,20 @@
 .exportBtn {
 	background: #fff;
 	color: #000;
+
+	:global([data-theme='dark']) & {
+		background: #000;
+		color: #fff;
+		border-color: #fff;
+	}
 }
 
 .exportBtn:hover {
 	background: #fafafa;
+
+	:global([data-theme='dark']) & {
+		background: #1a1a1a;
+	}
 }
 
 .archiveBtn {
@@ -77,11 +87,23 @@
 	border: 1px solid #d4d4d4;
 	border-radius: 8px;
 	font-size: 14px;
-}
+	background: #ffffff;
+	color: #000000;
 
-.searchInput:focus {
-	outline: none;
-	border-color: #000;
+	:global([data-theme='dark']) & {
+		background: #111111;
+		color: #ffffff;
+		border-color: #333333;
+	}
+
+	&:focus {
+		outline: none;
+		border-color: #000;
+
+		:global([data-theme='dark']) & {
+			border-color: #ffffff;
+		}
+	}
 }
 
 .statusSelect,
@@ -91,13 +113,24 @@
 	border-radius: 8px;
 	font-size: 14px;
 	background: white;
+	color: #000;
 	cursor: pointer;
+
+	:global([data-theme='dark']) & {
+		background: #111111;
+		color: #ffffff;
+		border-color: #333333;
+	}
 }
 
 .statusSelect:focus,
 .sortSelect:focus {
 	outline: none;
 	border-color: #000;
+
+	:global([data-theme='dark']) & {
+		border-color: #ffffff;
+	}
 }
 
 .bulkActions {
@@ -168,6 +201,11 @@
 	border: 1px solid #e5e5e5;
 	border-radius: 12px;
 	background: #fff;
+
+	:global([data-theme='dark']) & {
+		background: #000;
+		border-color: #333333;
+	}
 }
 
 .table {

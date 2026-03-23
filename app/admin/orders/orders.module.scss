@@ -68,12 +68,22 @@
 }
 
 .exportBtn {
-	background: $bg-primary;
-	color: $text-primary;
+	background: #ffffff;
+	color: #000000;
+
+	:global([data-theme='dark']) & {
+		background: #000000;
+		color: #ffffff;
+		border-color: #ffffff;
+	}
 }
 
 .exportBtn:hover {
-	background: $bg-secondary;
+	background: #fafafa;
+
+	:global([data-theme='dark']) & {
+		background: #1a1a1a;
+	}
 }
 
 .archiveBtn {
@@ -140,18 +150,29 @@
 	input,
 	select {
 		padding: 10px 16px;
-		border: 1px solid $border-medium;
+		border: 1px solid #d4d4d4;
 		border-radius: 8px;
 		font-size: 14px;
-		background: $bg-primary;
-		color: $text-primary;
+		background: #ffffff;
+		color: #000000;
 		min-width: 200px;
 		transition: all 0.2s;
 
+		:global([data-theme='dark']) & {
+			background: #111111;
+			color: #ffffff;
+			border-color: #333333;
+		}
+
 		&:focus {
 			outline: none;
-			border-color: $border-strong;
+			border-color: #000;
 			box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+
+			:global([data-theme='dark']) & {
+				border-color: #ffffff;
+				box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+			}
 		}
 	}
 }
@@ -161,10 +182,15 @@
 	justify-content: space-between;
 	align-items: center;
 	padding: 12px 20px;
-	background: $bg-secondary;
-	border: 1px solid $border-strong;
+	background: #f8f9fa;
+	border: 1px solid #000000;
 	border-radius: 12px;
 	margin-bottom: 20px;
+
+	:global([data-theme='dark']) & {
+		background: #111111;
+		border-color: #ffffff;
+	}
 }
 
 .bulkActionsBar span {
@@ -250,9 +276,14 @@
 .tableWrapper {
 	overflow-x: auto;
 	border: 1px solid #e5e5e5;
-	background: $bg-primary;
+	background: #ffffff;
 	border-radius: 12px;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+	:global([data-theme='dark']) & {
+		background: #000000;
+		border-color: #333333;
+	}
 }
 
 .table {
