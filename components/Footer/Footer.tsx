@@ -1,9 +1,16 @@
+'use client';
 import React from 'react';
 import styles from './Footer.module.scss';
 import NewsLetter from '../NewsLetter/NewsLetter';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const Footer = () => {
+	const pathname = usePathname();
+	const isAdminPage = pathname?.startsWith('/admin');
+
+	if (isAdminPage) return null;
+
 	return (
 		<footer className={`${styles.main}`}>
 			<NewsLetter></NewsLetter>

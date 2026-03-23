@@ -1,13 +1,17 @@
 'use client';
 
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import styles from './OfferBar.module.scss';
 import Link from 'next/link';
 
 export const OfferBar = () => {
+	const pathname = usePathname();
 	const [isVisible, setIsVisible] = useState(true);
 
-	if (!isVisible) return null;
+	const isAdminPage = pathname?.startsWith('/admin');
+
+	if (!isVisible || isAdminPage) return null;
 
 	return (
 		<div className={styles.offerBar}>

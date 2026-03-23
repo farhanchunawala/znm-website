@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import styles from './Navbar.module.scss';
 import SideNav from '../SideNav/SideNav';
 import AccountPanel from '../AccountPanel/AccountPanel';
@@ -12,6 +13,7 @@ import { useAppSelector } from '@/lib/hooks';
 import { selectCartCount } from '@/lib/features/cartSlice';
 
 export const Navbar = () => {
+	const pathname = usePathname();
 	const [isHidden, setIsHidden] = useState(true);
 	const [showAccountPanel, setShowAccountPanel] = useState(false);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -20,6 +22,8 @@ export const Navbar = () => {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [isVisible, setIsVisible] = useState(true);
 	const [lastScrollY, setLastScrollY] = useState(0);
+
+	const isAdminPage = pathname?.startsWith('/admin');
 
 	useEffect(() => {
 		// Check if user is logged in
@@ -82,6 +86,8 @@ export const Navbar = () => {
 			window.location.href = '/login';
 		}
 	};
+
+	if (isAdminPage) return null;
 
 	return (
 		<div className={`${styles.main} ${!isVisible ? styles.hidden : ''}`}>
