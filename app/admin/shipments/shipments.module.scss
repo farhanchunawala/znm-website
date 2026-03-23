@@ -26,8 +26,9 @@
 	display: flex;
 	align-items: center;
 	gap: 8px;
-	padding: 10px 16px;
-	border: 2px solid #000;
+	padding: 10px 20px;
+	border: 1px solid #000;
+	border-radius: 8px;
 	font-size: 14px;
 	font-weight: 500;
 	cursor: pointer;
@@ -73,7 +74,8 @@
 .searchInput {
 	flex: 1;
 	padding: 10px 16px;
-	border: 2px solid #d4d4d4;
+	border: 1px solid #d4d4d4;
+	border-radius: 8px;
 	font-size: 14px;
 }
 
@@ -85,7 +87,8 @@
 .statusSelect,
 .sortSelect {
 	padding: 10px 16px;
-	border: 2px solid #d4d4d4;
+	border: 1px solid #d4d4d4;
+	border-radius: 8px;
 	font-size: 14px;
 	background: white;
 	cursor: pointer;
@@ -103,7 +106,8 @@
 	align-items: center;
 	padding: 12px 20px;
 	background: #fafafa;
-	border: 2px solid #000;
+	border: 1px solid #000;
+	border-radius: 10px;
 	margin-bottom: 20px;
 }
 
@@ -123,7 +127,8 @@
 	align-items: center;
 	gap: 6px;
 	padding: 8px 14px;
-	border: 2px solid #000;
+	border: 1px solid #000;
+	border-radius: 6px;
 	font-size: 13px;
 	font-weight: 500;
 	cursor: pointer;
@@ -160,7 +165,9 @@
 
 .tableContainer {
 	overflow-x: auto;
-	border: 2px solid #e5e5e5;
+	border: 1px solid #e5e5e5;
+	border-radius: 12px;
+	background: #fff;
 }
 
 .table {

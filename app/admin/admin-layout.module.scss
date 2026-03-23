@@ -35,7 +35,7 @@
 			height: 40px;
 			background: var(--bg-inverse);
 			color: var(--text-inverse);
-			border-radius: 8px;
+			border-radius: 10px;
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -87,11 +87,12 @@
 	.navItem {
 		display: flex;
 		align-items: center;
-		padding: 10px 24px;
+		padding: 10px 20px;
+		margin: 2px 12px;
 		color: #cccccc;
 		text-decoration: none;
 		transition: all 0.15s;
-		border-left: 3px solid transparent;
+		border-radius: 8px;
 		font-size: 13px;
 		font-weight: 500;
 		gap: 10px;
@@ -111,7 +112,6 @@
 
 		&.active {
 			background-color: #1a1a1a;
-			border-left-color: #ffffff;
 			color: #ffffff;
 			font-weight: 600;
 			.icon { color: #ffffff; }
@@ -126,10 +126,12 @@
 	.logoutBtn {
 		display: flex;
 		align-items: center;
-		padding: 10px 24px;
+		padding: 10px 20px;
+		margin: 12px;
 		background: none;
 		border: none;
-		color: var(--text-secondary);
+		border-radius: 8px;
+		color: #cccccc;
 		cursor: pointer;
 		transition: all 0.15s;
 		width: 100%;
