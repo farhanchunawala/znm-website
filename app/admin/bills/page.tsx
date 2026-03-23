@@ -300,7 +300,18 @@ export default function BillsPage() {
 							if (fileInputRef.current) fileInputRef.current.value = '';
 						}} />
 						<button
-							onClick={() => setShowCreateModal(true)}
+							onClick={() => {
+								const generateObjectId = () => {
+									const chars = '0123456789abcdef';
+									return Array.from({ length: 24 }).map(() => chars[Math.floor(Math.random() * 16)]).join('');
+								};
+								setCreateFormData({
+									orderId: generateObjectId(),
+									paymentId: generateObjectId(),
+									notes: ''
+								});
+								setShowCreateModal(true);
+							}}
 							className={buttonStyles.primaryBtn}
 						>
 							+ Create Bill

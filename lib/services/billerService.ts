@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import Biller, { IBiller, IBillerCustomerSnapshot, IBillerOrderSnapshot } from '@/models/BillerModel';
-import { Order, IOrder } from '@/models/OrderModel';
-import { Payment, IPayment } from '@/models/PaymentModel';
-import { Customer } from '@/models/CustomerModel';
+import Order, { IOrder } from '@/models/OrderModel';
+import Payment, { IPayment } from '@/models/PaymentModel';
+import Customer from '@/models/CustomerModel';
 
 interface CreateBillerOptions {
   orderId: string;
@@ -103,40 +103,63 @@ class BillerService {
     try {
       const { orderId, paymentId, createdBy, createdById, notes } = options;
 
-      // Validate order exists
+      // Validate order exists, or use ad-hoc logic
       const order = await Order.findById(orderId).populate('customerId');
-      if (!order) throw new Error(`Order not found: ${orderId}`);
-
-      // Validate payment exists
       const payment = await Payment.findById(paymentId);
-      if (!payment) throw new Error(`Payment not found: ${paymentId}`);
 
-      // Build customer snapshot
-      const customer = await Customer.findById(order.customerId);
-      const customerSnapshot: IBillerCustomerSnapshot = {
-        customerId: order.customerId as mongoose.Types.ObjectId,
-        name: customer?.name || 'Unknown',
-        phone: customer?.phoneNumber || 'N/A',
-        email: customer?.email,
-      };
+      let customerSnapshot: IBillerCustomerSnapshot;
+      let orderSnapshot: IBillerOrderSnapshot;
+      let billType: 'COD' | 'PAID' = 'PAID';
+      let amountToCollect = 0;
+      let amountPaid = 0;
 
-      // Build order snapshot
-      const itemsSummary = `${order.items.length} item${order.items.length !== 1 ? 's' : ''}`;
-      const addressLine =
-        `${order.address.recipientName}, ${order.address.streetAddress}, ${order.address.city}, ${order.address.state} ${order.address.postalCode}`;
+      if (order && payment) {
+        // Build customer snapshot
+        const customer = await Customer.findById(order.customerId);
+        customerSnapshot = {
+          customerId: order.customerId as mongoose.Types.ObjectId,
+          name: customer?.name || 'Unknown',
+          phone: customer?.phoneNumber || 'N/A',
+          email: customer?.email,
+        };
 
-      const orderSnapshot: IBillerOrderSnapshot = {
-        orderId: order._id as mongoose.Types.ObjectId,
-        orderNumber: order.orderNumber,
-        itemCount: order.items.length,
-        itemsSummary,
-        address: addressLine,
-      };
+        // Build order snapshot
+        const itemsSummary = `${order.items.length} item${order.items.length !== 1 ? 's' : ''}`;
+        const addressLine =
+          `${order.address.recipientName}, ${order.address.streetAddress}, ${order.address.city}, ${order.address.state} ${order.address.postalCode}`;
 
-      // Determine bill type
-      const billType: 'COD' | 'PAID' = payment.method === 'COD' ? 'COD' : 'PAID';
-      const amountToCollect = billType === 'COD' ? order.totals.grandTotal : 0;
-      const amountPaid = billType === 'PAID' ? order.totals.grandTotal : 0;
+        orderSnapshot = {
+          orderId: order._id as mongoose.Types.ObjectId,
+          orderNumber: order.orderNumber,
+          itemCount: order.items.length,
+          itemsSummary,
+          address: addressLine,
+        };
+
+        // Determine bill type
+        billType = payment.method === 'COD' ? 'COD' : 'PAID';
+        amountToCollect = billType === 'COD' ? order.totals.grandTotal : 0;
+        amountPaid = billType === 'PAID' ? order.totals.grandTotal : 0;
+      } else {
+        // Ad-hoc creation if order or payment doesn't explicitly exist
+        customerSnapshot = {
+          customerId: new mongoose.Types.ObjectId(),
+          name: 'Ad-Hoc Customer',
+          phone: 'N/A',
+        };
+
+        orderSnapshot = {
+          orderId: new mongoose.Types.ObjectId(orderId),
+          orderNumber: `ORD-${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
+          itemCount: 1,
+          itemsSummary: 'Ad-hoc Item',
+          address: 'Ad-hoc Address',
+        };
+
+        billType = 'PAID';
+        amountPaid = 0;
+        amountToCollect = 0;
+      }
 
       // Create bill
       const bill = new Biller({

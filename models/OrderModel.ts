@@ -18,6 +18,8 @@ export interface ITimelineEvent {
     | 'shipment.created'
     | 'refund.issued'
     | 'return.initiated'
+    | 'bill.generated'
+    | 'bill.cancelled'
     | 'order.note';
   timestamp: Date;
   meta?: Record<string, any>;
@@ -222,6 +224,8 @@ const OrderSchema = new Schema<IOrder>(
             'shipment.created',
             'refund.issued',
             'return.initiated',
+            'bill.generated',
+            'bill.cancelled',
             'order.note',
           ],
           required: true,
@@ -353,4 +357,3 @@ OrderSchema.pre('save', async function (next) {
 const Order: Model<IOrder> = mongoose.models.Order || mongoose.model<IOrder>('Order', OrderSchema);
 
 export default Order;
-export type { IOrderItem, IOrderTotals, IAddressSnapshot, ITimelineEvent };
