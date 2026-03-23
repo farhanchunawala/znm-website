@@ -1,8 +1,13 @@
 .tableContainer {
 	background: #ffffff;
 	border: 1px solid #e0e0e0;
-	border-radius: 8px;
+	border-radius: 12px;
 	overflow: auto;
+
+	:global([data-theme='dark']) & {
+		background: #000000;
+		border-color: #333333;
+	}
 
 	&::-webkit-scrollbar {
 		height: 6px;
@@ -33,6 +38,11 @@
 		position: sticky;
 		top: 0;
 		z-index: 2;
+
+		:global([data-theme='dark']) & {
+			background: #111111;
+			border-bottom-color: #222222;
+		}
 	}
 
 	th {
@@ -45,6 +55,10 @@
 		letter-spacing: 0.3px;
 		font-size: 11px;
 		user-select: none;
+
+		:global([data-theme='dark']) & {
+			color: #aaaaaa;
+		}
 	}
 
 	td {
@@ -53,10 +67,19 @@
 		color: #333333;
 		font-weight: 500;
 
+		:global([data-theme='dark']) & {
+			color: #ffffff;
+			border-bottom-color: #111111;
+		}
+
 		a {
 			color: #000000;
 			text-decoration: none;
 			font-weight: 600;
+
+			:global([data-theme='dark']) & {
+				color: #ffffff;
+			}
 
 			&:hover {
 				text-decoration: underline;
@@ -70,6 +93,10 @@
 
 			&:hover {
 				background: #f8f8f8;
+
+				:global([data-theme='dark']) & {
+					background: #111111;
+				}
 			}
 
 			&:last-child td {

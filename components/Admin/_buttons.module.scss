@@ -2,9 +2,9 @@
 .primaryBtn {
 	background: #000000;
 	color: #ffffff;
-	border: none;
+	border: 1px solid #000000;
 	padding: 10px 20px;
-	border-radius: 6px;
+	border-radius: 8px;
 	font-size: 13px;
 	font-weight: 600;
 	cursor: pointer;
@@ -15,9 +15,19 @@
 	gap: 8px;
 	white-space: nowrap;
 
+	:global([data-theme='dark']) & {
+		background: #ffffff;
+		color: #000000;
+		border-color: #ffffff;
+	}
+
 	&:hover {
 		background: #2a2a2a;
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+		:global([data-theme='dark']) & {
+			background: #eeeeee;
+		}
 	}
 
 	&:active {
@@ -26,6 +36,7 @@
 
 	&:disabled {
 		background: #d0d0d0;
+		border-color: #d0d0d0;
 		cursor: not-allowed;
 		opacity: 0.6;
 	}
@@ -36,7 +47,7 @@
 	color: #000000;
 	border: 1px solid #d0d0d0;
 	padding: 10px 20px;
-	border-radius: 6px;
+	border-radius: 8px;
 	font-size: 13px;
 	font-weight: 600;
 	cursor: pointer;
@@ -47,9 +58,20 @@
 	gap: 8px;
 	white-space: nowrap;
 
+	:global([data-theme='dark']) & {
+		background: #000000;
+		color: #ffffff;
+		border-color: #333333;
+	}
+
 	&:hover {
 		background: #f8f8f8;
 		border-color: #b0b0b0;
+
+		:global([data-theme='dark']) & {
+			background: #111111;
+			border-color: #ffffff;
+		}
 	}
 
 	&:active {
@@ -98,7 +120,7 @@
 	color: #595959;
 	border: none;
 	padding: 10px 16px;
-	border-radius: 6px;
+	border-radius: 8px;
 	font-size: 13px;
 	font-weight: 600;
 	cursor: pointer;
@@ -109,9 +131,18 @@
 	gap: 8px;
 	white-space: nowrap;
 
+	:global([data-theme='dark']) & {
+		color: #aaaaaa;
+	}
+
 	&:hover {
 		background: #f0f0f0;
 		color: #2a2a2a;
+
+		:global([data-theme='dark']) & {
+			background: #111111;
+			color: #ffffff;
+		}
 	}
 
 	&:active {

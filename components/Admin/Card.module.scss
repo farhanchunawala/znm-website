@@ -1,9 +1,14 @@
 .card {
 	background: #ffffff;
 	border: 1px solid #e0e0e0;
-	border-radius: 8px;
+	border-radius: 12px;
 	overflow: hidden;
 	transition: all 0.15s;
+
+	:global([data-theme='dark']) & {
+		background: #000000;
+		border-color: #333333;
+	}
 
 	&:hover {
 		border-color: #c0c0c0;
@@ -26,6 +31,10 @@
 				font-size: 15px;
 				font-weight: 700;
 				color: #000000;
+
+				:global([data-theme='dark']) & {
+					color: #ffffff;
+				}
 			}
 
 			p {
@@ -33,6 +42,10 @@
 				font-size: 12px;
 				color: #808080;
 				font-weight: 500;
+
+				:global([data-theme='dark']) & {
+					color: #aaaaaa;
+				}
 			}
 		}
 
@@ -50,6 +63,11 @@
 		border-top: 1px solid #e8e8e8;
 		background: #f8f8f8;
 		display: flex;
+
+		:global([data-theme='dark']) & {
+			background: #111111;
+			border-top-color: #222222;
+		}
 		gap: 12px;
 		justify-content: flex-end;
 		flex-wrap: wrap;
