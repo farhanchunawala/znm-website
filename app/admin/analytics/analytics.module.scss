@@ -3,14 +3,22 @@
 		margin: 0;
 		font-size: 32px;
 		font-weight: 600;
-		color: #2c3e50;
+		color: #000000;
+
+		:global([data-theme='dark']) & {
+			color: #ffffff;
+		}
 	}
 
 	h2 {
 		margin: 0 0 20px 0;
 		font-size: 20px;
 		font-weight: 600;
-		color: #2c3e50;
+		color: #000000;
+
+		:global([data-theme='dark']) & {
+			color: #ffffff;
+		}
 	}
 }
 
@@ -28,15 +36,22 @@
 
 .rangeSelect {
 	padding: 10px 15px;
-	border: 2px solid #e0e0e0;
-	border-radius: 6px;
+	border: 1px solid #ddd;
+	border-radius: 8px;
 	font-size: 14px;
 	background: white;
+	color: #000;
 	cursor: pointer;
+
+	:global([data-theme='dark']) & {
+		background: #111111;
+		color: #ffffff;
+		border-color: #333333;
+	}
 
 	&:focus {
 		outline: none;
-		border-color: #667eea;
+		border-color: #000;
 	}
 }
 
@@ -70,9 +85,14 @@
 	.card {
 		background: white;
 		padding: 25px;
-		border-radius: 10px;
+		border-radius: 12px;
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-		transition: transform 0.2s;
+		transition: all 0.2s;
+
+		:global([data-theme='dark']) & {
+			background: #111111;
+			border: 1px solid #222222;
+		}
 
 		&:hover {
 			transform: translateY(-2px);
@@ -105,15 +125,25 @@
 .chartCard {
 	background: white;
 	padding: 25px;
-	border-radius: 10px;
+	border-radius: 12px;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+	:global([data-theme='dark']) & {
+		background: #111111;
+		border: 1px solid #222222;
+	}
 }
 
 .rankingsSection {
 	background: white;
 	padding: 25px;
-	border-radius: 10px;
+	border-radius: 12px;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+	:global([data-theme='dark']) & {
+		background: #111111;
+		border: 1px solid #222222;
+	}
 }
 
 .tableContainer {

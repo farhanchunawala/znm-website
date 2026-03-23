@@ -13,6 +13,10 @@
 	font-size: 28px;
 	font-weight: 600;
 	color: #000;
+
+	:global([data-theme='dark']) & {
+		color: #ffffff;
+	}
 }
 
 .actions {
@@ -111,8 +115,15 @@
 	align-items: center;
 	padding: 12px 20px;
 	background: #fafafa;
-	border: 2px solid #000;
+	border: 1px solid #000;
+	border-radius: 12px;
 	margin-bottom: 20px;
+
+	:global([data-theme='dark']) & {
+		background: #111111;
+		border-color: #ffffff;
+		color: #ffffff;
+	}
 }
 
 .bulkActions span {
@@ -195,7 +206,14 @@
 
 .tableContainer {
 	overflow-x: auto;
-	border: 2px solid #e5e5e5;
+	border: 1px solid #e5e5e5;
+	border-radius: 12px;
+	background: #ffffff;
+
+	:global([data-theme='dark']) & {
+		background: #000000;
+		border-color: #333333;
+	}
 }
 
 .table {
@@ -205,6 +223,10 @@
 
 .table thead {
 	background: #fafafa;
+
+	:global([data-theme='dark']) & {
+		background: #111111;
+	}
 }
 
 .table th {
