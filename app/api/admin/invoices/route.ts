@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
-import { verifyAdminAuth } from '@/lib/auth';
+import { verifyAdminAuth } from '@/lib/admin-auth';
 import InvoiceService from '@/lib/services/invoiceService';
 import mongoose from 'mongoose';
 
@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
 		await connectDB();
 
 		// Verify admin auth
-		const admin = await verifyAdminAuth(req);
+		const admin = await verifyAdminAuth();
 		if (!admin) {
 			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 		}
@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
 		await connectDB();
 
 		// Verify admin auth
-		const admin = await verifyAdminAuth(req);
+		const admin = await verifyAdminAuth();
 		if (!admin) {
 			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 		}

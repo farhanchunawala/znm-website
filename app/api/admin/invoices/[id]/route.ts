@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
-import { verifyAdminAuth } from '@/lib/auth';
+import { verifyAdminAuth } from '@/lib/admin-auth';
 import InvoiceService from '@/lib/services/invoiceService';
 import Invoice from '@/models/InvoiceModel';
 import mongoose from 'mongoose';
@@ -13,7 +13,7 @@ export async function GET(
 		await connectDB();
 
 		// Verify admin auth
-		const admin = await verifyAdminAuth(req);
+		const admin = await verifyAdminAuth();
 		if (!admin) {
 			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 		}
@@ -55,7 +55,7 @@ export async function PATCH(
 		await connectDB();
 
 		// Verify admin auth
-		const admin = await verifyAdminAuth(req);
+		const admin = await verifyAdminAuth();
 		if (!admin) {
 			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 		}
@@ -86,7 +86,7 @@ export async function PATCH(
 			const cancelled = await InvoiceService.cancelInvoice(
 				invoiceId,
 				reason,
-				admin.id
+				undefined
 			);
 			return NextResponse.json(cancelled, { status: 200 });
 		} else {
@@ -116,7 +116,7 @@ export async function DELETE(
 		await connectDB();
 
 		// Verify admin auth
-		const admin = await verifyAdminAuth(req);
+		const admin = await verifyAdminAuth();
 		if (!admin) {
 			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 		}
@@ -134,7 +134,7 @@ export async function DELETE(
 		const deleted = await InvoiceService.cancelInvoice(
 			invoiceId,
 			'Admin deletion',
-			admin.id
+			undefined
 		);
 
 		return NextResponse.json(deleted, { status: 200 });

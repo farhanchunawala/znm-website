@@ -71,16 +71,27 @@
 
 	select {
 		padding: 10px 16px;
-		border: 2px solid $border-medium;
+		border: 1px solid #d4d4d4;
+		border-radius: 8px;
 		font-size: 14px;
-		background: $bg-primary;
-		color: $text-primary;
+		background: #ffffff;
+		color: #000000;
 		min-width: 180px;
 		cursor: pointer;
 
+		:global([data-theme='dark']) & {
+			background: #111111;
+			color: #ffffff;
+			border-color: #333333;
+		}
+
 		&:focus {
 			outline: none;
-			border-color: $border-strong;
+			border-color: #000000;
+
+			:global([data-theme='dark']) & {
+				border-color: #ffffff;
+			}
 		}
 	}
 }

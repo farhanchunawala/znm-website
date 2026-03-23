@@ -32,6 +32,12 @@ interface AnalyticsData {
 		orderCount: number;
 	}>;
 	paymentBreakdown: Array<{ name: string; value: number }>;
+	mostSoldProductStats?: {
+		name: string;
+		totalSold: number;
+		monthlyData: Array<{ month: string; sales: number }>;
+		yearlyData: Array<{ year: string; sales: number }>;
+	};
 }
 
 export default function AnalyticsPage() {
@@ -226,6 +232,38 @@ export default function AnalyticsPage() {
 						</BarChart>
 					</ResponsiveContainer>
 				</div>
+				{/* Most Sold Product Charts */}
+				{data.mostSoldProductStats && (
+					<>
+						<div className={styles.chartCard}>
+							<h2>Monthly Sales ({data.mostSoldProductStats.name})</h2>
+							<ResponsiveContainer width="100%" height={300}>
+								<BarChart data={data.mostSoldProductStats.monthlyData}>
+									<CartesianGrid strokeDasharray="3 3" />
+									<XAxis dataKey="month" />
+									<YAxis />
+									<Tooltip formatter={(value) => `${value} units`} />
+									<Legend />
+									<Bar dataKey="sales" fill="#10b981" name="Units Sold" />
+								</BarChart>
+							</ResponsiveContainer>
+						</div>
+
+						<div className={styles.chartCard}>
+							<h2>Yearly Sales ({data.mostSoldProductStats.name})</h2>
+							<ResponsiveContainer width="100%" height={300}>
+								<BarChart data={data.mostSoldProductStats.yearlyData}>
+									<CartesianGrid strokeDasharray="3 3" />
+									<XAxis dataKey="year" />
+									<YAxis />
+									<Tooltip formatter={(value) => `${value} units`} />
+									<Legend />
+									<Bar dataKey="sales" fill="#f59e0b" name="Units Sold" />
+								</BarChart>
+							</ResponsiveContainer>
+						</div>
+					</>
+				)}
 			</div>
 
 			{/* Customer Rankings Table */}

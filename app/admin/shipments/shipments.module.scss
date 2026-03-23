@@ -225,6 +225,10 @@
 
 .table thead {
 	background: #fafafa;
+
+	:global([data-theme='dark']) & {
+		background: #111111;
+	}
 }
 
 .table th {

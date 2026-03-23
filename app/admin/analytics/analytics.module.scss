@@ -158,6 +158,10 @@
 	thead {
 		background: #f8f9fa;
 
+		:global([data-theme='dark']) & {
+			background: #111111;
+		}
+
 		th {
 			padding: 15px;
 			text-align: left;
@@ -165,6 +169,11 @@
 			color: #2c3e50;
 			border-bottom: 2px solid #e0e0e0;
 			font-size: 14px;
+
+			:global([data-theme='dark']) & {
+				color: #ffffff;
+				border-bottom-color: #333333;
+			}
 		}
 	}
 
@@ -172,14 +181,26 @@
 		tr {
 			border-bottom: 1px solid #f0f0f0;
 
+			:global([data-theme='dark']) & {
+				border-bottom-color: #222222;
+			}
+
 			&:hover {
 				background-color: #f8f9fa;
+
+				:global([data-theme='dark']) & {
+					background-color: #1a1a1a;
+				}
 			}
 
 			td {
 				padding: 15px;
 				font-size: 14px;
 				color: #2c3e50;
+
+				:global([data-theme='dark']) & {
+					color: #dddddd;
+				}
 
 				&.rank {
 					font-weight: 700;
