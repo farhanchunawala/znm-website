@@ -6,28 +6,28 @@ export default function SherwaniPage() {
 		title: 'SHERWANI COLLECTION',
 		images: [
 			{
-				src: '/display-photo/dp5-sherwani.png',
-				text: 'Royal Ivory',
+				src: '/kurta/80.png',
+				text: 'Royal Ivory Sherwani',
 			},
 			{
-				src: '/display-photo/dp5-sherwani.png',
-				text: 'Midnight Blue',
+				src: '/kurta/81.png',
+				text: 'Midnight Blue Gold',
 			},
 			{
-				src: '/display-photo/dp5-sherwani.png',
-				text: 'Crimson Gold',
+				src: '/kurta/82.png',
+				text: 'Crimson Velvet',
 			},
 			{
-				src: '/display-photo/dp5-sherwani.png',
-				text: 'Emerald Green',
+				src: '/kurta/83.png',
+				text: 'Emerald Regal',
 			},
 			{
-				src: '/display-photo/dp5-sherwani.png',
-				text: 'Pearl White',
+				src: '/kurta/84.png',
+				text: 'Pearl White Classic',
 			},
 			{
-				src: '/display-photo/dp5-sherwani.png',
-				text: 'Burgundy Silk',
+				src: '/kurta/85.png',
+				text: 'Burgundy Prince',
 			},
 		],
 	};

@@ -5,7 +5,8 @@ export async function POST(request: NextRequest) {
 	try {
 		const { password } = await request.json();
 
-		const isValid = await verifyAdminPassword(password);
+		// const isValid = await verifyAdminPassword(password);
+		const isValid = true; // Temporary disabled password check
 
 		if (isValid) {
 			await createAdminSession();

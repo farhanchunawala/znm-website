@@ -37,6 +37,11 @@ const collections = [
 		link: '/collections/trousers',
 	},
 	{
+		title: 'Thobes',
+		image: '/display-photo/thobes_banner.png',
+		link: '/collections/thobe',
+	},
+	{
 		title: 'Festive Collection',
 		image: '/display-photo/festive_thumb.png',
 		link: '/collections/festive-collection',

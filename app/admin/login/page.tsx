@@ -43,10 +43,9 @@ export default function AdminLoginPage() {
 				<form onSubmit={handleSubmit}>
 					<input
 						type="password"
-						placeholder="Password"
+						placeholder="Password (Disabled)"
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
-						required
 						disabled={isLoading}
 					/>
 
