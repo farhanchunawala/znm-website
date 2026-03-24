@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { DocumentTextIcon, PrinterIcon, TrashIcon, PencilIcon, PlusIcon, MinusIcon, EyeIcon, ArchiveBoxIcon } from '@heroicons/react/24/outline';
+import { DocumentTextIcon, PrinterIcon, TrashIcon, PencilIcon, PlusIcon, MinusIcon, EyeIcon, ArchiveBoxIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import JsBarcode from 'jsbarcode';
 import axios from 'axios';
 import PageHeader from '@/components/Admin/PageHeader';
@@ -16,11 +16,11 @@ interface Bill {
 	_id: string;
 	billId: string;
 	orderSnapshot: { orderNumber: string };
-	customerSnapshot: { name: string; phone: string };
+	customerSnapshot: { name: string; phone: string; customerCustomId?: string };
 	billType: 'COD' | 'PAID';
 	amountToCollect: number;
 	amountPaid: number;
-	status: 'active' | 'cancelled';
+	status: 'active' | 'cancelled' | 'completed';
 	printCount: number;
 	createdAt: string;
 	items?: Array<{ description: string; quantity: number; rate: number }>;
@@ -28,6 +28,8 @@ interface Bill {
 	rate?: number;
 	advancePaid?: number;
 	balanceAmount?: number;
+	trialDate?: string;
+	deliveryDate?: string;
 }
 
 interface BillDetail extends Bill {
@@ -60,6 +62,11 @@ export default function BillsPage() {
 	const [createFormData, setCreateFormData] = useState({
 		orderId: '',
 		paymentId: '',
+		customerName: '',
+		customerPhone: '',
+		customerCustomId: '',
+		trialDate: '',
+		deliveryDate: '',
 		notes: '',
 		items: [{ description: '', quantity: 1, rate: 0 }],
 		paymentStatus: '' as 'full_paid' | 'advance_payment' | 'pending_payment' | '',
@@ -260,7 +267,13 @@ export default function BillsPage() {
 		try {
 			setActionInProgress(true);
 			const response = await axios.post('/api/admin/bills', {
-				...createFormData,
+				customerName: createFormData.customerName,
+				customerPhone: createFormData.customerPhone,
+				customerCustomId: createFormData.customerCustomId,
+				trialDate: createFormData.trialDate,
+				deliveryDate: createFormData.deliveryDate,
+				items: createFormData.items,
+				paymentStatus: createFormData.paymentStatus,
 				paymentId: createFormData.paymentId || 'manual'
 			});
 			const newBill = response.data.data;
@@ -275,6 +288,11 @@ export default function BillsPage() {
 			setCreateFormData({ 
 				orderId: '', 
 				paymentId: '', 
+				customerName: '',
+				customerPhone: '',
+				customerCustomId: '',
+				trialDate: '',
+				deliveryDate: '',
 				notes: '', 
 				items: [{ description: '', quantity: 1, rate: 0 }],
 				paymentStatus: '',
@@ -354,20 +372,20 @@ export default function BillsPage() {
 		{
 			key: 'billId',
 			label: 'Bill ID',
-			width: '15%',
+			width: '20%',
 			render: (val: string) => <span className={styles.billId}>{val}</span>,
-		},
-		{
-			key: 'orderSnapshot',
-			label: 'Order',
-			width: '12%',
-			render: (val: any) => <strong>{val.orderNumber}</strong>,
 		},
 		{
 			key: 'customerSnapshot',
 			label: 'Customer',
-			width: '18%',
+			width: '20%',
 			render: (val: any) => <div>{val.name}</div>,
+		},
+		{
+			key: 'customerSnapshot_id',
+			label: 'Cust ID',
+			width: '10%',
+			render: (_: any, row: Bill) => <div>{row.customerSnapshot.customerCustomId || 'N/A'}</div>,
 		},
 		{
 			key: 'billType',
@@ -375,28 +393,56 @@ export default function BillsPage() {
 			width: '10%',
 			render: (val: string) => (
 				<span className={styles[`badge${val}`]}>
-					{val}
+					{val === 'COD' ? 'UNPAID' : 'PAID'}
 				</span>
 			),
 		},
 		{
-			key: 'rate',
-			label: 'Total Amount',
+			key: 'balanceAmount',
+			label: 'Balance',
 			width: '12%',
 			render: (_: any, row: Bill) => {
-				const amount = row.rate || 0;
-				return <strong>₹{amount.toFixed(2)}</strong>;
+				const balance = row.balanceAmount ?? row.amountToCollect ?? 0;
+				if (balance <= 0) {
+					return <CheckCircleIcon className={styles.icon} style={{ color: '#4caf50', width: '20px', height: '20px' }} />;
+				}
+				return <strong>₹{balance.toFixed(2)}</strong>;
 			},
 		},
 		{
 			key: 'status',
 			label: 'Status',
 			width: '12%',
-			render: (val: string) => (
-				<span className={styles[`status${val}`]}>
-					{val === 'active' ? '✓ Active' : '✕ Cancelled'}
-				</span>
-			),
+			render: (val: string, row: Bill) => {
+				const balance = row.balanceAmount ?? row.amountToCollect ?? 0;
+				if (balance <= 0 && row.status !== 'cancelled') {
+					return (
+						<span className={styles.statuscompleted}>
+							✓ Completed
+						</span>
+					);
+				}
+				if (val === 'active' || (val === 'completed' && balance > 0)) {
+					// Fallback if status is completed but balance is somehow > 0
+					return (
+						<span className={styles.statusactive}>
+							● Active
+						</span>
+					);
+				}
+				if (val === 'completed' || (balance <= 0 && row.status !== 'cancelled')) {
+					return (
+						<span className={styles.statuscompleted}>
+							✓ Completed
+						</span>
+					);
+				}
+				return (
+					<span className={styles.statuscancelled}>
+						✕ Cancelled
+					</span>
+				);
+			},
 		},
 		{
 			key: 'createdAt',
@@ -464,6 +510,11 @@ export default function BillsPage() {
 									setCreateFormData({
 										orderId: nextId,
 										paymentId: '',
+										customerName: '',
+										customerPhone: '',
+										customerCustomId: '',
+										trialDate: '',
+										deliveryDate: '',
 										notes: '',
 										items: [{ description: '', quantity: 1, rate: 0 }],
 										paymentStatus: '',
@@ -494,7 +545,7 @@ export default function BillsPage() {
 							className={formStyles.select}
 						>
 							<option value="">All Types</option>
-							<option value="COD">COD</option>
+							<option value="COD">UNPAID</option>
 							<option value="PAID">PAID</option>
 						</select>
 					</div>
@@ -508,6 +559,7 @@ export default function BillsPage() {
 						>
 							<option value="">All Status</option>
 							<option value="active">Active</option>
+							<option value="completed">Completed</option>
 							<option value="cancelled">Cancelled</option>
 						</select>
 					</div>
@@ -575,7 +627,7 @@ export default function BillsPage() {
 				isOpen={showDetail}
 				onClose={() => setShowDetail(false)}
 				title="Bill Details"
-				subtitle={selectedBill ? `Order #${selectedBill.orderSnapshot.orderNumber}` : ''}
+				subtitle={selectedBill ? `Bill #${selectedBill.billId || selectedBill.orderSnapshot?.orderNumber}` : ''}
 				size="md"
 				footer={
 					selectedBill && (
@@ -608,7 +660,7 @@ export default function BillsPage() {
 										onClick={() => {
 											setPayFormData({
 												paymentStatus: selectedBill.paymentStatus === 'pending_payment' ? '' : selectedBill.paymentStatus as any,
-												amountPaid: selectedBill.amountPaid || 0,
+												amountPaid: 0, // Reset for ADDITIONAL payment entering
 											});
 											setShowPayModal(true);
 										}}
@@ -643,15 +695,15 @@ export default function BillsPage() {
 						<div className={styles.detailGrid}>
 							<div>
 								<p className={styles.detailLabel}>Bill ID</p>
-								<p className={styles.detailValue}>{selectedBill.billId}</p>
-							</div>
-							<div>
-								<p className={styles.detailLabel}>Order Number</p>
-								<p className={styles.detailValue}>{selectedBill.orderSnapshot.orderNumber}</p>
+								<p className={styles.detailValue}>{selectedBill.billId || selectedBill.orderSnapshot?.orderNumber}</p>
 							</div>
 							<div>
 								<p className={styles.detailLabel}>Customer</p>
 								<p className={styles.detailValue}>{selectedBill.customerSnapshot.name}</p>
+							</div>
+							<div>
+								<p className={styles.detailLabel}>Customer ID</p>
+								<p className={styles.detailValue}>{selectedBill.customerSnapshot.customerCustomId || 'N/A'}</p>
 							</div>
 							<div>
 								<p className={styles.detailLabel}>Phone</p>
@@ -699,6 +751,22 @@ export default function BillsPage() {
 									{new Date(selectedBill.createdAt).toLocaleString()}
 								</p>
 							</div>
+							{selectedBill.trialDate && (
+								<div>
+									<p className={styles.detailLabel}>Trial Date</p>
+									<p className={styles.detailValue}>
+										{new Date(selectedBill.trialDate).toLocaleDateString()}
+									</p>
+								</div>
+							)}
+							{selectedBill.deliveryDate && (
+								<div>
+									<p className={styles.detailLabel}>Delivery Date</p>
+									<p className={styles.detailValue}>
+										{new Date(selectedBill.deliveryDate).toLocaleDateString()}
+									</p>
+								</div>
+							)}
 						</div>
 						{selectedBill.items && selectedBill.items.length > 0 && (
 							<div className={styles.itemsSection}>
@@ -763,6 +831,59 @@ export default function BillsPage() {
 							className={formStyles.input}
 						/>
 					</div>
+
+					<div className={formStyles.formGroup}>
+						<label>Customer Name <span className={formStyles.required}>*</span></label>
+						<input
+							type="text"
+							placeholder="John Doe"
+							value={createFormData.customerName}
+							onChange={(e) => {
+								const name = e.target.value;
+								const initial = name.charAt(0).toUpperCase();
+								// Since it's client side, we can only suggest a generic starting point if empty
+								// We'll let the user override
+								let suggestedId = createFormData.customerCustomId;
+								if (initial && (!suggestedId || suggestedId.length <= 5)) {
+									suggestedId = `${initial}-001`; // Placeholder suggestion
+								}
+								
+								setCreateFormData({ 
+									...createFormData, 
+									customerName: name,
+									customerCustomId: suggestedId
+								});
+							}}
+							className={formStyles.input}
+						/>
+					</div>
+
+					<div className={formStyles.formGroup}>
+						<label>Customer ID</label>
+						<input
+							type="text"
+							placeholder="J-001"
+							value={createFormData.customerCustomId}
+							onChange={(e) =>
+								setCreateFormData({ ...createFormData, customerCustomId: e.target.value })
+							}
+							className={formStyles.input}
+						/>
+					</div>
+
+					<div className={formStyles.formGroup}>
+						<label>Customer Phone Number <span className={formStyles.required}>*</span></label>
+						<input
+							type="text"
+							placeholder="91XXXXXXXXXX"
+							value={createFormData.customerPhone}
+							onChange={(e) =>
+								setCreateFormData({ ...createFormData, customerPhone: e.target.value })
+							}
+							className={formStyles.input}
+						/>
+					</div>
+
 
 					<div className={formStyles.formGroup}>
 						<label>Items Description, Quantity & Rate</label>
@@ -893,6 +1014,31 @@ export default function BillsPage() {
 						/>
 					</div>
 
+					<div style={{ display: 'flex', gap: '12px', marginBottom: '15px' }}>
+						<div className={formStyles.formGroup} style={{ flex: 1, marginBottom: 0 }}>
+							<label>Trial Date</label>
+							<input
+								type="date"
+								value={createFormData.trialDate}
+								onChange={(e) =>
+									setCreateFormData({ ...createFormData, trialDate: e.target.value })
+								}
+								className={formStyles.input}
+							/>
+						</div>
+						<div className={formStyles.formGroup} style={{ flex: 1, marginBottom: 0 }}>
+							<label>Delivery Date</label>
+							<input
+								type="date"
+								value={createFormData.deliveryDate}
+								onChange={(e) =>
+									setCreateFormData({ ...createFormData, deliveryDate: e.target.value })
+								}
+								className={formStyles.input}
+							/>
+						</div>
+					</div>
+
 					{createFormData.paymentStatus === 'advance_payment' && (
 						<>
 							<div className={formStyles.formGroup}>
@@ -944,7 +1090,7 @@ export default function BillsPage() {
 				isOpen={showEditModal}
 				onClose={() => setShowEditModal(false)}
 				title="Edit Bill"
-				subtitle={selectedBill ? `Order #${selectedBill.orderSnapshot.orderNumber}` : ''}
+				subtitle={selectedBill ? `Bill #${selectedBill.billId || selectedBill.orderSnapshot?.orderNumber}` : ''}
 				size="md"
 				footer={
 					<button
@@ -1018,10 +1164,10 @@ export default function BillsPage() {
 
 					{payFormData.paymentStatus === 'advance_payment' && (
 						<div className={formStyles.formGroup}>
-							<label>How much paid?</label>
+							<label>Extra amount paid just now?</label>
 							<input
 								type="number"
-								placeholder="Enter amount"
+								placeholder="Enter extra amount"
 								value={payFormData.amountPaid}
 								onChange={(e) => setPayFormData({ ...payFormData, amountPaid: parseFloat(e.target.value) || 0 })}
 								className={formStyles.input}
@@ -1030,8 +1176,32 @@ export default function BillsPage() {
 					)}
 					
 					{selectedBill && (
-						<div style={{ marginTop: '10px', fontSize: '14px', color: '#666' }}>
-							Total Rate: ₹{selectedBill.rate?.toFixed(2)}
+						<div style={{ marginTop: '15px', padding: '15px', backgroundColor: 'rgba(255, 255, 255, 0.05)', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+							<div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+								<span style={{ opacity: 0.8 }}>Total Rate:</span>
+								<strong>₹{selectedBill.rate?.toFixed(2)}</strong>
+							</div>
+							<div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+								<span style={{ opacity: 0.8 }}>Previously Paid:</span>
+								<strong>₹{(selectedBill.advancePaid || 0).toFixed(2)}</strong>
+							</div>
+							<div style={{ display: 'flex', justifyContent: 'space-between', color: '#ff5252', marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
+								<span>Remaining Balance:</span>
+								<strong>₹{(selectedBill.balanceAmount || 0).toFixed(2)}</strong>
+							</div>
+							
+							{payFormData.amountPaid > 0 && (
+								<div style={{ marginTop: '10px', borderTop: '1px dashed rgba(255, 255, 255, 0.1)', paddingTop: '10px' }}>
+									<div style={{ display: 'flex', justifyContent: 'space-between', color: '#4caf50', marginBottom: '5px' }}>
+										<span>New Payment:</span>
+										<strong>- ₹{payFormData.amountPaid.toFixed(2)}</strong>
+									</div>
+									<div style={{ display: 'flex', justifyContent: 'space-between', color: '#fff', fontWeight: 'bold' }}>
+										<span>Final Balance:</span>
+										<span>₹{Math.max(0, (selectedBill.balanceAmount || 0) - payFormData.amountPaid).toFixed(2)}</span>
+									</div>
+								</div>
+							)}
 						</div>
 					)}
 				</div>

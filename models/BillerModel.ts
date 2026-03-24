@@ -6,6 +6,7 @@ import mongoose, { Document, Schema, Model } from 'mongoose';
  */
 export interface IBillerCustomerSnapshot {
   customerId: mongoose.Types.ObjectId;
+  customerCustomId?: string;
   name: string;
   phone: string;
   email?: string;
@@ -59,12 +60,16 @@ export interface IBiller extends Document {
   // Custom Items
   items: Array<{ description: string; quantity: number; rate: number }>;
   
+  // Custom Dates
+  trialDate?: Date;
+  deliveryDate?: Date;
+  
   // Snapshots (immutable)
-  customerSnapshot: IBillerCustomerSnapshot;
+  customerSnapshot: IBillerCustomerSnapshot & { customerCustomId?: string };
   orderSnapshot: IBillerOrderSnapshot;
   
   // Status & Operations
-  status: 'active' | 'cancelled';
+  status: 'active' | 'cancelled' | 'completed';
   printCount: number; // How many times printed
   lastPrintedAt?: Date;
   
@@ -162,6 +167,7 @@ const BillerSchema = new Schema<IBiller>(
     // Snapshots
     customerSnapshot: {
       customerId: { type: Schema.Types.ObjectId, required: true },
+      customerCustomId: { type: String },
       name: { type: String, required: true },
       phone: { type: String, required: true },
       email: { type: String },
@@ -174,10 +180,14 @@ const BillerSchema = new Schema<IBiller>(
       address: { type: String, required: true },
     },
 
+    // Dates
+    trialDate: { type: Date },
+    deliveryDate: { type: Date },
+
     // Status & Operations
     status: {
       type: String,
-      enum: ['active', 'cancelled'],
+      enum: ['active', 'cancelled', 'completed'],
       default: 'active',
       index: true,
     },

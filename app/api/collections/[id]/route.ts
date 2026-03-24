@@ -27,7 +27,7 @@ export async function GET(
 
 		const collection = await Collection.findById(params.id);
 		if (!collection) {
-			throw new AppError('Collection not found', 'NOT_FOUND', 404);
+			throw new AppError('Collection not found', 404, 'NOT_FOUND');
 		}
 
 		return NextResponse.json({
@@ -53,7 +53,7 @@ export async function PATCH(
 		const body = await req.json();
 		const validated = CollectionUpdateSchema.parse(body);
 
-		const collection = await updateCollection(params.id, validated);
+		const collection = await updateCollection(params.id, validated as any);
 
 		return NextResponse.json({
 			success: true,

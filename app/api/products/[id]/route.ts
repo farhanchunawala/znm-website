@@ -24,7 +24,7 @@ export async function GET(
 		const product = await getProductWithDetails(id);
 
 		if (!product) {
-			throw new AppError('Product not found', 'NOT_FOUND', 404);
+			throw new AppError('Product not found', 404, 'NOT_FOUND');
 		}
 
 		return NextResponse.json({
@@ -63,7 +63,7 @@ export async function PATCH(
 		});
 
 		if (!product) {
-			throw new AppError('Product not found', 'NOT_FOUND', 404);
+			throw new AppError('Product not found', 404, 'NOT_FOUND');
 		}
 
 		return NextResponse.json({

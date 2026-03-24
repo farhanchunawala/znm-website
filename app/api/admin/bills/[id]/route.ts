@@ -54,7 +54,7 @@ export async function PATCH(
 
     const { id } = params;
     const body = await request.json();
-    const { action, amountToCollect, amountPaid, notes, reason } = body;
+    const { action, amountToCollect, amountPaid, notes, reason, paymentStatus, additionalAmount } = body;
 
     let result;
 
@@ -75,6 +75,8 @@ export async function PATCH(
         amountToCollect,
         amountPaid,
         notes,
+        paymentStatus,
+        additionalAmount,
       });
     }
 

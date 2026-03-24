@@ -21,15 +21,15 @@ export async function POST(
 		const variantId = formData.get('variantId') as string | null;
 
 		if (!file) {
-			throw new AppError('No file provided', 'NO_FILE', 400);
+			throw new AppError('No file provided', 400, 'NO_FILE');
 		}
 
 		// Validate file type
 		if (!file.type.startsWith('image/')) {
 			throw new AppError(
 				'File must be an image',
-				'INVALID_FILE_TYPE',
-				400
+				400,
+				'INVALID_FILE_TYPE'
 			);
 		}
 
@@ -45,7 +45,7 @@ export async function POST(
 
 		const product = await Product.findById(params.id);
 		if (!product) {
-			throw new AppError('Product not found', 'NOT_FOUND', 404);
+			throw new AppError('Product not found', 404, 'NOT_FOUND');
 		}
 
 		// Add to variant or first variant
@@ -54,14 +54,14 @@ export async function POST(
 				(v) => v._id?.toString() === variantId
 			);
 			if (!variant) {
-				throw new AppError('Variant not found', 'NOT_FOUND', 404);
+				throw new AppError('Variant not found', 404, 'NOT_FOUND');
 			}
 
 			if (variant.images.length >= MAX_IMAGES_PER_VARIANT) {
 				throw new AppError(
 					`Variant cannot have more than ${MAX_IMAGES_PER_VARIANT} images`,
-					'TOO_MANY_IMAGES',
-					422
+					422,
+					'TOO_MANY_IMAGES'
 				);
 			}
 
@@ -71,16 +71,16 @@ export async function POST(
 			if (!product.variants.length) {
 				throw new AppError(
 					'Product must have at least 1 variant',
-					'NO_VARIANTS',
-					422
+					422,
+					'NO_VARIANTS'
 				);
 			}
 
 			if (product.variants[0].images.length >= MAX_IMAGES_PER_VARIANT) {
 				throw new AppError(
 					`Variant cannot have more than ${MAX_IMAGES_PER_VARIANT} images`,
-					'TOO_MANY_IMAGES',
-					422
+					422,
+					'TOO_MANY_IMAGES'
 				);
 			}
 
@@ -117,7 +117,7 @@ export async function DELETE(
 
 		const product = await Product.findById(params.id);
 		if (!product) {
-			throw new AppError('Product not found', 'NOT_FOUND', 404);
+			throw new AppError('Product not found', 404, 'NOT_FOUND');
 		}
 
 		let imageUrl: string | null = null;
@@ -128,7 +128,7 @@ export async function DELETE(
 				(v) => v._id?.toString() === variantId
 			);
 			if (!variant) {
-				throw new AppError('Variant not found', 'NOT_FOUND', 404);
+				throw new AppError('Variant not found', 404, 'NOT_FOUND');
 			}
 
 			// Find image by URL containing imgId
@@ -136,7 +136,7 @@ export async function DELETE(
 				img.includes(params.imgId)
 			);
 			if (idx < 0) {
-				throw new AppError('Image not found', 'NOT_FOUND', 404);
+				throw new AppError('Image not found', 404, 'NOT_FOUND');
 			}
 
 			imageUrl = variant.images[idx];
@@ -148,7 +148,7 @@ export async function DELETE(
 					img.includes(params.imgId)
 				);
 				if (idx < 0) {
-					throw new AppError('Image not found', 'NOT_FOUND', 404);
+					throw new AppError('Image not found', 404, 'NOT_FOUND');
 				}
 
 				imageUrl = product.variants[0].images[idx];
@@ -156,8 +156,8 @@ export async function DELETE(
 			} else {
 				throw new AppError(
 					'Product has no variants',
-					'NO_VARIANTS',
-					404
+					404,
+					'NO_VARIANTS'
 				);
 			}
 		}

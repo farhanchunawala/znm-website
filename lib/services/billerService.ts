@@ -16,6 +16,11 @@ interface CreateBillerOptions {
   rate?: number;
   advancePaid?: number;
   balanceAmount?: number;
+  customerName?: string;
+  customerPhone?: string;
+  customerCustomId?: string;
+  trialDate?: string | Date;
+  deliveryDate?: string | Date;
 }
 
 interface UpdateBillerOptions {
@@ -23,12 +28,14 @@ interface UpdateBillerOptions {
   amountPaid?: number;
   notes?: string;
   paymentStatus?: 'full_paid' | 'advance_payment' | 'pending_payment';
+  additionalAmount?: number;
   updatedBy?: string;
+  status?: 'active' | 'cancelled' | 'completed';
 }
 
 interface ListBillerOptions {
   billType?: 'COD' | 'PAID';
-  status?: 'active' | 'cancelled';
+  status?: 'active' | 'cancelled' | 'completed';
   skip?: number;
   limit?: number;
   sortBy?: 'createdAt' | 'billType' | 'amountToCollect';
@@ -144,7 +151,7 @@ class BillerService {
    */
   async createBiller(options: CreateBillerOptions): Promise<IBiller> {
     try {
-      const {
+      let {
         orderId,
         paymentId,
         createdBy,
@@ -154,7 +161,11 @@ class BillerService {
         paymentStatus = 'full_paid',
         rate = 0,
         advancePaid = 0,
-        balanceAmount = 0
+        balanceAmount = 0,
+        customerName,
+        customerPhone,
+        trialDate,
+        deliveryDate
       } = options;
 
       // Check if orderId is a valid ObjectId
@@ -205,25 +216,41 @@ class BillerService {
           billType = 'PAID';
           amountPaid = rate || order.totals.grandTotal;
           amountToCollect = 0;
+          balanceAmount = 0;
+          advancePaid = amountPaid;
         } else if (paymentStatus === 'pending_payment') {
           billType = 'COD';
           amountPaid = 0;
           amountToCollect = rate || order.totals.grandTotal;
+          balanceAmount = amountToCollect;
+          advancePaid = 0;
         } else if (paymentStatus === 'advance_payment') {
-          billType = 'COD'; // Technically part COD part PAID, but we'll collect balance
+          billType = 'COD';
           amountPaid = advancePaid;
           amountToCollect = balanceAmount;
+          // advancePaid is already set from options
         } else {
           billType = payment.method === 'COD' ? 'COD' : 'PAID';
           amountToCollect = billType === 'COD' ? order.totals.grandTotal : 0;
+          amountToCollect = billType === 'COD' ? order.totals.grandTotal : 0;
           amountPaid = billType === 'PAID' ? order.totals.grandTotal : 0;
+          balanceAmount = amountToCollect;
+          advancePaid = amountPaid;
         }
       } else {
         // Ad-hoc creation if order or payment doesn't explicitly exist
+        let finalCustomerCustomId = options.customerCustomId;
+        if (!finalCustomerCustomId && customerName) {
+          const initial = customerName.charAt(0).toUpperCase();
+          const count = await Customer.countDocuments({});
+          finalCustomerCustomId = `${initial}-${(count + 1).toString().padStart(3, '0')}`;
+        }
+
         customerSnapshot = {
           customerId: new mongoose.Types.ObjectId(),
-          name: 'Ad-Hoc Customer',
-          phone: 'N/A',
+          customerCustomId: finalCustomerCustomId,
+          name: customerName || 'Ad-Hoc Customer',
+          phone: customerPhone || 'N/A',
         };
 
         const itemsSummary = items.length > 0 
@@ -245,18 +272,25 @@ class BillerService {
           billType = 'PAID';
           amountPaid = rate;
           amountToCollect = 0;
+          balanceAmount = 0;
+          advancePaid = rate;
         } else if (paymentStatus === 'pending_payment') {
           billType = 'COD';
           amountPaid = 0;
           amountToCollect = rate;
+          balanceAmount = rate;
+          advancePaid = 0;
         } else if (paymentStatus === 'advance_payment') {
           billType = 'COD';
           amountPaid = advancePaid;
           amountToCollect = balanceAmount;
+          // advancePaid is already set from options
         } else {
           billType = 'PAID';
           amountPaid = 0;
           amountToCollect = 0;
+          balanceAmount = 0;
+          advancePaid = 0;
         }
       }
 
@@ -282,6 +316,8 @@ class BillerService {
         customerSnapshot,
         orderSnapshot,
         items,
+        trialDate: trialDate ? new Date(trialDate) : undefined,
+        deliveryDate: deliveryDate ? new Date(deliveryDate) : undefined,
         status: 'active',
         printCount: 0,
         createdBy,
@@ -333,7 +369,18 @@ class BillerService {
 
       const filter: any = {};
       if (billType) filter.billType = billType;
-      if (status) filter.status = status;
+      
+      if (status === 'completed') {
+        filter.$or = [
+          { status: 'completed' },
+          { balanceAmount: { $lte: 0 }, status: { $ne: 'cancelled' } }
+        ];
+      } else if (status === 'active') {
+        filter.status = 'active';
+        filter.balanceAmount = { $gt: 0 };
+      } else if (status) {
+        filter.status = status;
+      }
 
       const sortOptions: any = {};
       sortOptions[sortBy] = -1;
@@ -397,15 +444,24 @@ class BillerService {
         if (options.paymentStatus === 'full_paid') {
           bill.billType = 'PAID';
           bill.amountPaid = bill.rate;
+          bill.advancePaid = bill.rate;
           bill.amountToCollect = 0;
           bill.balanceAmount = 0;
-          bill.advancePaid = 0;
-        } else if (options.paymentStatus === 'advance_payment' && options.amountPaid !== undefined) {
-          bill.billType = 'COD'; // Still has money to collect
-          bill.amountPaid = options.amountPaid;
-          bill.advancePaid = options.amountPaid;
-          bill.balanceAmount = (bill.rate || 0) - options.amountPaid;
+          bill.status = 'completed';
+        } else if (options.paymentStatus === 'advance_payment') {
+          bill.billType = 'COD';
+          const additional = options.additionalAmount || options.amountPaid || 0;
+          bill.advancePaid = (bill.advancePaid || 0) + additional;
+          bill.amountPaid = bill.advancePaid;
+          bill.balanceAmount = Math.max(0, (bill.rate || 0) - bill.advancePaid);
           bill.amountToCollect = bill.balanceAmount;
+          
+          // If balance becomes 0, mark as full_paid and completed automatically
+          if (bill.balanceAmount === 0) {
+            bill.paymentStatus = 'full_paid';
+            bill.billType = 'PAID';
+            bill.status = 'completed';
+          }
         }
       }
 
@@ -552,19 +608,7 @@ class BillerService {
       const bill = await Biller.findById(billerId);
       if (!bill) throw new Error(`Bill not found: ${billerId}`);
 
-      if (bill.printCount > 0) {
-        throw new Error('Cannot delete a bill that has been printed. Cancel it instead.');
-      }
-
-      // Add final audit entry before deletion
-      bill.auditLog.push({
-        action: 'cancelled',
-        actor: 'admin',
-        actorId: deletedBy ? new mongoose.Types.ObjectId(deletedBy) : undefined,
-        timestamp: new Date(),
-        reason: 'Permanently deleted',
-      });
-
+      // Delete immediately
       await Biller.deleteOne({ _id: billerId });
       return true;
     } catch (error) {

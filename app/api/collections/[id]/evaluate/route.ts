@@ -16,14 +16,14 @@ export async function POST(
 
 		const collection = await Collection.findById(params.id);
 		if (!collection) {
-			throw new AppError('Collection not found', 'NOT_FOUND', 404);
+			throw new AppError('Collection not found', 404, 'NOT_FOUND');
 		}
 
 		if (collection.type !== 'dynamic') {
 			throw new AppError(
 				'Collection must be dynamic to evaluate rules',
-				'INVALID_TYPE',
-				422
+				422,
+				'INVALID_TYPE'
 			);
 		}
 
