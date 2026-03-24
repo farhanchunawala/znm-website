@@ -22,6 +22,7 @@ interface UpdateBillerOptions {
   amountToCollect?: number;
   amountPaid?: number;
   notes?: string;
+  paymentStatus?: 'full_paid' | 'advance_payment' | 'pending_payment';
   updatedBy?: string;
 }
 
@@ -383,6 +384,29 @@ class BillerService {
           new: options.amountPaid,
         };
         bill.amountPaid = options.amountPaid;
+      }
+
+      if (options.paymentStatus) {
+        changes.paymentStatus = {
+          old: bill.paymentStatus,
+          new: options.paymentStatus,
+        };
+        bill.paymentStatus = options.paymentStatus;
+        
+        // Auto-adjust amounts based on status if payment is made
+        if (options.paymentStatus === 'full_paid') {
+          bill.billType = 'PAID';
+          bill.amountPaid = bill.rate;
+          bill.amountToCollect = 0;
+          bill.balanceAmount = 0;
+          bill.advancePaid = 0;
+        } else if (options.paymentStatus === 'advance_payment' && options.amountPaid !== undefined) {
+          bill.billType = 'COD'; // Still has money to collect
+          bill.amountPaid = options.amountPaid;
+          bill.advancePaid = options.amountPaid;
+          bill.balanceAmount = (bill.rate || 0) - options.amountPaid;
+          bill.amountToCollect = bill.balanceAmount;
+        }
       }
 
       if (options.notes !== undefined) {

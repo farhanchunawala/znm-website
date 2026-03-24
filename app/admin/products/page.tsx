@@ -138,7 +138,7 @@ export default function ProductsPage() {
 
 	return (
 		<div className={styles.container}>
-			<div className={styles.header}>
+			<div className={styles.titleBar}>
 				<h1>Products</h1>
 				<div className={styles.headerActions}>
 					<button onClick={handleExportCSV} className={styles.csvBtn}>📥 Export CSV</button>
@@ -234,9 +234,16 @@ export default function ProductsPage() {
 										</span>
 									</td>
 									<td>
-										{product.variants.length > 0
-											? `₹${Math.min(...product.variants.map((v) => v.price))} - ₹${Math.max(...product.variants.map((v) => v.price))}`
-											: 'No variants'}
+										{product.variants.length > 0 ? (
+											(() => {
+												const prices = product.variants.map((v) => v.price);
+												const min = Math.min(...prices);
+												const max = Math.max(...prices);
+												return min === max ? `₹${min}` : `₹${min} - ₹${max}`;
+											})()
+										) : (
+											'No variants'
+										)}
 									</td>
 									<td>
 										{new Date(

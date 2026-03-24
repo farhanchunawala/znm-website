@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { DocumentTextIcon, PrinterIcon, TrashIcon, PencilIcon, PlusIcon, MinusIcon } from '@heroicons/react/24/outline';
+import { DocumentTextIcon, PrinterIcon, TrashIcon, PencilIcon, PlusIcon, MinusIcon, EyeIcon, ArchiveBoxIcon } from '@heroicons/react/24/outline';
 import JsBarcode from 'jsbarcode';
 import axios from 'axios';
 import PageHeader from '@/components/Admin/PageHeader';
@@ -51,6 +51,11 @@ export default function BillsPage() {
 	const [showDetail, setShowDetail] = useState(false);
 	const [showCreateModal, setShowCreateModal] = useState(false);
 	const [showEditModal, setShowEditModal] = useState(false);
+	const [showPayModal, setShowPayModal] = useState(false);
+	const [payFormData, setPayFormData] = useState({
+		paymentStatus: '' as 'full_paid' | 'advance_payment' | '',
+		amountPaid: 0,
+	});
 
 	const [createFormData, setCreateFormData] = useState({
 		orderId: '',
@@ -147,11 +152,11 @@ export default function BillsPage() {
 							<body>
 								<div class="bill-header">
 									<h1>ZOLL & METÉR</h1>
-									<p>Bill ID: ${bill.billId}</p>
+									<p>Bill ID: ${bill.billId || bill.orderSnapshot?.orderNumber || 'N/A'}</p>
 								</div>
 								<div class="bill-details">
-									<p><strong>Customer:</strong> ${bill.customerSnapshot.name}</p>
-									<p><strong>Phone:</strong> ${bill.customerSnapshot.phone}</p>
+									<p><strong>Customer:</strong> ${bill.customerSnapshot?.name || 'N/A'}</p>
+									<p><strong>Phone:</strong> ${bill.customerSnapshot?.phone || 'N/A'}</p>
 									<p><strong>Date:</strong> ${new Date(bill.createdAt).toLocaleDateString()}</p>
 								</div>
 								<h3>Items</h3>
@@ -174,7 +179,7 @@ export default function BillsPage() {
 										<p><strong>Advance Paid:</strong> ₹${(bill.advancePaid || 0).toFixed(2)}</p>
 										<p><strong>Balance:</strong> ₹${(bill.balanceAmount || 0).toFixed(2)}</p>
 									` : ''}
-									<p><strong>Status:</strong> ${bill.paymentStatus?.replace('_', ' ').toUpperCase()}</p>
+									<p><strong>Status:</strong> ${((bill.paymentStatus as any) || '').replace('_', ' ').toUpperCase() || 'PAID'}</p>
 								</div>
 								<div class="barcode-container">
 									<svg id="${barcodeId}"></svg>
@@ -182,7 +187,7 @@ export default function BillsPage() {
 								<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
 								<script>
 									window.onload = function() {
-										JsBarcode("#${barcodeId}", "${bill.billId}", {
+										JsBarcode("#${barcodeId}", "${bill.billId || bill.orderSnapshot?.orderNumber || "BillID"}", {
 											format: "CODE128",
 											lineColor: "#000",
 											width: 2,
@@ -275,6 +280,28 @@ export default function BillsPage() {
 			if (!shouldPrint) alert('Bill created successfully');
 		} catch (err: any) {
 			alert(err.response?.data?.error || 'Failed to create bill');
+		} finally {
+			setActionInProgress(false);
+		}
+	};
+
+	// Pay bill
+	const handlePayBill = async () => {
+		if (!selectedBill || !payFormData.paymentStatus) return;
+
+		try {
+			setActionInProgress(true);
+			await axios.patch(`/api/admin/bills/${selectedBill._id}`, {
+				action: 'edit',
+				paymentStatus: payFormData.paymentStatus,
+				amountPaid: payFormData.amountPaid,
+			});
+			await fetchBills();
+			setShowPayModal(false);
+			setShowDetail(false);
+			alert('Payment updated successfully');
+		} catch (err: any) {
+			alert(err.response?.data?.error || 'Failed to update payment');
 		} finally {
 			setActionInProgress(false);
 		}
@@ -513,17 +540,32 @@ export default function BillsPage() {
 							className={`${buttonStyles.ghostBtn} ${styles.small}`}
 							title="View details"
 						>
-							View
+							<EyeIcon style={{ width: '18px' }} />
 						</button>
 						{row.status === 'active' && (
-							<button
-								onClick={() => handlePrint(row._id)}
-								className={`${buttonStyles.ghostBtn} ${styles.small}`}
-								title="Print bill"
-								disabled={actionInProgress}
-							>
-								<PrinterIcon />
-							</button>
+							<>
+								<button
+									onClick={() => handlePrint(row._id)}
+									className={`${buttonStyles.ghostBtn} ${styles.small}`}
+									title="Print bill"
+								>
+									<PrinterIcon style={{ width: '18px' }} />
+								</button>
+								<button
+									onClick={() => handleCancel(row._id)}
+									className={`${buttonStyles.ghostBtn} ${styles.small}`}
+									title="Archive/Cancel"
+								>
+									<ArchiveBoxIcon style={{ width: '18px' }} />
+								</button>
+								<button
+									onClick={() => handleDeleteBill(row._id)}
+									className={`${buttonStyles.ghostBtn} ${styles.small} ${styles.danger}`}
+									title="Delete bill"
+								>
+									<TrashIcon style={{ width: '18px', color: '#ff5252' }} />
+								</button>
+							</>
 						)}
 					</div>
 				)}
@@ -564,11 +606,18 @@ export default function BillsPage() {
 										<PencilIcon className={styles.icon} /> Edit
 									</button>
 									<button
-										onClick={() => handleRegenerate(selectedBill._id)}
-										className={buttonStyles.secondaryBtn}
+										onClick={() => {
+											setPayFormData({
+												paymentStatus: selectedBill.paymentStatus === 'pending_payment' ? '' : selectedBill.paymentStatus as any,
+												amountPaid: selectedBill.amountPaid || 0,
+											});
+											setShowPayModal(true);
+										}}
+										className={buttonStyles.primaryBtn}
 										disabled={actionInProgress}
+										style={{ backgroundColor: '#2e7d32', color: 'white' }}
 									>
-										Regenerate
+										Pay
 									</button>
 									<button
 										onClick={() => handleCancel(selectedBill._id)}
@@ -934,6 +983,58 @@ export default function BillsPage() {
 							className={formStyles.textarea}
 						/>
 					</div>
+				</div>
+			</Modal>
+
+			{/* Pay Bill Modal */}
+			<Modal
+				isOpen={showPayModal}
+				onClose={() => setShowPayModal(false)}
+				title="Update Payment"
+				subtitle={selectedBill ? `Bill #${selectedBill.billId || selectedBill.orderSnapshot?.orderNumber}` : ''}
+				footer={
+					<button
+						onClick={handlePayBill}
+						className={buttonStyles.primaryBtn}
+						disabled={actionInProgress}
+						style={{ backgroundColor: '#2e7d32' }}
+					>
+						Confirm Payment
+					</button>
+				}
+			>
+				<div className={formStyles.formSection}>
+					<div className={formStyles.formGroup}>
+						<label>Payment Status</label>
+						<select
+							value={payFormData.paymentStatus}
+							onChange={(e) => setPayFormData({ ...payFormData, paymentStatus: e.target.value as any })}
+							className={formStyles.select}
+						>
+							<option value="">Please select</option>
+							<option value="full_paid">Full Paid</option>
+							<option value="advance_payment">Advance Paid</option>
+						</select>
+					</div>
+
+					{payFormData.paymentStatus === 'advance_payment' && (
+						<div className={formStyles.formGroup}>
+							<label>How much paid?</label>
+							<input
+								type="number"
+								placeholder="Enter amount"
+								value={payFormData.amountPaid}
+								onChange={(e) => setPayFormData({ ...payFormData, amountPaid: parseFloat(e.target.value) || 0 })}
+								className={formStyles.input}
+							/>
+						</div>
+					)}
+					
+					{selectedBill && (
+						<div style={{ marginTop: '10px', fontSize: '14px', color: '#666' }}>
+							Total Rate: ₹{selectedBill.rate?.toFixed(2)}
+						</div>
+					)}
 				</div>
 			</Modal>
 		</div>
