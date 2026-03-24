@@ -18,18 +18,21 @@ const DisplayGallery = ({ imageGrid }) => {
 				<h2>{imageGrid.title}</h2>
 				<div className={`${styles.container}`}>
 					{imageGrid.images.map((image, index) => {
-						const productSlug = createSlug(image.text);
+						const productSlug = image.slug || createSlug(image.text || image.title);
+						const imgSrc = image.src || (image.variants && image.variants[0]?.images[0]);
+						const displayTitle = image.text || image.title;
+
 						return (
 							<div className={`${styles.frame}`} key={index}>
 								<Link href={`/product/${productSlug}`}>
 									<Image
-										src={image.src}
-										alt={image.text}
+										src={imgSrc}
+										alt={displayTitle}
 										width="205"
 										height="286"
 									/>
 									<p className={`${styles.imgtext}`}>
-										{image.text}
+										{displayTitle}
 									</p>
 {/* <div style={{ color: '#863f01', fontSize: '12px', marginTop: '8px', display: 'flex', justifyContent: 'center', gap: '2px' }}>
 										<i className="fa-solid fa-star"></i>

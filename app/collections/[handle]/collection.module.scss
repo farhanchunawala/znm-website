@@ -14,12 +14,21 @@
 			font-weight: 300;
 			margin-bottom: 20px;
 			letter-spacing: 2px;
+			color: #000;
+
+			:global([data-theme='dark']) & {
+				color: #fff;
+			}
 		}
 
 		.description {
 			font-size: 1.1rem;
 			color: #666;
 			line-height: 1.6;
+
+			:global([data-theme='dark']) & {
+				color: #ccc;
+			}
 		}
 	}
 }

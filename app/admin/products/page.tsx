@@ -56,7 +56,7 @@ export default function ProductsPage() {
 			if (activeCollection === 'all') {
 				const params = new URLSearchParams();
 				if (search) params.append('q', search);
-				if (status !== 'all') params.append('status', status);
+				params.append('status', status);
 				params.append('page', page.toString());
 				params.append('limit', limit.toString());
 

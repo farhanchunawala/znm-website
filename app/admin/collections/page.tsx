@@ -25,6 +25,7 @@ export default function CollectionsPage() {
 	const [showModal, setShowModal] = useState(false);
 	const [editingCollection, setEditingCollection] =
 		useState<Collection | null>(null);
+	const [status, setStatus] = useState<'all' | 'active' | 'hidden'>('all');
 	const [formData, setFormData] = useState({
 		title: '',
 		description: '',
@@ -39,13 +40,14 @@ export default function CollectionsPage() {
 
 	useEffect(() => {
 		fetchCollections();
-	}, [search, page]);
+	}, [search, page, status]);
 
 	async function fetchCollections() {
 		try {
 			setLoading(true);
 			const params = new URLSearchParams();
 			if (search) params.append('q', search);
+			params.append('status', status);
 			params.append('page', page.toString());
 			params.append('limit', limit.toString());
 
@@ -193,6 +195,18 @@ export default function CollectionsPage() {
 						setPage(1);
 					}}
 				/>
+				<select
+					value={status}
+					onChange={(e) => {
+						setStatus(e.target.value as any);
+						setPage(1);
+					}}
+					className={styles.statusSelect}
+				>
+					<option value="all">All Status</option>
+					<option value="active">Active</option>
+					<option value="hidden">Hidden</option>
+				</select>
 			</div>
 
 			{loading ? (

@@ -23,7 +23,7 @@ interface Bill {
 	status: 'active' | 'cancelled';
 	printCount: number;
 	createdAt: string;
-	items?: Array<{ description: string }>;
+	items?: Array<{ description: string; quantity: number; rate: number }>;
 	paymentStatus?: 'full_paid' | 'advance_payment' | 'pending_payment';
 	rate?: number;
 	advancePaid?: number;
@@ -56,7 +56,7 @@ export default function BillsPage() {
 		orderId: '',
 		paymentId: '',
 		notes: '',
-		items: [{ description: '' }],
+		items: [{ description: '', quantity: 1, rate: 0 }],
 		paymentStatus: '' as 'full_paid' | 'advance_payment' | 'pending_payment' | '',
 		rate: 0,
 		advancePaid: 0,
@@ -106,18 +106,25 @@ export default function BillsPage() {
 	};
 
 	// Print bill
-	const handlePrint = async (billId: string) => {
+	const handlePrint = async (billId: string, directBill?: Bill) => {
 		try {
 			setActionInProgress(true);
 			await axios.patch(`/api/admin/bills/${billId}`, { action: 'print' });
 			await fetchBills();
 			
 			// Open print preview
-			const bill = bills.find(b => b._id === billId) || selectedBill;
+			const bill = directBill || bills.find(b => b._id === billId) || selectedBill;
 			if (bill) {
 				const printWindow = window.open('', '_blank');
 				if (printWindow) {
-					const itemsHtml = (bill.items || []).map(item => `<li>${item.description}</li>`).join('') || '<li>No items listed</li>';
+					const itemsHtml = (bill.items || []).map(item => `
+						<tr>
+							<td>${item.description}</td>
+							<td style="text-align: center;">${item.quantity || 1}</td>
+							<td style="text-align: right;">₹${(item.rate || 0).toFixed(2)}</td>
+							<td style="text-align: right;">₹${((item.quantity || 1) * (item.rate || 0)).toFixed(2)}</td>
+						</tr>
+					`).join('') || '<tr><td colspan="4">No items listed</td></tr>';
 					const barcodeId = `barcode-${bill.billId}`;
 					
 					printWindow.document.write(`
@@ -148,7 +155,19 @@ export default function BillsPage() {
 									<p><strong>Date:</strong> ${new Date(bill.createdAt).toLocaleDateString()}</p>
 								</div>
 								<h3>Items</h3>
-								<ul>${itemsHtml}</ul>
+								<table style="margin-bottom: 20px;">
+									<thead>
+										<tr>
+											<th>Description</th>
+											<th style="text-align: center;">Qty</th>
+											<th style="text-align: right;">Rate</th>
+											<th style="text-align: right;">Total</th>
+										</tr>
+									</thead>
+									<tbody>
+										${itemsHtml}
+									</tbody>
+								</table>
 								<div class="total-section">
 									<p><strong>Rate:</strong> ₹${(bill.rate || 0).toFixed(2)}</p>
 									${bill.paymentStatus === 'advance_payment' ? `
@@ -222,7 +241,7 @@ export default function BillsPage() {
 	};
 
 	// Create bill
-	const handleCreateBill = async () => {
+	const handleCreateBill = async (shouldPrint = false) => {
 		if (!createFormData.orderId || !createFormData.paymentStatus) {
 			alert('Please fill in all required fields');
 			return;
@@ -230,23 +249,30 @@ export default function BillsPage() {
 
 		try {
 			setActionInProgress(true);
-			await axios.post('/api/admin/bills', {
+			const response = await axios.post('/api/admin/bills', {
 				...createFormData,
 				paymentId: createFormData.paymentId || 'manual'
 			});
+			const newBill = response.data.data;
+			
 			await fetchBills();
 			setShowCreateModal(false);
+			
+			if (shouldPrint && newBill) {
+				handlePrint(newBill._id, newBill);
+			}
+			
 			setCreateFormData({ 
 				orderId: '', 
 				paymentId: '', 
 				notes: '', 
-				items: [{ description: '' }],
+				items: [{ description: '', quantity: 1, rate: 0 }],
 				paymentStatus: '',
 				rate: 0,
 				advancePaid: 0,
 				balanceAmount: 0
 			});
-			alert('Bill created successfully');
+			if (!shouldPrint) alert('Bill created successfully');
 		} catch (err: any) {
 			alert(err.response?.data?.error || 'Failed to create bill');
 		} finally {
@@ -398,21 +424,29 @@ export default function BillsPage() {
 						}} />
 						<button
 							onClick={() => {
-								const generateObjectId = () => {
-									const chars = '0123456789abcdef';
-									return Array.from({ length: 24 }).map(() => chars[Math.floor(Math.random() * 16)]).join('');
+								const fetchNextId = async () => {
+									try {
+										const res = await axios.get('/api/admin/bills?nextId=true');
+										return res.data.nextId;
+									} catch {
+										const today = new Date();
+										return `znm-${today.getDate().toString().padStart(2, '0')}${(today.getMonth() + 1).toString().padStart(2, '0')}${today.getFullYear()}001`;
+									}
 								};
-								setCreateFormData({
-									orderId: generateObjectId(),
-									paymentId: '',
-									notes: '',
-									items: [{ description: '' }],
-									paymentStatus: '',
-									rate: 0,
-									advancePaid: 0,
-									balanceAmount: 0,
+
+								fetchNextId().then(nextId => {
+									setCreateFormData({
+										orderId: nextId,
+										paymentId: '',
+										notes: '',
+										items: [{ description: '', quantity: 1, rate: 0 }],
+										paymentStatus: '',
+										rate: 0,
+										advancePaid: 0,
+										balanceAmount: 0,
+									});
+									setShowCreateModal(true);
 								});
-								setShowCreateModal(true);
 							}}
 							className={buttonStyles.primaryBtn}
 						>
@@ -621,11 +655,14 @@ export default function BillsPage() {
 						{selectedBill.items && selectedBill.items.length > 0 && (
 							<div className={styles.itemsSection}>
 								<p className={styles.detailLabel}>Items</p>
-								<ul className={styles.itemList}>
+								<div className={styles.itemGrid}>
 									{selectedBill.items.map((item, idx) => (
-										<li key={idx} className={styles.detailValue}>{item.description}</li>
+										<div key={idx} className={styles.itemRow}>
+											<span className={styles.detailValue}>{item.description} (x{item.quantity || 1})</span>
+											<span className={styles.detailValue}>₹{((item.quantity || 1) * (item.rate || 0)).toFixed(2)}</span>
+										</div>
 									))}
-								</ul>
+								</div>
 							</div>
 						)}
 						{selectedBill.notes && (
@@ -646,21 +683,31 @@ export default function BillsPage() {
 				subtitle="Create a bill for an order"
 				size="md"
 				footer={
-					<button
-						onClick={handleCreateBill}
-						className={buttonStyles.primaryBtn}
-						disabled={actionInProgress}
-					>
-						Create Bill
-					</button>
+					<div style={{ display: 'flex', gap: '12px' }}>
+						<button
+							onClick={() => handleCreateBill(false)}
+							className={buttonStyles.secondaryBtn}
+							disabled={actionInProgress}
+						>
+							Save Only
+						</button>
+						<button
+							onClick={() => handleCreateBill(true)}
+							className={buttonStyles.primaryBtn}
+							disabled={actionInProgress}
+							style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+						>
+							<PrinterIcon style={{ width: '18px' }} /> Create & Print
+						</button>
+					</div>
 				}
 			>
 				<div className={formStyles.formSection}>
 					<div className={formStyles.formGroup}>
-						<label>Order ID <span className={formStyles.required}>*</span></label>
+						<label>Bill/Order Number <span className={formStyles.required}>*</span></label>
 						<input
 							type="text"
-							placeholder="Enter order ID"
+							placeholder="znm-DDMMYYYYXXX"
 							value={createFormData.orderId}
 							onChange={(e) =>
 								setCreateFormData({ ...createFormData, orderId: e.target.value })
@@ -670,25 +717,79 @@ export default function BillsPage() {
 					</div>
 
 					<div className={formStyles.formGroup}>
-						<label>Items Description</label>
+						<label>Items Description, Quantity & Rate</label>
 						{createFormData.items.map((item, index) => (
-							<div key={index} style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
-								<input
-									type="text"
-									placeholder={index === 0 ? "e.g., he took a kurta" : "Add more detail..."}
-									value={item.description}
-									onChange={(e) => {
-										const newItems = [...createFormData.items];
-										newItems[index].description = e.target.value;
-										setCreateFormData({ ...createFormData, items: newItems });
-									}}
-									className={formStyles.input}
-								/>
+							<div key={index} style={{ display: 'flex', gap: '8px', marginBottom: '8px', alignItems: 'center' }}>
+								<div style={{ flex: 3 }}>
+									<input
+										type="text"
+										placeholder={index === 0 ? "Shirt" : "Add more detail..."}
+										value={item.description}
+										onChange={(e) => {
+											const newItems = [...createFormData.items];
+											newItems[index].description = e.target.value;
+											setCreateFormData({ ...createFormData, items: newItems });
+										}}
+										className={formStyles.input}
+									/>
+								</div>
+								<div style={{ flex: 1 }}>
+									<input
+										type="number"
+										placeholder="Qty"
+										value={item.quantity || ''}
+										onChange={(e) => {
+											const qty = parseInt(e.target.value) || 0;
+											const newItems = [...createFormData.items];
+											newItems[index].quantity = qty;
+											
+											// Auto-calculate total rate
+											const totalRate = newItems.reduce((sum, i) => sum + ((i.quantity || 1) * (i.rate || 0)), 0);
+											
+											setCreateFormData({ 
+												...createFormData, 
+												items: newItems,
+												rate: totalRate,
+												balanceAmount: totalRate - (createFormData.advancePaid || 0)
+											});
+										}}
+										className={formStyles.input}
+									/>
+								</div>
+								<div style={{ flex: 1.5 }}>
+									<input
+										type="number"
+										placeholder="Rate"
+										value={item.rate || ''}
+										onChange={(e) => {
+											const val = parseFloat(e.target.value) || 0;
+											const newItems = [...createFormData.items];
+											newItems[index].rate = val;
+											
+											// Auto-calculate total rate
+											const totalRate = newItems.reduce((sum, i) => sum + ((i.quantity || 1) * (i.rate || 0)), 0);
+											
+											setCreateFormData({ 
+												...createFormData, 
+												items: newItems,
+												rate: totalRate,
+												balanceAmount: totalRate - (createFormData.advancePaid || 0)
+											});
+										}}
+										className={formStyles.input}
+									/>
+								</div>
 								{index > 0 && (
 									<button 
 										onClick={() => {
 											const newItems = createFormData.items.filter((_, i) => i !== index);
-											setCreateFormData({ ...createFormData, items: newItems });
+											const totalRate = newItems.reduce((sum, i) => sum + ((i.quantity || 1) * (i.rate || 0)), 0);
+											setCreateFormData({ 
+												...createFormData, 
+												items: newItems,
+												rate: totalRate,
+												balanceAmount: totalRate - (createFormData.advancePaid || 0)
+											});
 										}}
 										className={buttonStyles.dangerBtn}
 										style={{ padding: '8px' }}
@@ -701,7 +802,7 @@ export default function BillsPage() {
 						<button 
 							onClick={() => setCreateFormData({ 
 								...createFormData, 
-								items: [...createFormData.items, { description: '' }] 
+								items: [...createFormData.items, { description: '', quantity: 1, rate: 0 }] 
 							})}
 							className={buttonStyles.ghostBtn}
 							style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '14px' }}

@@ -57,7 +57,7 @@ export interface IBiller extends Document {
   currency: string; // Default: INR
   
   // Custom Items
-  items: Array<{ description: string; rate: number }>;
+  items: Array<{ description: string; quantity: number; rate: number }>;
   
   // Snapshots (immutable)
   customerSnapshot: IBillerCustomerSnapshot;
@@ -154,6 +154,7 @@ const BillerSchema = new Schema<IBiller>(
     items: [
       {
         description: { type: String, required: true },
+        quantity: { type: Number, required: true, default: 1 },
         rate: { type: Number, required: true, default: 0 },
       },
     ],

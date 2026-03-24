@@ -120,8 +120,8 @@ export async function createCollection(data: {
 		if (count !== data.productIds.length) {
 			throw new AppError(
 				'Some product IDs are invalid',
-				'INVALID_PRODUCTS',
-				400
+				400,
+				'INVALID_PRODUCTS'
 			);
 		}
 	}
@@ -166,7 +166,7 @@ export async function updateCollection(
 
 	const collection = await Collection.findById(collectionId);
 	if (!collection) {
-		throw new AppError('Collection not found', 'NOT_FOUND', 404);
+		throw new AppError('Collection not found', 404, 'NOT_FOUND');
 	}
 
 	// Update handle if title changed
@@ -190,8 +190,8 @@ export async function updateCollection(
 		if (count !== data.productIds.length) {
 			throw new AppError(
 				'Some product IDs are invalid',
-				'INVALID_PRODUCTS',
-				400
+				400,
+				'INVALID_PRODUCTS'
 			);
 		}
 		collection.productIds = data.productIds.map(
@@ -248,7 +248,7 @@ export async function getCollectionProducts(
 
 	const collection = await Collection.findById(collectionId);
 	if (!collection) {
-		throw new AppError('Collection not found', 'NOT_FOUND', 404);
+		throw new AppError('Collection not found', 404, 'NOT_FOUND');
 	}
 
 	// Determine which product IDs to use
@@ -282,14 +282,14 @@ export async function addProductsToCollection(
 
 	const collection = await Collection.findById(collectionId);
 	if (!collection) {
-		throw new AppError('Collection not found', 'NOT_FOUND', 404);
+		throw new AppError('Collection not found', 404, 'NOT_FOUND');
 	}
 
 	if (collection.type !== 'manual') {
 		throw new AppError(
 			'Cannot manually add products to dynamic collection',
-			'INVALID_TYPE',
-			422
+			422,
+			'INVALID_TYPE'
 		);
 	}
 
@@ -317,7 +317,7 @@ export async function removeProductFromCollection(
 
 	const collection = await Collection.findById(collectionId);
 	if (!collection) {
-		throw new AppError('Collection not found', 'NOT_FOUND', 404);
+		throw new AppError('Collection not found', 404, 'NOT_FOUND');
 	}
 
 	collection.productIds = collection.productIds.filter(
@@ -337,8 +337,10 @@ export async function getActiveCollections(): Promise<ICollection[]> {
 
 	return Collection.find({
 		status: 'active',
-		$or: [{ startAt: { $lte: now } }, { startAt: { $exists: false } }],
-		$or: [{ endAt: { $gte: now } }, { endAt: { $exists: false } }],
+		$and: [
+			{ $or: [{ startAt: { $lte: now } }, { startAt: { $exists: false } }] },
+			{ $or: [{ endAt: { $gte: now } }, { endAt: { $exists: false } }] },
+		],
 	}).sort({ priority: -1 });
 }
 
@@ -370,14 +372,19 @@ export async function validateRules(rules: IRule[]): Promise<void> {
 		if (!validOperators.includes(rule.operator)) {
 			throw new AppError(
 				`Invalid operator: ${rule.operator}`,
-				'INVALID_OPERATOR',
-				400
+				400,
+				'INVALID_OPERATOR'
 			);
 		}
 
 		// Basic field validation (could be extended)
 		if (!rule.field) {
-			throw new AppError('Rule field is required', 'MISSING_FIELD', 400);
+			throw new AppError('Rule field is required', 400, 'MISSING_FIELD');
+		}
+		// Assuming 'price' is a field that might be validated here, based on the instruction.
+		// This condition is added based on the provided "Code Edit" snippet.
+		if (rule.field === 'variants.price' && typeof rule.value === 'number' && rule.value <= 0) {
+			throw new AppError('Price must be greater than 0', 400, 'INVALID_PRICE');
 		}
 
 		// Validate value based on operator
@@ -387,8 +394,8 @@ export async function validateRules(rules: IRule[]): Promise<void> {
 		) {
 			throw new AppError(
 				`${rule.operator} requires array value`,
-				'INVALID_VALUE',
-				400
+				400,
+				'INVALID_VALUE'
 			);
 		}
 	}
@@ -409,7 +416,7 @@ export async function deleteCollection(
 	);
 
 	if (!collection) {
-		throw new AppError('Collection not found', 'NOT_FOUND', 404);
+		throw new AppError('Collection not found', 404, 'NOT_FOUND');
 	}
 
 	return collection;
@@ -445,7 +452,7 @@ export async function searchCollections(
 		searchQuery.type = filters.type;
 	}
 
-	if (filters?.status !== undefined) {
+	if (filters?.status !== undefined && (filters.status as any) !== 'all') {
 		searchQuery.status = filters.status;
 	}
 
@@ -459,3 +466,14 @@ export async function searchCollections(
 
 	return { collections, total };
 }
+
+/**
+ * Get collection by handle
+ */
+export async function getCollectionByHandle(
+	handle: string
+): Promise<ICollection | null> {
+	await dbConnect();
+	return Collection.findOne({ handle, status: 'active' });
+}
+

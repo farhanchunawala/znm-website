@@ -108,12 +108,13 @@ export async function generateVariantSKU(
  */
 export function validatePricing(price: number, comparePrice?: number): void {
 	if (price <= 0) {
-		throw new AppError('Price must be greater than 0', 'INVALID_PRICE');
+		throw new AppError('Price must be greater than 0', 400, 'INVALID_PRICE');
 	}
 
 	if (comparePrice && comparePrice < price) {
 		throw new AppError(
 			'Compare price (MRP) must be greater than or equal to selling price',
+			400,
 			'INVALID_COMPARE_PRICE'
 		);
 	}
@@ -127,22 +128,22 @@ export async function validatePublish(productId: string): Promise<IProduct> {
 
 	const product = await Product.findById(productId);
 	if (!product) {
-		throw new AppError('Product not found', 'NOT_FOUND', 404);
+		throw new AppError('Product not found', 404, 'NOT_FOUND');
 	}
 
 	if (!product.title || product.title.trim().length === 0) {
 		throw new AppError(
 			'Product must have a title before publishing',
-			'MISSING_TITLE',
-			422
+			422,
+			'MISSING_TITLE'
 		);
 	}
 
 	if (!product.variants || product.variants.length === 0) {
 		throw new AppError(
 			'Product must have at least 1 variant before publishing',
-			'NO_VARIANTS',
-			422
+			422,
+			'NO_VARIANTS'
 		);
 	}
 
@@ -152,8 +153,8 @@ export async function validatePublish(productId: string): Promise<IProduct> {
 		if (!variant.sku) {
 			throw new AppError(
 				`Variant missing SKU: ${variant._id}`,
-				'VARIANT_MISSING_SKU',
-				422
+				422,
+				'VARIANT_MISSING_SKU'
 			);
 		}
 	}
@@ -181,8 +182,8 @@ export async function canDeleteProduct(productId: string): Promise<boolean> {
 		if (activeOrder) {
 			throw new AppError(
 				'Cannot delete product with active orders',
-				'PRODUCT_IN_USE',
-				409
+				409,
+				'PRODUCT_IN_USE'
 			);
 		}
 	} catch (err) {
@@ -210,7 +211,7 @@ export async function softDeleteProduct(productId: string): Promise<IProduct> {
 	);
 
 	if (!product) {
-		throw new AppError('Product not found', 'NOT_FOUND', 404);
+		throw new AppError('Product not found', 404, 'NOT_FOUND');
 	}
 
 	return product;
@@ -301,7 +302,7 @@ export async function searchProducts(
 		searchQuery.tags = filters.tag;
 	}
 
-	if (filters?.status) {
+	if (filters?.status !== undefined && (filters.status as string) !== 'all') {
 		searchQuery.status = filters.status;
 	}
 
@@ -340,8 +341,8 @@ export async function addVariantToProduct(
 	if (!isUnique) {
 		throw new AppError(
 			`Variant SKU '${variant.sku}' already exists`,
-			'SKU_EXISTS',
-			409
+			409,
+			'SKU_EXISTS'
 		);
 	}
 
@@ -381,14 +382,14 @@ export async function removeVariantFromProduct(
 
 	const product = await Product.findById(productId);
 	if (!product) {
-		throw new AppError('Product not found', 'NOT_FOUND', 404);
+		throw new AppError('Product not found', 404, 'NOT_FOUND');
 	}
 
 	if (product.variants.length === 1) {
 		throw new AppError(
 			'Cannot delete the only variant. Product must have at least 1 variant',
-			'LAST_VARIANT',
-			422
+			422,
+			'LAST_VARIANT'
 		);
 	}
 

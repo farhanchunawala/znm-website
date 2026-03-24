@@ -11,7 +11,7 @@ interface CreateBillerOptions {
   createdBy: 'system' | 'admin';
   createdById?: string;
   notes?: string;
-  items?: Array<{ description: string }>;
+  items?: Array<{ description: string; quantity: number; rate: number }>;
   paymentStatus?: 'full_paid' | 'advance_payment' | 'pending_payment';
   rate?: number;
   advancePaid?: number;
@@ -156,9 +156,16 @@ class BillerService {
         balanceAmount = 0
       } = options;
 
-      // Validate order exists, or use ad-hoc logic
-      const order = await Order.findById(orderId).populate('customerId');
-      const payment = await Payment.findById(paymentId);
+      // Check if orderId is a valid ObjectId
+      const isValidObjectId = mongoose.Types.ObjectId.isValid(orderId);
+      
+      let order: any = null;
+      let payment: any = null;
+      
+      if (isValidObjectId) {
+        order = await Order.findById(orderId).populate('customerId');
+        payment = await Payment.findById(paymentId);
+      }
 
       let customerSnapshot: IBillerCustomerSnapshot;
       let orderSnapshot: IBillerOrderSnapshot;
@@ -222,9 +229,12 @@ class BillerService {
           ? items.map(i => i.description).join(', ')
           : 'Ad-hoc Item';
 
+        // Generate custom bill ID
+        const billId = await this.generateBillId();
+
         orderSnapshot = {
-          orderId: new mongoose.Types.ObjectId(orderId),
-          orderNumber: `ORD-${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
+          orderId: mongoose.Types.ObjectId.isValid(orderId) ? new mongoose.Types.ObjectId(orderId) : new mongoose.Types.ObjectId(),
+          orderNumber: billId, // Use billId format as requested for ad-hoc
           itemCount: items.length || 1,
           itemsSummary,
           address: 'Ad-hoc Address',
@@ -249,14 +259,17 @@ class BillerService {
         }
       }
 
-      // Generate custom bill ID
-      const billId = await this.generateBillId();
+      // Generate custom bill ID if not already generated
+      const billId = orderSnapshot?.orderNumber?.startsWith('znm-') ? orderSnapshot.orderNumber : await this.generateBillId();
 
       // Create bill
+      const finalOrderId = isValidObjectId ? new mongoose.Types.ObjectId(orderId) : new mongoose.Types.ObjectId();
+      const finalPaymentId = mongoose.Types.ObjectId.isValid(paymentId) ? new mongoose.Types.ObjectId(paymentId) : new mongoose.Types.ObjectId();
+
       const bill = new Biller({
         billId,
-        orderId: new mongoose.Types.ObjectId(orderId),
-        paymentId: new mongoose.Types.ObjectId(paymentId),
+        orderId: finalOrderId,
+        paymentId: finalPaymentId,
         billType,
         paymentStatus,
         rate,

@@ -15,8 +15,8 @@ export async function GET(
     await dbConnect();
 
     // Verify admin authorization
-    const auth = await verifyAdminAuth(request);
-    if (!auth.success) {
+    const authenticated = await verifyAdminAuth();
+    if (!authenticated) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -47,8 +47,8 @@ export async function PATCH(
     await dbConnect();
 
     // Verify admin authorization
-    const auth = await verifyAdminAuth(request);
-    if (!auth.success) {
+    const authenticated = await verifyAdminAuth();
+    if (!authenticated) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -66,17 +66,15 @@ export async function PATCH(
       if (!reason) {
         return NextResponse.json({ error: 'Reason is required for cancellation' }, { status: 400 });
       }
-      result = await BillerService.cancelBiller(id, reason, auth.userId);
+      result = await BillerService.cancelBiller(id, reason);
     } else if (action === 'regenerate') {
       // Regenerate bill (create new, archive old)
-      result = await BillerService.regenerateBiller(id, auth.userId);
+      result = await BillerService.regenerateBiller(id);
     } else {
-      // Regular edit (amount, notes)
       result = await BillerService.updateBiller(id, {
         amountToCollect,
         amountPaid,
         notes,
-        updatedBy: auth.userId,
       });
     }
 
@@ -103,15 +101,15 @@ export async function DELETE(
     await dbConnect();
 
     // Verify admin authorization
-    const auth = await verifyAdminAuth(request);
-    if (!auth.success) {
+    const authenticated = await verifyAdminAuth();
+    if (!authenticated) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { id } = params;
 
     // Delete bill
-    const success = await BillerService.deleteBiller(id, auth.userId);
+    const success = await BillerService.deleteBiller(id);
 
     if (!success) {
       return NextResponse.json({ error: 'Failed to delete bill' }, { status: 400 });

@@ -19,6 +19,12 @@ export async function GET(request: NextRequest) {
 
     // Parse query parameters
     const searchParams = request.nextUrl.searchParams;
+
+    // Support for pre-generating the next ID
+    if (searchParams.get('nextId') === 'true') {
+      const nextId = await BillerService.generateBillId();
+      return NextResponse.json({ success: true, nextId });
+    }
     const billType = searchParams.get('billType') as 'COD' | 'PAID' | null;
     const status = searchParams.get('status') as 'active' | 'cancelled' | null;
     const skip = parseInt(searchParams.get('skip') || '0');
