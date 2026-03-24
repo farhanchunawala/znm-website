@@ -12,8 +12,8 @@ export async function GET(request: NextRequest) {
     await dbConnect();
 
     // Verify admin authorization
-    const auth = await verifyAdminAuth(request);
-    if (!auth.success) {
+    const authenticated = await verifyAdminAuth();
+    if (!authenticated) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -59,13 +59,13 @@ export async function POST(request: NextRequest) {
     await dbConnect();
 
     // Verify admin authorization
-    const auth = await verifyAdminAuth(request);
-    if (!auth.success) {
+    const authenticated = await verifyAdminAuth();
+    if (!authenticated) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const body = await request.json();
-    const { orderId, paymentId, notes } = body;
+    const { orderId, paymentId, notes, items, paymentStatus, rate, advancePaid, balanceAmount } = body;
 
     // Validate required fields
     if (!orderId || !paymentId) {
@@ -78,10 +78,15 @@ export async function POST(request: NextRequest) {
     // Create bill
     const bill = await BillerService.createBiller({
       orderId,
-      paymentId,
+      paymentId: paymentId || 'manual',
       createdBy: 'admin',
-      createdById: auth.userId,
+      createdById: undefined, // Or get from session if available
       notes,
+      items,
+      paymentStatus,
+      rate,
+      advancePaid,
+      balanceAmount,
     });
 
     return NextResponse.json(

@@ -11,6 +11,11 @@ interface CreateBillerOptions {
   createdBy: 'system' | 'admin';
   createdById?: string;
   notes?: string;
+  items?: Array<{ description: string }>;
+  paymentStatus?: 'full_paid' | 'advance_payment' | 'pending_payment';
+  rate?: number;
+  advancePaid?: number;
+  balanceAmount?: number;
 }
 
 interface UpdateBillerOptions {
@@ -34,6 +39,43 @@ interface ListBillerOptions {
  * Enforces global rule: automated + manual admin control
  */
 class BillerService {
+  /**
+   * GENERATE CUSTOM BILL ID
+   * Format: znm-DDMMYYYYXXX
+   */
+  async generateBillId(): Promise<string> {
+    const today = new Date();
+    const day = today.getDate().toString().padStart(2, '0');
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const year = today.getFullYear().toString();
+    const dateStr = `${day}${month}${year}`;
+    const prefix = `znm-${dateStr}`;
+
+    // Find all bills for today to find empty slots
+    const existingBills = await Biller.find({
+      billId: { $regex: `^${prefix}` }
+    }).select('billId');
+
+    const existingNumbers = existingBills
+      .map(b => {
+        const numPart = b.billId.replace(prefix, '');
+        return parseInt(numPart);
+      })
+      .filter(n => !isNaN(n))
+      .sort((a, b) => a - b);
+
+    let nextNumber = 1;
+    for (const num of existingNumbers) {
+      if (num === nextNumber) {
+        nextNumber++;
+      } else if (num > nextNumber) {
+        break; // Found an empty slot
+      }
+    }
+
+    return `${prefix}${nextNumber.toString().padStart(3, '0')}`;
+  }
+
   /**
    * AUTO-GENERATE BILL (Called after order confirmation)
    * Triggered automatically when:
@@ -101,7 +143,18 @@ class BillerService {
    */
   async createBiller(options: CreateBillerOptions): Promise<IBiller> {
     try {
-      const { orderId, paymentId, createdBy, createdById, notes } = options;
+      const {
+        orderId,
+        paymentId,
+        createdBy,
+        createdById,
+        notes,
+        items = [],
+        paymentStatus = 'full_paid',
+        rate = 0,
+        advancePaid = 0,
+        balanceAmount = 0
+      } = options;
 
       // Validate order exists, or use ad-hoc logic
       const order = await Order.findById(orderId).populate('customerId');
@@ -124,7 +177,10 @@ class BillerService {
         };
 
         // Build order snapshot
-        const itemsSummary = `${order.items.length} item${order.items.length !== 1 ? 's' : ''}`;
+        const itemsSummary = items.length > 0 
+          ? items.map(i => i.description).join(', ')
+          : `${order.items.length} item${order.items.length !== 1 ? 's' : ''}`;
+          
         const addressLine =
           `${order.address.recipientName}, ${order.address.streetAddress}, ${order.address.city}, ${order.address.state} ${order.address.postalCode}`;
 
@@ -136,10 +192,24 @@ class BillerService {
           address: addressLine,
         };
 
-        // Determine bill type
-        billType = payment.method === 'COD' ? 'COD' : 'PAID';
-        amountToCollect = billType === 'COD' ? order.totals.grandTotal : 0;
-        amountPaid = billType === 'PAID' ? order.totals.grandTotal : 0;
+        // Determine bill type and amounts based on the new logic
+        if (paymentStatus === 'full_paid') {
+          billType = 'PAID';
+          amountPaid = rate || order.totals.grandTotal;
+          amountToCollect = 0;
+        } else if (paymentStatus === 'pending_payment') {
+          billType = 'COD';
+          amountPaid = 0;
+          amountToCollect = rate || order.totals.grandTotal;
+        } else if (paymentStatus === 'advance_payment') {
+          billType = 'COD'; // Technically part COD part PAID, but we'll collect balance
+          amountPaid = advancePaid;
+          amountToCollect = balanceAmount;
+        } else {
+          billType = payment.method === 'COD' ? 'COD' : 'PAID';
+          amountToCollect = billType === 'COD' ? order.totals.grandTotal : 0;
+          amountPaid = billType === 'PAID' ? order.totals.grandTotal : 0;
+        }
       } else {
         // Ad-hoc creation if order or payment doesn't explicitly exist
         customerSnapshot = {
@@ -148,29 +218,56 @@ class BillerService {
           phone: 'N/A',
         };
 
+        const itemsSummary = items.length > 0 
+          ? items.map(i => i.description).join(', ')
+          : 'Ad-hoc Item';
+
         orderSnapshot = {
           orderId: new mongoose.Types.ObjectId(orderId),
           orderNumber: `ORD-${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
-          itemCount: 1,
-          itemsSummary: 'Ad-hoc Item',
+          itemCount: items.length || 1,
+          itemsSummary,
           address: 'Ad-hoc Address',
         };
 
-        billType = 'PAID';
-        amountPaid = 0;
-        amountToCollect = 0;
+        if (paymentStatus === 'full_paid') {
+          billType = 'PAID';
+          amountPaid = rate;
+          amountToCollect = 0;
+        } else if (paymentStatus === 'pending_payment') {
+          billType = 'COD';
+          amountPaid = 0;
+          amountToCollect = rate;
+        } else if (paymentStatus === 'advance_payment') {
+          billType = 'COD';
+          amountPaid = advancePaid;
+          amountToCollect = balanceAmount;
+        } else {
+          billType = 'PAID';
+          amountPaid = 0;
+          amountToCollect = 0;
+        }
       }
+
+      // Generate custom bill ID
+      const billId = await this.generateBillId();
 
       // Create bill
       const bill = new Biller({
+        billId,
         orderId: new mongoose.Types.ObjectId(orderId),
         paymentId: new mongoose.Types.ObjectId(paymentId),
         billType,
+        paymentStatus,
+        rate,
+        advancePaid,
+        balanceAmount,
         amountToCollect,
         amountPaid,
         currency: 'INR',
         customerSnapshot,
         orderSnapshot,
+        items,
         status: 'active',
         printCount: 0,
         createdBy,

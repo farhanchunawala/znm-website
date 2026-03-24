@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { DocumentTextIcon, PrinterIcon, TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { DocumentTextIcon, PrinterIcon, TrashIcon, PencilIcon, PlusIcon, MinusIcon } from '@heroicons/react/24/outline';
+import JsBarcode from 'jsbarcode';
 import axios from 'axios';
 import PageHeader from '@/components/Admin/PageHeader';
 import DataTable from '@/components/Admin/DataTable';
@@ -13,6 +14,7 @@ import formStyles from '@/components/Admin/_forms.module.scss';
 
 interface Bill {
 	_id: string;
+	billId: string;
 	orderSnapshot: { orderNumber: string };
 	customerSnapshot: { name: string; phone: string };
 	billType: 'COD' | 'PAID';
@@ -21,6 +23,11 @@ interface Bill {
 	status: 'active' | 'cancelled';
 	printCount: number;
 	createdAt: string;
+	items?: Array<{ description: string }>;
+	paymentStatus?: 'full_paid' | 'advance_payment' | 'pending_payment';
+	rate?: number;
+	advancePaid?: number;
+	balanceAmount?: number;
 }
 
 interface BillDetail extends Bill {
@@ -49,6 +56,11 @@ export default function BillsPage() {
 		orderId: '',
 		paymentId: '',
 		notes: '',
+		items: [{ description: '' }],
+		paymentStatus: '' as 'full_paid' | 'advance_payment' | 'pending_payment' | '',
+		rate: 0,
+		advancePaid: 0,
+		balanceAmount: 0,
 	});
 
 	const [editFormData, setEditFormData] = useState({
@@ -99,7 +111,74 @@ export default function BillsPage() {
 			setActionInProgress(true);
 			await axios.patch(`/api/admin/bills/${billId}`, { action: 'print' });
 			await fetchBills();
-			alert('Bill printed successfully');
+			
+			// Open print preview
+			const bill = bills.find(b => b._id === billId) || selectedBill;
+			if (bill) {
+				const printWindow = window.open('', '_blank');
+				if (printWindow) {
+					const itemsHtml = (bill.items || []).map(item => `<li>${item.description}</li>`).join('') || '<li>No items listed</li>';
+					const barcodeId = `barcode-${bill.billId}`;
+					
+					printWindow.document.write(`
+						<html>
+							<head>
+								<title>Print Bill - ${bill.billId}</title>
+								<style>
+									body { font-family: sans-serif; padding: 20px; }
+									.bill-header { text-align: center; margin-bottom: 20px; }
+									.bill-details { margin-bottom: 20px; }
+									.barcode-container { text-align: center; margin-top: 30px; }
+									table { width: 100%; border-collapse: collapse; }
+									th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+									.total-section { margin-top: 20px; text-align: right; }
+									@media print {
+										.no-print { display: none; }
+									}
+								</style>
+							</head>
+							<body>
+								<div class="bill-header">
+									<h1>ZOLL & METÉR</h1>
+									<p>Bill ID: ${bill.billId}</p>
+								</div>
+								<div class="bill-details">
+									<p><strong>Customer:</strong> ${bill.customerSnapshot.name}</p>
+									<p><strong>Phone:</strong> ${bill.customerSnapshot.phone}</p>
+									<p><strong>Date:</strong> ${new Date(bill.createdAt).toLocaleDateString()}</p>
+								</div>
+								<h3>Items</h3>
+								<ul>${itemsHtml}</ul>
+								<div class="total-section">
+									<p><strong>Rate:</strong> ₹${(bill.rate || 0).toFixed(2)}</p>
+									${bill.paymentStatus === 'advance_payment' ? `
+										<p><strong>Advance Paid:</strong> ₹${(bill.advancePaid || 0).toFixed(2)}</p>
+										<p><strong>Balance:</strong> ₹${(bill.balanceAmount || 0).toFixed(2)}</p>
+									` : ''}
+									<p><strong>Status:</strong> ${bill.paymentStatus?.replace('_', ' ').toUpperCase()}</p>
+								</div>
+								<div class="barcode-container">
+									<svg id="${barcodeId}"></svg>
+								</div>
+								<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+								<script>
+									window.onload = function() {
+										JsBarcode("#${barcodeId}", "${bill.billId}", {
+											format: "CODE128",
+											lineColor: "#000",
+											width: 2,
+											height: 40,
+											displayValue: true
+										});
+										setTimeout(() => { window.print(); }, 500);
+									};
+								</script>
+							</body>
+						</html>
+					`);
+					printWindow.document.close();
+				}
+			}
 		} catch (err: any) {
 			alert(err.response?.data?.error || 'Failed to print bill');
 		} finally {
@@ -144,17 +223,29 @@ export default function BillsPage() {
 
 	// Create bill
 	const handleCreateBill = async () => {
-		if (!createFormData.orderId || !createFormData.paymentId) {
+		if (!createFormData.orderId || !createFormData.paymentStatus) {
 			alert('Please fill in all required fields');
 			return;
 		}
 
 		try {
 			setActionInProgress(true);
-			await axios.post('/api/admin/bills', createFormData);
+			await axios.post('/api/admin/bills', {
+				...createFormData,
+				paymentId: createFormData.paymentId || 'manual'
+			});
 			await fetchBills();
 			setShowCreateModal(false);
-			setCreateFormData({ orderId: '', paymentId: '', notes: '' });
+			setCreateFormData({ 
+				orderId: '', 
+				paymentId: '', 
+				notes: '', 
+				items: [{ description: '' }],
+				paymentStatus: '',
+				rate: 0,
+				advancePaid: 0,
+				balanceAmount: 0
+			});
 			alert('Bill created successfully');
 		} catch (err: any) {
 			alert(err.response?.data?.error || 'Failed to create bill');
@@ -203,15 +294,21 @@ export default function BillsPage() {
 
 	const columns = [
 		{
+			key: 'billId',
+			label: 'Bill ID',
+			width: '15%',
+			render: (val: string) => <span className={styles.billId}>{val}</span>,
+		},
+		{
 			key: 'orderSnapshot',
 			label: 'Order',
-			width: '15%',
+			width: '12%',
 			render: (val: any) => <strong>{val.orderNumber}</strong>,
 		},
 		{
 			key: 'customerSnapshot',
 			label: 'Customer',
-			width: '20%',
+			width: '18%',
 			render: (val: any) => <div>{val.name}</div>,
 		},
 		{
@@ -307,8 +404,13 @@ export default function BillsPage() {
 								};
 								setCreateFormData({
 									orderId: generateObjectId(),
-									paymentId: generateObjectId(),
-									notes: ''
+									paymentId: '',
+									notes: '',
+									items: [{ description: '' }],
+									paymentStatus: '',
+									rate: 0,
+									advancePaid: 0,
+									balanceAmount: 0,
 								});
 								setShowCreateModal(true);
 							}}
@@ -458,6 +560,10 @@ export default function BillsPage() {
 					<div className={formStyles.formSection}>
 						<div className={styles.detailGrid}>
 							<div>
+								<p className={styles.detailLabel}>Bill ID</p>
+								<p className={styles.detailValue}>{selectedBill.billId}</p>
+							</div>
+							<div>
 								<p className={styles.detailLabel}>Order Number</p>
 								<p className={styles.detailValue}>{selectedBill.orderSnapshot.orderNumber}</p>
 							</div>
@@ -470,22 +576,29 @@ export default function BillsPage() {
 								<p className={styles.detailValue}>{selectedBill.customerSnapshot.phone}</p>
 							</div>
 							<div>
-								<p className={styles.detailLabel}>Bill Type</p>
+								<p className={styles.detailLabel}>Payment Status</p>
 								<p className={styles.detailValue}>
-									<span className={styles[`badge${selectedBill.billType}`]}>
-										{selectedBill.billType}
+									<span className={styles[`badge${selectedBill.paymentStatus}`]}>
+										{selectedBill.paymentStatus?.replace('_', ' ').toUpperCase()}
 									</span>
 								</p>
 							</div>
 							<div>
-								<p className={styles.detailLabel}>Amount</p>
-								<p className={styles.detailValue}>
-									₹{(selectedBill.billType === 'COD'
-										? selectedBill.amountToCollect
-										: selectedBill.amountPaid
-									).toFixed(2)}
-								</p>
+								<p className={styles.detailLabel}>Rate</p>
+								<p className={styles.detailValue}>₹{(selectedBill.rate || 0).toFixed(2)}</p>
 							</div>
+							{selectedBill.paymentStatus === 'advance_payment' && (
+								<>
+									<div>
+										<p className={styles.detailLabel}>Advance Paid</p>
+										<p className={styles.detailValue}>₹{(selectedBill.advancePaid || 0).toFixed(2)}</p>
+									</div>
+									<div>
+										<p className={styles.detailLabel}>Balance</p>
+										<p className={styles.detailValue}>₹{(selectedBill.balanceAmount || 0).toFixed(2)}</p>
+									</div>
+								</>
+							)}
 							<div>
 								<p className={styles.detailLabel}>Status</p>
 								<p className={styles.detailValue}>
@@ -505,6 +618,16 @@ export default function BillsPage() {
 								</p>
 							</div>
 						</div>
+						{selectedBill.items && selectedBill.items.length > 0 && (
+							<div className={styles.itemsSection}>
+								<p className={styles.detailLabel}>Items</p>
+								<ul className={styles.itemList}>
+									{selectedBill.items.map((item, idx) => (
+										<li key={idx} className={styles.detailValue}>{item.description}</li>
+									))}
+								</ul>
+							</div>
+						)}
 						{selectedBill.notes && (
 							<div className={styles.notesSection}>
 								<p className={styles.detailLabel}>Notes</p>
@@ -547,17 +670,111 @@ export default function BillsPage() {
 					</div>
 
 					<div className={formStyles.formGroup}>
-						<label>Payment ID <span className={formStyles.required}>*</span></label>
-						<input
-							type="text"
-							placeholder="Enter payment ID"
-							value={createFormData.paymentId}
+						<label>Items Description</label>
+						{createFormData.items.map((item, index) => (
+							<div key={index} style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+								<input
+									type="text"
+									placeholder={index === 0 ? "e.g., he took a kurta" : "Add more detail..."}
+									value={item.description}
+									onChange={(e) => {
+										const newItems = [...createFormData.items];
+										newItems[index].description = e.target.value;
+										setCreateFormData({ ...createFormData, items: newItems });
+									}}
+									className={formStyles.input}
+								/>
+								{index > 0 && (
+									<button 
+										onClick={() => {
+											const newItems = createFormData.items.filter((_, i) => i !== index);
+											setCreateFormData({ ...createFormData, items: newItems });
+										}}
+										className={buttonStyles.dangerBtn}
+										style={{ padding: '8px' }}
+									>
+										<MinusIcon style={{ width: '16px' }} />
+									</button>
+								)}
+							</div>
+						))}
+						<button 
+							onClick={() => setCreateFormData({ 
+								...createFormData, 
+								items: [...createFormData.items, { description: '' }] 
+							})}
+							className={buttonStyles.ghostBtn}
+							style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '14px' }}
+						>
+							<PlusIcon style={{ width: '16px' }} /> Add more
+						</button>
+					</div>
+
+					<div className={formStyles.formGroup}>
+						<label>Payment Status <span className={formStyles.required}>*</span></label>
+						<select
+							value={createFormData.paymentStatus}
 							onChange={(e) =>
-								setCreateFormData({ ...createFormData, paymentId: e.target.value })
+								setCreateFormData({ ...createFormData, paymentStatus: e.target.value as any })
 							}
+							className={formStyles.select}
+						>
+							<option value="">Please select</option>
+							<option value="full_paid">Full Paid</option>
+							<option value="advance_payment">Advance Payment</option>
+							<option value="pending_payment">Pending Payment</option>
+						</select>
+					</div>
+
+					<div className={formStyles.formGroup}>
+						<label>Rate</label>
+						<input
+							type="number"
+							placeholder="Enter total rate"
+							value={createFormData.rate}
+							onChange={(e) => {
+								const val = parseFloat(e.target.value) || 0;
+								setCreateFormData({ 
+									...createFormData, 
+									rate: val,
+									balanceAmount: val - (createFormData.advancePaid || 0)
+								});
+							}}
 							className={formStyles.input}
 						/>
 					</div>
+
+					{createFormData.paymentStatus === 'advance_payment' && (
+						<>
+							<div className={formStyles.formGroup}>
+								<label>Advance Paid</label>
+								<input
+									type="number"
+									placeholder="Enter advance amount"
+									value={createFormData.advancePaid}
+									onChange={(e) => {
+										const val = parseFloat(e.target.value) || 0;
+										setCreateFormData({ 
+											...createFormData, 
+											advancePaid: val,
+											balanceAmount: createFormData.rate - val
+										});
+									}}
+									className={formStyles.input}
+								/>
+							</div>
+							<div className={formStyles.formGroup}>
+								<label>Balance to be Paid</label>
+								<input
+									type="number"
+									value={createFormData.balanceAmount}
+									disabled
+									className={formStyles.input}
+									style={{ backgroundColor: '#f5f5f5' }}
+								/>
+							</div>
+						</>
+					)}
 
 					<div className={formStyles.formGroup}>
 						<label>Notes (Optional)</label>

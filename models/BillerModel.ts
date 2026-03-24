@@ -42,14 +42,22 @@ export interface IBillerAuditEntry {
  */
 export interface IBiller extends Document {
   // Identification & Linking
+  billId: string; // Custom format: znm-DDMMYYYYXXX
   orderId: mongoose.Types.ObjectId;
   paymentId: mongoose.Types.ObjectId;
   
   // Bill Type & Amount
   billType: 'COD' | 'PAID';
-  amountToCollect: number; // Only for COD; 0 for PAID
-  amountPaid: number; // Only for PAID; tracks what was already paid
+  paymentStatus: 'full_paid' | 'advance_payment' | 'pending_payment';
+  rate: number;
+  advancePaid?: number;
+  balanceAmount?: number;
+  amountToCollect: number; // Only for COD or Pending/Advance; 0 for PAID
+  amountPaid: number; // tracks what was already paid
   currency: string; // Default: INR
+  
+  // Custom Items
+  items: Array<{ description: string; rate: number }>;
   
   // Snapshots (immutable)
   customerSnapshot: IBillerCustomerSnapshot;
@@ -82,6 +90,12 @@ export interface IBiller extends Document {
 const BillerSchema = new Schema<IBiller>(
   {
     // Identification
+    billId: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
+    },
     orderId: {
       type: Schema.Types.ObjectId,
       ref: 'Order',
@@ -101,6 +115,24 @@ const BillerSchema = new Schema<IBiller>(
       required: true,
       index: true,
     },
+    paymentStatus: {
+      type: String,
+      enum: ['full_paid', 'advance_payment', 'pending_payment'],
+      default: 'full_paid',
+    },
+    rate: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    advancePaid: {
+      type: Number,
+      default: 0,
+    },
+    balanceAmount: {
+      type: Number,
+      default: 0,
+    },
     amountToCollect: {
       type: Number,
       required: true,
@@ -117,6 +149,14 @@ const BillerSchema = new Schema<IBiller>(
       type: String,
       default: 'INR',
     },
+
+    // Custom Items
+    items: [
+      {
+        description: { type: String, required: true },
+        rate: { type: Number, required: true, default: 0 },
+      },
+    ],
 
     // Snapshots
     customerSnapshot: {
@@ -197,6 +237,7 @@ const BillerSchema = new Schema<IBiller>(
 );
 
 // Indexes for performance
+BillerSchema.index({ billId: 1 });
 BillerSchema.index({ orderId: 1, status: 1 }); // Composite: one active bill per order
 BillerSchema.index({ paymentId: 1 });
 BillerSchema.index({ billType: 1, status: 1 }); // Filter by bill type
