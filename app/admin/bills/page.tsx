@@ -122,14 +122,19 @@ export default function BillsPage() {
 			if (bill) {
 				const printWindow = window.open('', '_blank');
 				if (printWindow) {
-					const itemsHtml = (bill.items || []).map(item => `
+					const itemsHtml = (bill.items && bill.items.length > 0) ? bill.items.map(item => `
 						<tr>
 							<td>${item.description}</td>
 							<td style="text-align: center;">${item.quantity || 1}</td>
 							<td style="text-align: right;">₹${(item.rate || 0).toFixed(2)}</td>
 							<td style="text-align: right;">₹${((item.quantity || 1) * (item.rate || 0)).toFixed(2)}</td>
 						</tr>
-					`).join('') || '<tr><td colspan="4">No items listed</td></tr>';
+					`).join('') : '<tr><td colspan="4">No items listed</td></tr>';
+
+					const calculatedRate = (bill.items && bill.items.length > 0)
+						? bill.items.reduce((sum, item) => sum + ((item.quantity || 1) * (item.rate || 0)), 0)
+						: (bill.rate || 0);
+
 					const barcodeId = `barcode-${bill.billId}`;
 					
 					printWindow.document.write(`
@@ -174,12 +179,12 @@ export default function BillsPage() {
 									</tbody>
 								</table>
 								<div class="total-section">
-									<p><strong>Rate:</strong> ₹${(bill.rate || 0).toFixed(2)}</p>
+									<p><strong>Total Amount:</strong> ₹${calculatedRate.toFixed(2)}</p>
 									${bill.paymentStatus === 'advance_payment' ? `
 										<p><strong>Advance Paid:</strong> ₹${(bill.advancePaid || 0).toFixed(2)}</p>
 										<p><strong>Balance:</strong> ₹${(bill.balanceAmount || 0).toFixed(2)}</p>
 									` : ''}
-									<p><strong>Status:</strong> ${((bill.paymentStatus as any) || '').replace('_', ' ').toUpperCase() || 'PAID'}</p>
+									<p><strong>Payment Status:</strong> ${((bill.paymentStatus as any) || '').replace('_', ' ').toUpperCase() || 'N/A'}</p>
 								</div>
 								<div class="barcode-container">
 									<svg id="${barcodeId}"></svg>
@@ -375,11 +380,11 @@ export default function BillsPage() {
 			),
 		},
 		{
-			key: 'amountToCollect',
-			label: 'Amount',
+			key: 'rate',
+			label: 'Total Amount',
 			width: '12%',
 			render: (_: any, row: Bill) => {
-				const amount = row.billType === 'COD' ? row.amountToCollect : row.amountPaid;
+				const amount = row.rate || 0;
 				return <strong>₹{amount.toFixed(2)}</strong>;
 			},
 		},
@@ -392,12 +397,6 @@ export default function BillsPage() {
 					{val === 'active' ? '✓ Active' : '✕ Cancelled'}
 				</span>
 			),
-		},
-		{
-			key: 'printCount',
-			label: 'Prints',
-			width: '10%',
-			render: (val: number) => <span>{val}x</span>,
 		},
 		{
 			key: 'createdAt',
@@ -667,7 +666,7 @@ export default function BillsPage() {
 								</p>
 							</div>
 							<div>
-								<p className={styles.detailLabel}>Rate</p>
+								<p className={styles.detailLabel}>Total Amount</p>
 								<p className={styles.detailValue}>₹{(selectedBill.rate || 0).toFixed(2)}</p>
 							</div>
 							{selectedBill.paymentStatus === 'advance_payment' && (
@@ -877,7 +876,7 @@ export default function BillsPage() {
 					</div>
 
 					<div className={formStyles.formGroup}>
-						<label>Rate</label>
+						<label>Total Amount</label>
 						<input
 							type="number"
 							placeholder="Enter total rate"

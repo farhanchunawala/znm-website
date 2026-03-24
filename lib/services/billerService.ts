@@ -261,14 +261,14 @@ class BillerService {
       }
 
       // Generate custom bill ID if not already generated
-      const billId = orderSnapshot?.orderNumber?.startsWith('znm-') ? orderSnapshot.orderNumber : await this.generateBillId();
+      const generatedBillId = orderSnapshot?.orderNumber?.startsWith('znm-') ? orderSnapshot.orderNumber : await this.generateBillId();
 
       // Create bill
       const finalOrderId = isValidObjectId ? new mongoose.Types.ObjectId(orderId) : new mongoose.Types.ObjectId();
       const finalPaymentId = mongoose.Types.ObjectId.isValid(paymentId) ? new mongoose.Types.ObjectId(paymentId) : new mongoose.Types.ObjectId();
 
       const bill = new Biller({
-        billId,
+        billId: generatedBillId,
         orderId: finalOrderId,
         paymentId: finalPaymentId,
         billType,

@@ -245,6 +245,10 @@ BillerSchema.index({ billType: 1, status: 1 }); // Filter by bill type
 BillerSchema.index({ 'customerSnapshot.customerId': 1 }); // Find by customer
 BillerSchema.index({ createdAt: -1 }); // Sort by creation date
 
+// @ts-ignore
+if (process.env.NODE_ENV !== 'production' && mongoose.models) {
+  delete (mongoose.models as any).Biller;
+}
 export const Biller: Model<IBiller> =
   mongoose.models.Biller || mongoose.model('Biller', BillerSchema);
 
