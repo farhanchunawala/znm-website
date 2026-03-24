@@ -24,28 +24,60 @@ export default function ProductsPage() {
 	>('all');
 	const [page, setPage] = useState(1);
 	const [total, setTotal] = useState(0);
+	const [collections, setCollections] = useState<any[]>([]);
+	const [activeCollection, setActiveCollection] = useState<string>('all');
 	const limit = 10;
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
+		fetchCollections();
+	}, []);
+
+	async function fetchCollections() {
+		try {
+			const res = await fetch('/api/collections?limit=100');
+			const result = await res.json();
+			if (result.success) {
+				setCollections(result.data);
+			}
+		} catch (error) {
+			console.error('Failed to fetch collections:', error);
+		}
+	}
+
+	useEffect(() => {
 		fetchProducts();
-	}, [search, status, page]);
+	}, [search, status, page, activeCollection]);
 
 	async function fetchProducts() {
 		try {
 			setLoading(true);
-			const params = new URLSearchParams();
-			if (search) params.append('q', search);
-			if (status !== 'all') params.append('status', status);
-			params.append('page', page.toString());
-			params.append('limit', limit.toString());
+			
+			if (activeCollection === 'all') {
+				const params = new URLSearchParams();
+				if (search) params.append('q', search);
+				if (status !== 'all') params.append('status', status);
+				params.append('page', page.toString());
+				params.append('limit', limit.toString());
 
-			const res = await fetch(`/api/products?${params}`);
-			const result = await res.json();
+				const res = await fetch(`/api/products?${params}`);
+				const result = await res.json();
 
-			if (result.success) {
-				setProducts(result.data);
-				setTotal(result.meta.total);
+				if (result.success) {
+					setProducts(result.data);
+					setTotal(result.meta.total);
+				}
+			} else {
+				const params = new URLSearchParams();
+				params.append('skip', ((page - 1) * limit).toString());
+				params.append('limit', limit.toString());
+				
+				const res = await fetch(`/api/collections/${activeCollection}/products?${params}`);
+				const result = await res.json();
+				if (result.success) {
+					setProducts(result.data);
+					setTotal(result.meta.total);
+				}
 			}
 		} catch (error) {
 			console.error('Failed to fetch products:', error);
@@ -112,13 +144,32 @@ export default function ProductsPage() {
 					<button onClick={handleExportCSV} className={styles.csvBtn}>📥 Export CSV</button>
 					<button onClick={() => fileInputRef.current?.click()} className={styles.csvBtn}>📤 Import CSV</button>
 					<input type="file" ref={fileInputRef} accept=".csv" onChange={handleImportCSV} style={{ display: 'none' }} />
-					<Link href="/admin/products/new" className={styles.createBtn}>
+					<Link href={activeCollection === 'all' ? "/admin/products/new" : `/admin/products/new?collectionId=${activeCollection}`} className={styles.createBtn}>
 						+ New Product
 					</Link>
 				</div>
 			</div>
 
-			<div className={styles.filters}>
+			<div className={styles.tabsContainer}>
+				<button
+					className={`${styles.tabBtn} ${activeCollection === 'all' ? styles.activeTab : ''}`}
+					onClick={() => { setActiveCollection('all'); setPage(1); }}
+				>
+					All Products
+				</button>
+				{collections.map(c => (
+					<button
+						key={c._id}
+						className={`${styles.tabBtn} ${activeCollection === c._id ? styles.activeTab : ''}`}
+						onClick={() => { setActiveCollection(c._id); setPage(1); }}
+					>
+						{c.title}
+					</button>
+				))}
+			</div>
+
+			<div className={styles.filtersWrapper}>
+				<div className={styles.filters}>
 				<input
 					type="text"
 					placeholder="Search products..."
@@ -143,6 +194,7 @@ export default function ProductsPage() {
 					<option value="active">Active</option>
 					<option value="archived">Archived</option>
 				</select>
+			</div>
 			</div>
 
 			{loading ? (

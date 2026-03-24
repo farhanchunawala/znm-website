@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import styles from '../products.module.scss';
 
 interface Product {
@@ -31,8 +31,10 @@ type TabType = 'basic' | 'variants' | 'images' | 'seo';
 
 export default function ProductDetailPage() {
 	const params = useParams();
+	const searchParams = useSearchParams();
 	const router = useRouter();
 	const productId = params.id as string;
+	const collectionId = searchParams.get('collectionId');
 	const isNew = productId === 'new';
 
 	const [product, setProduct] = useState<Partial<Product> | null>(
@@ -86,6 +88,20 @@ export default function ProductDetailPage() {
 
 			if (result.success) {
 				setMessage('Product saved successfully');
+				
+				// Auto-associate with manual collection if created from a collection tab
+				if (isNew && collectionId) {
+					try {
+						await fetch(`/api/collections/${collectionId}/products`, {
+							method: 'POST',
+							headers: { 'Content-Type': 'application/json' },
+							body: JSON.stringify({ productIds: [result.data._id] }),
+						});
+					} catch (addToColErr) {
+						console.error('Failed to auto-add to collection', addToColErr);
+					}
+				}
+
 				if (isNew) {
 					router.push(`/admin/products/${result.data._id}`);
 				} else {
