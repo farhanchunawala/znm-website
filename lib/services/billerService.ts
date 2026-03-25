@@ -276,7 +276,7 @@ class BillerService {
         }
 
         // Check if customer already exists in main Customers collection
-        let existingCustomer = null;
+        let existingCustomer: any = null;
         if (customerPhone && customerPhone !== 'N/A') {
           existingCustomer = await Customer.findOne({ phone: customerPhone });
         }
