@@ -16,7 +16,7 @@ interface Bill {
 	_id: string;
 	billId: string;
 	orderSnapshot: { orderNumber: string };
-	customerSnapshot: { name: string; phone: string; customerCustomId?: string };
+	customerSnapshot: { name: string; phone: string; phones?: string[]; customerCustomId?: string };
 	billType: 'COD' | 'PAID';
 	amountToCollect: number;
 	amountPaid: number;
@@ -65,6 +65,7 @@ export default function BillsPage() {
 		paymentId: '',
 		customerName: '',
 		customerPhone: '',
+		customerPhones: [] as string[],
 		customerCustomId: '',
 		trialDate: '',
 		deliveryDate: '',
@@ -80,6 +81,7 @@ export default function BillsPage() {
 		orderId: '',
 		customerName: '',
 		customerPhone: '',
+		customerPhones: [] as string[],
 		customerCustomId: '',
 		trialDate: '',
 		deliveryDate: '',
@@ -145,6 +147,7 @@ export default function BillsPage() {
 			...createFormData,
 			customerName: customer.name,
 			customerPhone: customer.phone,
+			customerPhones: customer.phones || [],
 			customerCustomId: customer.customerCustomId
 		});
 		setShowSuggestions(false);
@@ -231,7 +234,7 @@ export default function BillsPage() {
 								</div>
 								<div class="bill-details">
 									<p><strong>Customer:</strong> ${bill.customerSnapshot?.name || 'N/A'}</p>
-									<p><strong>Phone:</strong> ${bill.customerSnapshot?.phone || 'N/A'}</p>
+									<p><strong>Phone:</strong> ${[bill.customerSnapshot?.phone, ...(bill.customerSnapshot?.phones || [])].filter(Boolean).join(', ')}</p>
 									<p><strong>Date:</strong> ${new Date(bill.createdAt).toLocaleDateString()}</p>
 								</div>
 								<h3>Items</h3>
@@ -332,6 +335,7 @@ export default function BillsPage() {
 			const response = await axios.post('/api/admin/bills', {
 				customerName: createFormData.customerName,
 				customerPhone: createFormData.customerPhone,
+				customerPhones: createFormData.customerPhones,
 				customerCustomId: createFormData.customerCustomId,
 				trialDate: createFormData.trialDate,
 				deliveryDate: createFormData.deliveryDate,
@@ -357,12 +361,13 @@ export default function BillsPage() {
 				paymentId: '', 
 				customerName: '',
 				customerPhone: '',
+				customerPhones: [],
 				customerCustomId: '',
 				trialDate: '',
 				deliveryDate: '',
 				notes: '', 
 				items: [{ description: '', quantity: 1, rate: 0 }],
-				paymentStatus: '',
+				paymentStatus: '' as any,
 				rate: 0,
 				advancePaid: 0,
 				balanceAmount: 0
@@ -407,6 +412,7 @@ export default function BillsPage() {
 				notes: editFormData.notes,
 				customerName: editFormData.customerName,
 				customerPhone: editFormData.customerPhone,
+				customerPhones: editFormData.customerPhones,
 				customerCustomId: editFormData.customerCustomId,
 				trialDate: editFormData.trialDate,
 				deliveryDate: editFormData.deliveryDate,
@@ -587,6 +593,7 @@ export default function BillsPage() {
 										paymentId: '',
 										customerName: '',
 										customerPhone: '',
+										customerPhones: [],
 										customerCustomId: '',
 										trialDate: '',
 										deliveryDate: '',
@@ -735,6 +742,7 @@ export default function BillsPage() {
 												orderId: selectedBill.billId || '',
 												customerName: selectedBill.customerSnapshot.name || '',
 												customerPhone: selectedBill.customerSnapshot.phone || '',
+												customerPhones: selectedBill.customerSnapshot.phones || [],
 												customerCustomId: selectedBill.customerSnapshot.customerCustomId || '',
 												trialDate: selectedBill.trialDate ? new Date(selectedBill.trialDate).toISOString().split('T')[0] : '',
 												deliveryDate: selectedBill.deliveryDate ? new Date(selectedBill.deliveryDate).toISOString().split('T')[0] : '',
@@ -801,8 +809,10 @@ export default function BillsPage() {
 								<p className={styles.detailValue}>{selectedBill.customerSnapshot.customerCustomId || 'N/A'}</p>
 							</div>
 							<div>
-								<p className={styles.detailLabel}>Phone</p>
-								<p className={styles.detailValue}>{selectedBill.customerSnapshot.phone}</p>
+								<p className={styles.detailLabel}>Phones</p>
+								<p className={styles.detailValue}>
+									{[selectedBill.customerSnapshot.phone, ...(selectedBill.customerSnapshot.phones || [])].filter(Boolean).join(', ')}
+								</p>
 							</div>
 							<div>
 								<p className={styles.detailLabel}>Payment Status</p>
@@ -1007,16 +1017,52 @@ export default function BillsPage() {
 					</div>
 
 					<div className={formStyles.formGroup}>
-						<label>Customer Phone Number <span className={formStyles.required}>*</span></label>
+						<label>Customer Phone Numbers <span className={formStyles.required}>*</span></label>
 						<input
 							type="text"
-							placeholder="91XXXXXXXXXX"
+							placeholder="Primary Phone (91XXXXXXXXXX)"
 							value={createFormData.customerPhone}
 							onChange={(e) =>
 								setCreateFormData({ ...createFormData, customerPhone: e.target.value })
 							}
 							className={formStyles.input}
+							style={{ marginBottom: '8px' }}
 						/>
+						{createFormData.customerPhones.map((phone, idx) => (
+							<div key={idx} style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+								<input
+									type="text"
+									placeholder={`Secondary Phone ${idx + 1}`}
+									value={phone}
+									onChange={(e) => {
+										const newPhones = [...createFormData.customerPhones];
+										newPhones[idx] = e.target.value;
+										setCreateFormData({ ...createFormData, customerPhones: newPhones });
+									}}
+									className={formStyles.input}
+								/>
+								<button 
+									onClick={() => {
+										const newPhones = createFormData.customerPhones.filter((_, i) => i !== idx);
+										setCreateFormData({ ...createFormData, customerPhones: newPhones });
+									}}
+									className={buttonStyles.dangerBtn}
+									style={{ padding: '8px' }}
+								>
+									<MinusIcon style={{ width: '16px' }} />
+								</button>
+							</div>
+						))}
+						<button 
+							onClick={() => setCreateFormData({ 
+								...createFormData, 
+								customerPhones: [...createFormData.customerPhones, ''] 
+							})}
+							className={buttonStyles.ghostBtn}
+							style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', padding: '4px 0' }}
+						>
+							<PlusIcon style={{ width: '14px' }} /> Add another phone
+						</button>
 					</div>
 
 
@@ -1311,16 +1357,52 @@ export default function BillsPage() {
 					</div>
 
 					<div className={formStyles.formGroup}>
-						<label>Customer Phone Number <span className={formStyles.required}>*</span></label>
+						<label>Customer Phone Numbers <span className={formStyles.required}>*</span></label>
 						<input
 							type="text"
-							placeholder="91XXXXXXXXXX"
+							placeholder="Primary Phone"
 							value={editFormData.customerPhone}
 							onChange={(e) =>
 								setEditFormData({ ...editFormData, customerPhone: e.target.value })
 							}
 							className={formStyles.input}
+							style={{ marginBottom: '8px' }}
 						/>
+						{editFormData.customerPhones.map((phone, idx) => (
+							<div key={idx} style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+								<input
+									type="text"
+									placeholder={`Secondary Phone ${idx + 1}`}
+									value={phone}
+									onChange={(e) => {
+										const newPhones = [...editFormData.customerPhones];
+										newPhones[idx] = e.target.value;
+										setEditFormData({ ...editFormData, customerPhones: newPhones });
+									}}
+									className={formStyles.input}
+								/>
+								<button 
+									onClick={() => {
+										const newPhones = editFormData.customerPhones.filter((_, i) => i !== idx);
+										setEditFormData({ ...editFormData, customerPhones: newPhones });
+									}}
+									className={buttonStyles.dangerBtn}
+									style={{ padding: '8px' }}
+								>
+									<MinusIcon style={{ width: '16px' }} />
+								</button>
+							</div>
+						))}
+						<button 
+							onClick={() => setEditFormData({ 
+								...editFormData, 
+								customerPhones: [...editFormData.customerPhones, ''] 
+							})}
+							className={buttonStyles.ghostBtn}
+							style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', padding: '4px 0' }}
+						>
+							<PlusIcon style={{ width: '14px' }} /> Add another phone
+						</button>
 					</div>
 
 					<div className={formStyles.formGroup}>

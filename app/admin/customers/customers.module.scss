@@ -51,14 +51,20 @@
 
 .importBtn,
 .exportBtn {
-	background: #fff;
-	color: #000;
+	background: #ffffff;
+	color: #000000;
+	border: 1px solid #d4d4d4;
 	border-radius: 8px;
 
 	:global([data-theme='dark']) & {
-		background: #000;
-		color: #fff;
-		border-color: #fff;
+		background: #111111;
+		color: #ffffff;
+		border-color: #333333;
+
+		&:hover {
+			background: #1a1a1a;
+			border-color: #444444;
+		}
 	}
 }
 
@@ -150,14 +156,18 @@
 
 	:global([data-theme='dark']) & {
 		background: #111111;
-		border-color: #ffffff;
+		border-color: #333333;
 		color: #ffffff;
+		
+		span {
+			color: #ffffff;
+		}
 	}
 }
 
 .bulkActions span {
 	font-weight: 600;
-	color: #000;
+	color: #000000;
 }
 
 .bulkButtons {
@@ -243,6 +253,10 @@
 	font-size: 14px;
 	color: #525252;
 	font-weight: 500;
+
+	:global([data-theme='dark']) & {
+		color: #aaaaaa;
+	}
 }
 
 .tableContainer {
@@ -266,7 +280,7 @@
 	background: #fafafa;
 
 	:global([data-theme='dark']) & {
-		background: #111111;
+		background: #000000;
 	}
 }
 
@@ -309,9 +323,13 @@
 }
 
 .link {
-	color: #000;
+	color: #000000;
 	text-decoration: none;
 	font-weight: 600;
+
+	:global([data-theme='dark']) & {
+		color: #ffffff;
+	}
 }
 
 .link:hover {
@@ -329,7 +347,11 @@
 
 .amount {
 	font-weight: 600;
-	color: #000;
+	color: #000000;
+
+	:global([data-theme='dark']) & {
+		color: #ffffff;
+	}
 }
 
 .actionButtons {

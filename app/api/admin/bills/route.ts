@@ -102,6 +102,7 @@ export async function POST(request: NextRequest) {
       balanceAmount,
       customerName,
       customerPhone,
+      customerPhones,
       customerCustomId,
       trialDate,
       deliveryDate
@@ -121,6 +122,7 @@ export async function POST(request: NextRequest) {
       balanceAmount,
       customerName,
       customerPhone,
+      customerPhones,
       customerCustomId,
       trialDate,
       deliveryDate

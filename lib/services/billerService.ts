@@ -18,6 +18,7 @@ interface CreateBillerOptions {
   balanceAmount?: number;
   customerName?: string;
   customerPhone?: string;
+  customerPhones?: string[];
   customerCustomId?: string;
   trialDate?: string | Date;
   deliveryDate?: string | Date;
@@ -34,6 +35,7 @@ interface UpdateBillerOptions {
   items?: Array<{ description: string; quantity: number; rate: number }>;
   customerName?: string;
   customerPhone?: string;
+  customerPhones?: string[];
   customerCustomId?: string;
   trialDate?: string | Date;
   deliveryDate?: string | Date;
@@ -172,6 +174,8 @@ class BillerService {
         balanceAmount = 0,
         customerName,
         customerPhone,
+        customerPhones,
+        customerCustomId,
         trialDate,
         deliveryDate
       } = options;
@@ -200,6 +204,7 @@ class BillerService {
           customerId: order.customerId as mongoose.Types.ObjectId,
           name: customer?.name || 'Unknown',
           phone: customer?.phoneNumber || 'N/A',
+          phones: [], // Auto-registration from order uses primary phone
           email: customer?.email,
         };
 
@@ -270,11 +275,36 @@ class BillerService {
           finalCustomerCustomId = `${initial}-${(maxNum + 1).toString().padStart(3, '0')}`;
         }
 
+        // Check if customer already exists in main Customers collection
+        let existingCustomer = null;
+        if (customerPhone && customerPhone !== 'N/A') {
+          existingCustomer = await Customer.findOne({ phone: customerPhone });
+        }
+
+        let mainCustomerId;
+        if (existingCustomer) {
+          mainCustomerId = existingCustomer._id;
+        } else {
+          // Register new customer automatically
+          const newCustomer = await Customer.create({
+            name: customerName || 'Ad-Hoc Customer',
+            phone: customerPhone || undefined,
+            status: 'active',
+            tags: ['biller-auto-reg'],
+            meta: {
+              customId: finalCustomerCustomId,
+              source: 'biller'
+            }
+          });
+          mainCustomerId = newCustomer._id;
+        }
+
         customerSnapshot = {
-          customerId: new mongoose.Types.ObjectId(),
-          customerCustomId: finalCustomerCustomId,
+          customerId: mainCustomerId as mongoose.Types.ObjectId,
+          customerCustomId: finalCustomerCustomId || 'N/A',
           name: customerName || 'Ad-Hoc Customer',
           phone: customerPhone || 'N/A',
+          phones: customerPhones || [],
         };
 
         const itemsSummary = items.length > 0 
@@ -508,11 +538,12 @@ class BillerService {
         bill.notes = options.notes;
       }
 
-      if (options.customerName || options.customerPhone || options.customerCustomId) {
+      if (options.customerName || options.customerPhone || options.customerCustomId || options.customerPhones) {
         bill.customerSnapshot = {
           ...bill.customerSnapshot,
           name: options.customerName || bill.customerSnapshot.name,
           phone: options.customerPhone || bill.customerSnapshot.phone,
+          phones: options.customerPhones || bill.customerSnapshot.phones || [],
           customerCustomId: options.customerCustomId || bill.customerSnapshot.customerCustomId,
         };
       }

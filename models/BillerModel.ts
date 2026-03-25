@@ -8,7 +8,8 @@ export interface IBillerCustomerSnapshot {
   customerId: mongoose.Types.ObjectId;
   customerCustomId?: string;
   name: string;
-  phone: string;
+  phone: string; // Primary phone
+  phones?: string[]; // Additional phones
   email?: string;
 }
 
@@ -170,6 +171,7 @@ const BillerSchema = new Schema<IBiller>(
       customerCustomId: { type: String },
       name: { type: String, required: true },
       phone: { type: String, required: true },
+      phones: { type: [String], default: [] },
       email: { type: String },
     },
     orderSnapshot: {

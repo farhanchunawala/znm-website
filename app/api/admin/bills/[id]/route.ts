@@ -80,6 +80,7 @@ export async function PATCH(
         items: body.items,
         customerName: body.customerName,
         customerPhone: body.customerPhone,
+        customerPhones: body.customerPhones,
         customerCustomId: body.customerCustomId,
         trialDate: body.trialDate,
         deliveryDate: body.deliveryDate,
