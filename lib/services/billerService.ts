@@ -60,28 +60,26 @@ class BillerService {
     const dateStr = `${day}${month}${year}`;
     const prefix = `znm-${dateStr}`;
 
-    // Find all bills for today to find empty slots
-    const existingBills = await Biller.find({
-      billId: { $regex: `^${prefix}` }
-    }).select('billId');
+    // Find ALL bills to determine the global maximum sequence number (last 3-4 digits)
+    const allBills = await Biller.find({
+      billId: { $regex: /^znm-[0-9]{8}/ }
+    }).select('billId').lean();
 
-    const existingNumbers = existingBills
-      .map(b => {
-        const numPart = b.billId.replace(prefix, '');
-        return parseInt(numPart);
-      })
-      .filter(n => !isNaN(n))
-      .sort((a, b) => a - b);
-
-    let nextNumber = 1;
-    for (const num of existingNumbers) {
-      if (num === nextNumber) {
-        nextNumber++;
-      } else if (num > nextNumber) {
-        break; // Found an empty slot
+    let maxGlobalNum = 0;
+    allBills.forEach(b => {
+      const billId = b.billId;
+      if (billId && billId.startsWith('znm-')) {
+        // Extract digits after the date string (e.g., after the 8th digit of the data part)
+        // Format: znm-DDMMYYYYNNN
+        const numPartString = billId.slice(12); // znm- + 8 chars date
+        const num = parseInt(numPartString, 10);
+        if (!isNaN(num) && num > maxGlobalNum) {
+          maxGlobalNum = num;
+        }
       }
-    }
+    });
 
+    const nextNumber = maxGlobalNum + 1;
     return `${prefix}${nextNumber.toString().padStart(3, '0')}`;
   }
 
