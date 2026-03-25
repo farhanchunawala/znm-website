@@ -48,6 +48,7 @@ export default function BillsPage() {
 	const [billType, setBillType] = useState<'COD' | 'PAID' | ''>('');
 	const [status, setStatus] = useState<'active' | 'cancelled' | ''>('');
 	const [sortBy, setSortBy] = useState<'createdAt' | 'billType' | 'amountToCollect'>('createdAt');
+	const [search, setSearch] = useState('');
 
 	const [selectedBill, setSelectedBill] = useState<BillDetail | null>(null);
 	const [showDetail, setShowDetail] = useState(false);
@@ -90,6 +91,7 @@ export default function BillsPage() {
 			const params = new URLSearchParams();
 			if (billType) params.append('billType', billType);
 			if (status) params.append('status', status);
+			if (search) params.append('search', search);
 			params.append('sortBy', sortBy);
 
 			const response = await axios.get(`/api/admin/bills?${params.toString()}`);
@@ -104,7 +106,28 @@ export default function BillsPage() {
 
 	useEffect(() => {
 		fetchBills();
-	}, [billType, status, sortBy]);
+	}, [billType, status, sortBy, search]);
+
+	// Auto-generate customer ID based on name initial
+	const [lastCheckedInitial, setLastCheckedInitial] = useState('');
+	const updateNextCustomerId = async (name: string) => {
+		if (!name) return;
+		const initial = name.charAt(0).toUpperCase();
+		if (initial === lastCheckedInitial) return;
+
+		try {
+			const res = await axios.get(`/api/admin/bills?nextCustomerId=${initial}`);
+			if (res.data.success) {
+				setCreateFormData(prev => ({
+					...prev,
+					customerCustomId: res.data.nextId
+				}));
+				setLastCheckedInitial(initial);
+			}
+		} catch (err) {
+			console.error('Failed to get next customer ID', err);
+		}
+	};
 
 	// Get bill detail
 	const getBillDetail = async (billId: string) => {
@@ -274,7 +297,11 @@ export default function BillsPage() {
 				deliveryDate: createFormData.deliveryDate,
 				items: createFormData.items,
 				paymentStatus: createFormData.paymentStatus,
-				paymentId: createFormData.paymentId || 'manual'
+				rate: createFormData.rate,
+				advancePaid: createFormData.advancePaid,
+				balanceAmount: createFormData.balanceAmount,
+				paymentId: createFormData.paymentId || 'manual',
+				orderId: createFormData.orderId
 			});
 			const newBill = response.data.data;
 			
@@ -537,6 +564,17 @@ export default function BillsPage() {
 
 			<Card>
 				<div className={styles.filterSection}>
+					<div className={styles.filterGroup} style={{ gridColumn: 'span 2' }}>
+						<label>Search Bills</label>
+						<input
+							type="text"
+							placeholder="Search by ID, Customer Name, or Custom ID..."
+							value={search}
+							onChange={(e) => setSearch(e.target.value)}
+							className={formStyles.input}
+						/>
+					</div>
+
 					<div className={styles.filterGroup}>
 						<label>Bill Type</label>
 						<select
@@ -593,31 +631,31 @@ export default function BillsPage() {
 						>
 							<EyeIcon style={{ width: '18px' }} />
 						</button>
-						{row.status === 'active' && (
-							<>
-								<button
-									onClick={() => handlePrint(row._id)}
-									className={`${buttonStyles.ghostBtn} ${styles.small}`}
-									title="Print bill"
-								>
-									<PrinterIcon style={{ width: '18px' }} />
-								</button>
-								<button
-									onClick={() => handleCancel(row._id)}
-									className={`${buttonStyles.ghostBtn} ${styles.small}`}
-									title="Archive/Cancel"
-								>
-									<ArchiveBoxIcon style={{ width: '18px' }} />
-								</button>
-								<button
-									onClick={() => handleDeleteBill(row._id)}
-									className={`${buttonStyles.ghostBtn} ${styles.small} ${styles.danger}`}
-									title="Delete bill"
-								>
-									<TrashIcon style={{ width: '18px', color: '#ff5252' }} />
-								</button>
-							</>
+						{(row.status === 'active' || row.status === 'cancelled' || row.status === 'completed') && (
+							<button
+								onClick={() => handlePrint(row._id)}
+								className={`${buttonStyles.ghostBtn} ${styles.small}`}
+								title="Print bill"
+							>
+								<PrinterIcon style={{ width: '18px' }} />
+							</button>
 						)}
+						{row.status === 'active' && (
+							<button
+								onClick={() => handleCancel(row._id)}
+								className={`${buttonStyles.ghostBtn} ${styles.small}`}
+								title="Archive/Cancel"
+							>
+								<ArchiveBoxIcon style={{ width: '18px' }} />
+							</button>
+						)}
+						<button
+							onClick={() => handleDeleteBill(row._id)}
+							className={`${buttonStyles.ghostBtn} ${styles.small} ${styles.danger}`}
+							title="Delete bill"
+						>
+							<TrashIcon style={{ width: '18px', color: '#ff5252' }} />
+						</button>
 					</div>
 				)}
 			/>
@@ -632,15 +670,17 @@ export default function BillsPage() {
 				footer={
 					selectedBill && (
 						<div className={styles.modalActions}>
+							{(selectedBill.status === 'active' || selectedBill.status === 'cancelled' || selectedBill.status === 'completed') && (
+								<button
+									onClick={() => handlePrint(selectedBill._id)}
+									className={buttonStyles.primaryBtn}
+									disabled={actionInProgress}
+								>
+									<PrinterIcon className={styles.icon} /> Print
+								</button>
+							)}
 							{selectedBill.status === 'active' && (
 								<>
-									<button
-										onClick={() => handlePrint(selectedBill._id)}
-										className={buttonStyles.primaryBtn}
-										disabled={actionInProgress}
-									>
-										<PrinterIcon className={styles.icon} /> Print
-									</button>
 									<button
 										onClick={() => {
 											setEditFormData({
@@ -840,19 +880,13 @@ export default function BillsPage() {
 							value={createFormData.customerName}
 							onChange={(e) => {
 								const name = e.target.value;
-								const initial = name.charAt(0).toUpperCase();
-								// Since it's client side, we can only suggest a generic starting point if empty
-								// We'll let the user override
-								let suggestedId = createFormData.customerCustomId;
-								if (initial && (!suggestedId || suggestedId.length <= 5)) {
-									suggestedId = `${initial}-001`; // Placeholder suggestion
-								}
-								
 								setCreateFormData({ 
 									...createFormData, 
-									customerName: name,
-									customerCustomId: suggestedId
+									customerName: name
 								});
+								if (name.length === 1) {
+									updateNextCustomerId(name);
+								}
 							}}
 							className={formStyles.input}
 						/>
@@ -864,9 +898,27 @@ export default function BillsPage() {
 							type="text"
 							placeholder="J-001"
 							value={createFormData.customerCustomId}
-							onChange={(e) =>
-								setCreateFormData({ ...createFormData, customerCustomId: e.target.value })
-							}
+							onChange={async (e) => {
+								const customId = e.target.value;
+								setCreateFormData({ ...createFormData, customerCustomId: customId });
+								
+								// If ID is fully entered (starts with letter, has dash and numbers)
+								const idRegex = /^[A-Z]-[0-9]{3,}$/i;
+								if (idRegex.test(customId)) {
+									try {
+										const res = await axios.get(`/api/admin/bills?lookupCustomerId=${customId}`);
+										if (res.data.success && res.data.details) {
+											setCreateFormData(prev => ({
+												...prev,
+												customerName: res.data.details.name,
+												customerPhone: res.data.details.phone
+											}));
+										}
+									} catch (err) {
+										console.error('Failed to lookup customer', err);
+									}
+								}
+							}}
 							className={formStyles.input}
 						/>
 					</div>
@@ -907,6 +959,7 @@ export default function BillsPage() {
 										type="number"
 										placeholder="Qty"
 										value={item.quantity || ''}
+										onWheel={(e) => (e.target as HTMLInputElement).blur()}
 										onChange={(e) => {
 											const qty = parseInt(e.target.value) || 0;
 											const newItems = [...createFormData.items];
@@ -930,6 +983,7 @@ export default function BillsPage() {
 										type="number"
 										placeholder="Rate"
 										value={item.rate || ''}
+										onWheel={(e) => (e.target as HTMLInputElement).blur()}
 										onChange={(e) => {
 											const val = parseFloat(e.target.value) || 0;
 											const newItems = [...createFormData.items];
@@ -1002,6 +1056,7 @@ export default function BillsPage() {
 							type="number"
 							placeholder="Enter total rate"
 							value={createFormData.rate}
+							onWheel={(e) => (e.target as HTMLInputElement).blur()}
 							onChange={(e) => {
 								const val = parseFloat(e.target.value) || 0;
 								setCreateFormData({ 
@@ -1047,6 +1102,7 @@ export default function BillsPage() {
 									type="number"
 									placeholder="Enter advance amount"
 									value={createFormData.advancePaid}
+									onWheel={(e) => (e.target as HTMLInputElement).blur()}
 									onChange={(e) => {
 										const val = parseFloat(e.target.value) || 0;
 										setCreateFormData({ 
@@ -1167,8 +1223,9 @@ export default function BillsPage() {
 							<label>Extra amount paid just now?</label>
 							<input
 								type="number"
-								placeholder="Enter extra amount"
+								placeholder="Enter new amount"
 								value={payFormData.amountPaid}
+								onWheel={(e) => (e.target as HTMLInputElement).blur()}
 								onChange={(e) => setPayFormData({ ...payFormData, amountPaid: parseFloat(e.target.value) || 0 })}
 								className={formStyles.input}
 							/>

@@ -25,8 +25,15 @@ export async function GET(request: NextRequest) {
       const nextId = await BillerService.generateBillId();
       return NextResponse.json({ success: true, nextId });
     }
+
+    const nextInitial = searchParams.get('nextCustomerId');
+    if (nextInitial) {
+      const nextId = await BillerService.generateNextCustomerId(nextInitial);
+      return NextResponse.json({ success: true, nextId });
+    }
     const billType = searchParams.get('billType') as 'COD' | 'PAID' | null;
-    const status = searchParams.get('status') as 'active' | 'cancelled' | null;
+    const status = searchParams.get('status') as 'active' | 'cancelled' | 'completed' | null;
+    const search = searchParams.get('search') || '';
     const skip = parseInt(searchParams.get('skip') || '0');
     const limit = parseInt(searchParams.get('limit') || '50');
     const sortBy = (searchParams.get('sortBy') || 'createdAt') as 'createdAt' | 'billType' | 'amountToCollect';
@@ -35,6 +42,7 @@ export async function GET(request: NextRequest) {
     const { bills, total } = await BillerService.listBillers({
       billType: billType || undefined,
       status: status || undefined,
+      search: search || undefined,
       skip,
       limit,
       sortBy,
@@ -71,28 +79,39 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { orderId, paymentId, notes, items, paymentStatus, rate, advancePaid, balanceAmount } = body;
-
-    // Validate required fields
-    if (!orderId || !paymentId) {
-      return NextResponse.json(
-        { error: 'orderId and paymentId are required' },
-        { status: 400 }
-      );
-    }
+    const { 
+      orderId, 
+      paymentId, 
+      notes, 
+      items, 
+      paymentStatus, 
+      rate, 
+      advancePaid, 
+      balanceAmount,
+      customerName,
+      customerPhone,
+      customerCustomId,
+      trialDate,
+      deliveryDate
+    } = body;
 
     // Create bill
     const bill = await BillerService.createBiller({
-      orderId,
+      orderId: orderId || 'manual',
       paymentId: paymentId || 'manual',
       createdBy: 'admin',
-      createdById: undefined, // Or get from session if available
+      createdById: undefined,
       notes,
       items,
       paymentStatus,
       rate,
       advancePaid,
       balanceAmount,
+      customerName,
+      customerPhone,
+      customerCustomId,
+      trialDate,
+      deliveryDate
     });
 
     return NextResponse.json(

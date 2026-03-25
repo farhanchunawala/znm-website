@@ -10,8 +10,8 @@
 	label {
 		display: block;
 		margin-bottom: 8px;
-		font-size: 13px;
-		font-weight: 600;
+		font-size: 12px;
+		font-weight: 500;
 		color: #000000;
 		text-transform: uppercase;
 		letter-spacing: 0.3px;
@@ -44,7 +44,7 @@
 .textarea,
 .select {
 	width: 100%;
-	padding: 10px 14px;
+	padding: 8px 12px;
 	border: 1px solid #d0d0d0;
 	border-radius: 8px;
 	font-size: 13px;
@@ -57,10 +57,24 @@
 		background: #111111;
 		color: #ffffff;
 		border-color: #333333;
+
+		&::-webkit-calendar-picker-indicator {
+			filter: invert(1);
+			cursor: pointer;
+			opacity: 0.6;
+			
+			&:hover {
+				opacity: 0.9;
+			}
+		}
 	}
 
 	&::placeholder {
-		color: #b0b0b0;
+		color: #a0a0a0;
+		
+		:global([data-theme='dark']) & {
+			color: #555555;
+		}
 	}
 
 	&:hover {
@@ -94,6 +108,17 @@
 
 		&:focus {
 			box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
+		}
+	}
+
+	&[type='number'] {
+		-moz-appearance: textfield;
+		appearance: textfield;
+
+		&::-webkit-outer-spin-button,
+		&::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
 		}
 	}
 }
@@ -153,11 +178,11 @@
 
 	h3 {
 		margin: 0 0 20px 0;
-		font-size: 14px;
-		font-weight: 700;
+		font-size: 13px;
+		font-weight: 600;
 		color: #000000;
 		text-transform: uppercase;
-		letter-spacing: 0.3px;
+		letter-spacing: 0.2px;
 
 		:global([data-theme='dark']) & {
 			color: #ffffff;

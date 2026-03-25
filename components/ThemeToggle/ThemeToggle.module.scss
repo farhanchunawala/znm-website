@@ -29,6 +29,12 @@
 		background-color: $bg-secondary;
 		color: $text-primary;
 	}
+
+	&.collapsed {
+		padding: 10px;
+		justify-content: center;
+		gap: 0;
+	}
 }
 
 // Dark mode specific styles

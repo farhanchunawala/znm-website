@@ -36,6 +36,7 @@ interface UpdateBillerOptions {
 interface ListBillerOptions {
   billType?: 'COD' | 'PAID';
   status?: 'active' | 'cancelled' | 'completed';
+  search?: string;
   skip?: number;
   limit?: number;
   sortBy?: 'createdAt' | 'billType' | 'amountToCollect';
@@ -242,8 +243,24 @@ class BillerService {
         let finalCustomerCustomId = options.customerCustomId;
         if (!finalCustomerCustomId && customerName) {
           const initial = customerName.charAt(0).toUpperCase();
-          const count = await Customer.countDocuments({});
-          finalCustomerCustomId = `${initial}-${(count + 1).toString().padStart(3, '0')}`;
+          // Find the highest existing number for this initial across all billers
+          const existingBillers = await Biller.find({
+            'customerSnapshot.customerCustomId': { $regex: `^${initial}-` }
+          }).select('customerSnapshot.customerCustomId').lean();
+
+          let maxNum = 0;
+          existingBillers.forEach(b => {
+            const customId = b.customerSnapshot?.customerCustomId;
+            if (customId && customId.startsWith(`${initial}-`)) {
+              const numPart = customId.split('-')[1];
+              const num = parseInt(numPart, 10);
+              if (!isNaN(num) && num > maxNum) {
+                maxNum = num;
+              }
+            }
+          });
+          
+          finalCustomerCustomId = `${initial}-${(maxNum + 1).toString().padStart(3, '0')}`;
         }
 
         customerSnapshot = {
@@ -365,7 +382,7 @@ class BillerService {
    */
   async listBillers(options: ListBillerOptions = {}): Promise<{ bills: IBiller[]; total: number }> {
     try {
-      const { billType, status, skip = 0, limit = 50, sortBy = 'createdAt' } = options;
+      const { billType, status, skip = 0, limit = 50, sortBy = 'createdAt', search } = options;
 
       const filter: any = {};
       if (billType) filter.billType = billType;
@@ -380,6 +397,17 @@ class BillerService {
         filter.balanceAmount = { $gt: 0 };
       } else if (status) {
         filter.status = status;
+      }
+
+      if (search) {
+        const searchRegex = new RegExp(search, 'i');
+        filter.$or = [
+          ...(filter.$or || []),
+          { billId: searchRegex },
+          { 'customerSnapshot.name': searchRegex },
+          { 'customerSnapshot.customerCustomId': searchRegex },
+          { 'orderSnapshot.orderNumber': searchRegex }
+        ];
       }
 
       const sortOptions: any = {};
@@ -660,6 +688,58 @@ class BillerService {
     } catch (error) {
       console.error('Error verifying bill printability:', error);
       return false;
+    }
+  }
+
+  /**
+   * GENERATE NEXT CUSTOMER ID
+   * Pre-generate a custom ID based on Initial and existing slots
+   */
+  async generateNextCustomerId(initial: string): Promise<string> {
+    try {
+      if (!initial) return '';
+      const uppercaseInitial = initial.charAt(0).toUpperCase();
+      
+      // Find ALL custom IDs to determine the global maximum number
+      const allBillers = await Biller.find({
+        'customerSnapshot.customerCustomId': { $regex: /-[0-9]{3,}$/ }
+      }).select('customerSnapshot.customerCustomId').lean();
+
+      let maxGlobalNum = 0;
+      allBillers.forEach(b => {
+        const customId = b.customerSnapshot?.customerCustomId;
+        if (customId && customId.includes('-')) {
+          const parts = customId.split('-');
+          const numPart = parts[parts.length - 1];
+          const num = parseInt(numPart, 10);
+          if (!isNaN(num) && num > maxGlobalNum) {
+            maxGlobalNum = num;
+          }
+        }
+      });
+      
+      return `${uppercaseInitial}-${(maxGlobalNum + 1).toString().padStart(3, '0')}`;
+    } catch (error) {
+      console.error('Error generating next customer ID:', error);
+      return `${initial.charAt(0).toUpperCase()}-001`;
+    }
+  }
+
+  /**
+   * FIND CUSTOMER BY CUSTOM ID
+   * Retrieve existing customer details for auto-filling
+   */
+  async findCustomerByCustomId(customId: string): Promise<IBillerCustomerSnapshot | null> {
+    try {
+      if (!customId) return null;
+      const bill = await Biller.findOne({
+        'customerSnapshot.customerCustomId': customId
+      }).select('customerSnapshot').lean();
+      
+      return bill?.customerSnapshot || null;
+    } catch (error) {
+      console.error('Error finding customer by custom ID:', error);
+      return null;
     }
   }
 }

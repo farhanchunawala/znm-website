@@ -15,18 +15,27 @@ import {
 	Cog6ToothIcon,
 	CheckCircleIcon,
 	CurrencyDollarIcon,
+	ChevronLeftIcon,
+	ChevronRightIcon,
 } from '@heroicons/react/24/outline';
 import { ThemeProvider } from '@/lib/contexts/ThemeContext';
 import ThemeToggle from '@/components/ThemeToggle/ThemeToggle';
+import { useState } from 'react';
 import styles from './admin-layout.module.scss';
 
 function AdminLayoutContent({ children }: { children: React.ReactNode }) {
 	const router = useRouter();
 	const pathname = usePathname();
 
+	const [isCollapsed, setIsCollapsed] = useState(false);
+
 	const handleLogout = async () => {
 		await fetch('/api/admin/logout', { method: 'POST' });
 		router.push('/admin/login');
+	};
+
+	const toggleSidebar = () => {
+		setIsCollapsed(!isCollapsed);
 	};
 
 	const navSections = [
@@ -84,20 +93,22 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
 	};
 
 	return (
-		<div className={styles.adminLayout}>
-			<aside className={styles.sidebar}>
+		<div className={`${styles.adminLayout} ${isCollapsed ? styles.layoutCollapsed : ''}`}>
+			<aside className={`${styles.sidebar} ${isCollapsed ? styles.collapsed : ''}`}>
 				<div className={styles.logo}>
 					<div className={styles.logoIcon}>ZNM</div>
-					<div className={styles.logoText}>
-						<h2>Admin</h2>
-						<p>Dashboard</p>
-					</div>
+					{!isCollapsed && (
+						<div className={styles.logoText}>
+							<h2>Admin</h2>
+							<p>Dashboard</p>
+						</div>
+					)}
 				</div>
 
 				<nav className={styles.nav}>
 					{navSections.map((section) => (
 						<div key={section.title} className={styles.navSection}>
-							<div className={styles.sectionTitle}>{section.title}</div>
+							{!isCollapsed && <div className={styles.sectionTitle}>{section.title}</div>}
 							{section.items.map((item) => {
 								const Icon = item.icon;
 								return (
@@ -105,9 +116,10 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
 										key={item.href}
 										href={item.href}
 										className={`${styles.navItem} ${isActive(item.href) ? styles.active : ''}`}
+										title={isCollapsed ? item.label : ''}
 									>
 										<Icon className={styles.icon} />
-										<span>{item.label}</span>
+										{!isCollapsed && <span>{item.label}</span>}
 									</Link>
 								);
 							})}
@@ -116,10 +128,13 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
 				</nav>
 
 				<div className={styles.sidebarFooter}>
-					<ThemeToggle />
-					<button onClick={handleLogout} className={styles.logoutBtn}>
+					<ThemeToggle showLabel={!isCollapsed} />
+					<button onClick={handleLogout} className={styles.logoutBtn} title={isCollapsed ? 'Logout' : ''}>
 						<ArrowLeftOnRectangleIcon className={styles.icon} />
-						<span>Logout</span>
+						{!isCollapsed && <span>Logout</span>}
+					</button>
+					<button onClick={toggleSidebar} className={styles.collapseBtn}>
+						{isCollapsed ? <ChevronRightIcon className={styles.icon} /> : <ChevronLeftIcon className={styles.icon} />}
 					</button>
 				</div>
 			</aside>
