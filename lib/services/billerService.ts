@@ -3,6 +3,7 @@ import Biller, { IBiller, IBillerCustomerSnapshot, IBillerOrderSnapshot } from '
 import Order, { IOrder } from '@/models/OrderModel';
 import Payment, { IPayment } from '@/models/PaymentModel';
 import Customer from '@/models/CustomerModel';
+import { normalizePhone } from '@/lib/utils/customer-validation';
 
 interface CreateBillerOptions {
   orderId: string;
@@ -19,6 +20,7 @@ interface CreateBillerOptions {
   customerName?: string;
   customerPhone?: string;
   customerPhones?: string[];
+  customerEmail?: string;
   customerCustomId?: string;
   trialDate?: string | Date;
   deliveryDate?: string | Date;
@@ -36,6 +38,7 @@ interface UpdateBillerOptions {
   customerName?: string;
   customerPhone?: string;
   customerPhones?: string[];
+  customerEmail?: string;
   customerCustomId?: string;
   trialDate?: string | Date;
   deliveryDate?: string | Date;
@@ -175,6 +178,7 @@ class BillerService {
         customerName,
         customerPhone,
         customerPhones,
+        customerEmail,
         customerCustomId,
         trialDate,
         deliveryDate
@@ -275,10 +279,15 @@ class BillerService {
           finalCustomerCustomId = `${initial}-${(maxNum + 1).toString().padStart(3, '0')}`;
         }
 
+        // Normalize phone for consistent lookup and registration
+        const normalizedPhone = (customerPhone && customerPhone !== 'N/A') 
+          ? normalizePhone(customerPhone) 
+          : undefined;
+
         // Check if customer already exists in main Customers collection
         let existingCustomer: any = null;
-        if (customerPhone && customerPhone !== 'N/A') {
-          existingCustomer = await Customer.findOne({ phone: customerPhone });
+        if (normalizedPhone) {
+          existingCustomer = await Customer.findOne({ phone: normalizedPhone });
         }
 
         let mainCustomerId;
@@ -286,17 +295,54 @@ class BillerService {
           mainCustomerId = existingCustomer._id;
         } else {
           // Register new customer automatically
-          const newCustomer = await Customer.create({
-            name: customerName || 'Ad-Hoc Customer',
-            phone: customerPhone || undefined,
-            status: 'active',
-            tags: ['biller-auto-reg'],
-            meta: {
-              customId: finalCustomerCustomId,
-              source: 'biller'
+          try {
+            // Determine the ID to use. Prioritize user-provided ID if valid.
+            let formalCustomerId = customerCustomId;
+            
+            // If no user-provided ID, generate a znm-XXXX ID
+            if (!formalCustomerId) {
+              const highestIdCust: any = await Customer.findOne({ customerId: /^znm-/ })
+                .sort({ customerId: -1 })
+                .lean();
+              
+              let custNum = 1;
+              if (highestIdCust && highestIdCust.customerId) {
+                const matches = highestIdCust.customerId.match(/znm-(\d+)/);
+                if (matches) {
+                  custNum = parseInt(matches[1]) + 1;
+                }
+              }
+              formalCustomerId = `znm-${String(custNum).padStart(4, '0')}`;
             }
-          });
-          mainCustomerId = newCustomer._id;
+
+            // Handle name splitting for legacy UI support (firstName/lastName)
+            const nameParts = (customerName || '').trim().split(/\s+/);
+            const fName = nameParts[0] || 'Ad-Hoc';
+            const lName = nameParts.slice(1).join(' ') || 'Customer';
+
+            const newCustomer = await Customer.create({
+              name: customerName || 'Ad-Hoc Customer',
+              firstName: fName,
+              lastName: lName,
+              phone: normalizedPhone,
+              email: customerEmail, // Fixed variable name
+              customerId: formalCustomerId,
+              status: 'active',
+              archived: false,
+              tags: ['biller-auto-reg'],
+              meta: {
+                customId: formalCustomerId,
+                source: 'biller'
+              }
+            });
+            mainCustomerId = newCustomer._id;
+            // Ensure snapshots use the actual created ID
+            finalCustomerCustomId = formalCustomerId;
+          } catch (regErr: any) {
+            console.error('Error auto-registering customer during bill creation:', regErr);
+            // Fallback: Use ad-hoc ID if registration fails (e.g. duplicate key we missed)
+            mainCustomerId = new mongoose.Types.ObjectId();
+          }
         }
 
         customerSnapshot = {

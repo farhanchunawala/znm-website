@@ -20,14 +20,25 @@ export interface ICustomer extends Document {
 	customerId?: string; // Legacy field - keep for backward compatibility
 	userId?: mongoose.Types.ObjectId; // Link to User account
 	email?: string;
+	emails?: string[];
 	phone?: string;
+	phoneCode?: string;
 	name: string;
+	firstName?: string;
+	lastName?: string;
 	dob?: Date;
 	gender?: 'male' | 'female' | 'other' | 'prefer_not_to_say';
 	status: 'active' | 'inactive' | 'merged';
+	archived?: boolean;
+	archivedAt?: Date;
 	tags: string[];
 	addresses: IAddress[];
 	primaryAddressId?: string;
+	address?: string;
+	city?: string;
+	state?: string;
+	country?: string;
+	zipCode?: string;
 	meta?: Record<string, any>;
 	lastOrderAt?: Date;
 	mergedInto?: mongoose.Types.ObjectId;
@@ -77,13 +88,17 @@ const CustomerSchema = new Schema<ICustomer>(
 				message: 'Invalid email format',
 			},
 		},
+		emails: { type: [String], default: [] },
 		phone: {
 			type: String,
 			sparse: true,
 			unique: true,
 			index: true,
 		},
+		phoneCode: { type: String, default: '+91' },
 		name: { type: String, required: true, index: 'text' },
+		firstName: { type: String, index: 'text' },
+		lastName: { type: String, index: 'text' },
 		dob: Date,
 		gender: {
 			type: String,
@@ -95,9 +110,16 @@ const CustomerSchema = new Schema<ICustomer>(
 			default: 'active',
 			index: true,
 		},
+		archived: { type: Boolean, default: false, index: true },
+		archivedAt: Date,
 		tags: { type: [String], default: [], index: true },
 		addresses: { type: [AddressSchema], default: [] },
 		primaryAddressId: String,
+		address: String,
+		city: String,
+		state: String,
+		country: String,
+		zipCode: String,
 		meta: Schema.Types.Mixed,
 		lastOrderAt: { type: Date, index: true },
 		mergedInto: { type: Schema.Types.ObjectId, ref: 'Customer' },

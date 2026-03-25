@@ -103,6 +103,7 @@ export async function POST(request: NextRequest) {
       customerName,
       customerPhone,
       customerPhones,
+      customerEmail,
       customerCustomId,
       trialDate,
       deliveryDate
@@ -110,8 +111,9 @@ export async function POST(request: NextRequest) {
 
     // Create bill
     const bill = await BillerService.createBiller({
-      orderId: orderId || 'manual',
-      paymentId: paymentId || 'manual',
+      orderId,
+      paymentId,
+      manualOverride: true,
       createdBy: 'admin',
       createdById: undefined,
       notes,
@@ -123,6 +125,7 @@ export async function POST(request: NextRequest) {
       customerName,
       customerPhone,
       customerPhones,
+      customerEmail,
       customerCustomId,
       trialDate,
       deliveryDate

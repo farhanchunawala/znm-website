@@ -66,6 +66,7 @@ export default function BillsPage() {
 		customerName: '',
 		customerPhone: '',
 		customerPhones: [] as string[],
+		customerEmail: '',
 		customerCustomId: '',
 		trialDate: '',
 		deliveryDate: '',
@@ -82,6 +83,7 @@ export default function BillsPage() {
 		customerName: '',
 		customerPhone: '',
 		customerPhones: [] as string[],
+		customerEmail: '',
 		customerCustomId: '',
 		trialDate: '',
 		deliveryDate: '',
@@ -92,6 +94,30 @@ export default function BillsPage() {
 		advancePaid: 0,
 		balanceAmount: 0,
 	});
+
+	const [statusModal, setStatusModal] = useState<{ 
+		title: string; 
+		message: string; 
+		type: 'success' | 'error' | 'info';
+	} | null>(null);
+
+	const showStatus = (title: string, message: string, type: 'success' | 'error' | 'info' = 'success') => {
+		setStatusModal({ title, message, type });
+	};
+
+	const [confirmAction, setConfirmAction] = useState<{ 
+		title: string; 
+		message: string; 
+		onConfirm: () => void;
+	} | null>(null);
+
+	const [promptAction, setPromptAction] = useState<{ 
+		title: string; 
+		message: string; 
+		placeholder: string;
+		onConfirm: (value: string) => void;
+	} | null>(null);
+	const [promptValue, setPromptValue] = useState('');
 
 	const [actionInProgress, setActionInProgress] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
@@ -148,6 +174,7 @@ export default function BillsPage() {
 			customerName: customer.name,
 			customerPhone: customer.phone,
 			customerPhones: customer.phones || [],
+			customerEmail: customer.email || '',
 			customerCustomId: customer.customerCustomId
 		});
 		setShowSuggestions(false);
@@ -229,13 +256,20 @@ export default function BillsPage() {
 							</head>
 							<body>
 								<div class="bill-header">
-									<h1>ZOLL & METÉR</h1>
-									<p>Bill ID: ${bill.billId || bill.orderSnapshot?.orderNumber || 'N/A'}</p>
+									<img src="/logo/zm-nobg.png" alt="Logo" style="max-height: 80px; margin-bottom: 10px;">
+									<h1 style="margin: 0; font-size: 24px;">ZOLL & METÉR</h1>
+									<p style="margin: 5px 0; font-size: 14px;">Shop no. 10, Abba Apartment, Jogeshwari West, Mumbai - 400102</p>
+									<p style="margin: 5px 0; font-size: 14px;">Farhan: 9769735377 | Faizan: 9820978696 | Shop: 8291943457</p>
+									<p style="margin: 5px 0; font-size: 14px;">Timing: 11:00 am to 09:00 pm</p>
+									<hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+									<p style="font-weight: bold; font-size: 16px;">Bill ID: ${bill.billId || bill.orderSnapshot?.orderNumber || 'N/A'}</p>
 								</div>
 								<div class="bill-details">
-									<p><strong>Customer:</strong> ${bill.customerSnapshot?.name || 'N/A'}</p>
+									<p><strong>Customer:</strong> ${bill.customerSnapshot?.name || 'N/A'} (${bill.customerSnapshot?.customerCustomId || 'N/A'})</p>
 									<p><strong>Phone:</strong> ${[bill.customerSnapshot?.phone, ...(bill.customerSnapshot?.phones || [])].filter(Boolean).join(', ')}</p>
 									<p><strong>Date:</strong> ${new Date(bill.createdAt).toLocaleDateString()}</p>
+									${bill.trialDate ? `<p><strong>Trial Date:</strong> ${new Date(bill.trialDate).toLocaleDateString()}</p>` : ''}
+									${bill.deliveryDate ? `<p><strong>Delivery Date:</strong> ${new Date(bill.deliveryDate).toLocaleDateString()}</p>` : ''}
 								</div>
 								<h3>Items</h3>
 								<table style="margin-bottom: 20px;">
@@ -282,42 +316,59 @@ export default function BillsPage() {
 				}
 			}
 		} catch (err: any) {
-			alert(err.response?.data?.error || 'Failed to print bill');
+			showStatus('Error', err.response?.data?.error || 'Failed to print bill', 'error');
 		} finally {
 			setActionInProgress(false);
 		}
 	};
 
-	// Cancel bill
-	const handleCancel = async (billId: string) => {
-		const reason = prompt('Enter cancellation reason:');
-		if (!reason) return;
+	const initiateCancel = (billId: string) => {
+		setPromptValue('');
+		setPromptAction({
+			title: 'Cancel Bill',
+			message: 'Please enter a reason for cancelling this bill:',
+			placeholder: 'Reason for cancellation...',
+			onConfirm: (reason) => {
+				handleCancel(billId, reason);
+				setPromptAction(null);
+			}
+		});
+	};
 
+	const handleCancel = async (billId: string, reason: string) => {
 		try {
 			setActionInProgress(true);
 			await axios.patch(`/api/admin/bills/${billId}`, { action: 'cancel', reason });
 			await fetchBills();
-			alert('Bill cancelled successfully');
+			showStatus('Success', 'Bill cancelled successfully');
 			setShowDetail(false);
 		} catch (err: any) {
-			alert(err.response?.data?.error || 'Failed to cancel bill');
+			showStatus('Error', err.response?.data?.error || 'Failed to cancel bill', 'error');
 		} finally {
 			setActionInProgress(false);
 		}
 	};
 
-	// Regenerate bill
-	const handleRegenerate = async (billId: string) => {
-		if (!confirm('Create a new bill for this order? Old bill will be archived.')) return;
+	const initiateRegenerate = (billId: string) => {
+		setConfirmAction({
+			title: 'Regenerate Bill',
+			message: 'Are you sure you want to create a new bill for this order? The old bill will be archived.',
+			onConfirm: () => {
+				handleRegenerate(billId);
+				setConfirmAction(null);
+			}
+		});
+	};
 
+	const handleRegenerate = async (billId: string) => {
 		try {
 			setActionInProgress(true);
 			await axios.patch(`/api/admin/bills/${billId}`, { action: 'regenerate' });
 			await fetchBills();
-			alert('Bill regenerated successfully');
+			showStatus('Success', 'Bill regenerated successfully');
 			setShowDetail(false);
 		} catch (err: any) {
-			alert(err.response?.data?.error || 'Failed to regenerate bill');
+			showStatus('Error', err.response?.data?.error || 'Failed to regenerate bill', 'error');
 		} finally {
 			setActionInProgress(false);
 		}
@@ -326,7 +377,7 @@ export default function BillsPage() {
 	// Create bill
 	const handleCreateBill = async (shouldPrint = false) => {
 		if (!createFormData.orderId || !createFormData.paymentStatus) {
-			alert('Please fill in all required fields');
+			showStatus('Warning', 'Please fill in all required fields', 'info');
 			return;
 		}
 
@@ -336,6 +387,7 @@ export default function BillsPage() {
 				customerName: createFormData.customerName,
 				customerPhone: createFormData.customerPhone,
 				customerPhones: createFormData.customerPhones,
+				customerEmail: createFormData.customerEmail,
 				customerCustomId: createFormData.customerCustomId,
 				trialDate: createFormData.trialDate,
 				deliveryDate: createFormData.deliveryDate,
@@ -362,6 +414,7 @@ export default function BillsPage() {
 				customerName: '',
 				customerPhone: '',
 				customerPhones: [],
+				customerEmail: '',
 				customerCustomId: '',
 				trialDate: '',
 				deliveryDate: '',
@@ -372,9 +425,9 @@ export default function BillsPage() {
 				advancePaid: 0,
 				balanceAmount: 0
 			});
-			if (!shouldPrint) alert('Bill created successfully');
+			if (!shouldPrint) showStatus('Success', 'Bill created successfully');
 		} catch (err: any) {
-			alert(err.response?.data?.error || 'Failed to create bill');
+			showStatus('Error', err.response?.data?.error || 'Failed to create bill', 'error');
 		} finally {
 			setActionInProgress(false);
 		}
@@ -394,9 +447,9 @@ export default function BillsPage() {
 			await fetchBills();
 			setShowPayModal(false);
 			setShowDetail(false);
-			alert('Payment updated successfully');
+			showStatus('Success', 'Payment updated successfully');
 		} catch (err: any) {
-			alert(err.response?.data?.error || 'Failed to update payment');
+			showStatus('Error', err.response?.data?.error || 'Failed to update payment', 'error');
 		} finally {
 			setActionInProgress(false);
 		}
@@ -413,6 +466,7 @@ export default function BillsPage() {
 				customerName: editFormData.customerName,
 				customerPhone: editFormData.customerPhone,
 				customerPhones: editFormData.customerPhones,
+				customerEmail: editFormData.customerEmail,
 				customerCustomId: editFormData.customerCustomId,
 				trialDate: editFormData.trialDate,
 				deliveryDate: editFormData.deliveryDate,
@@ -424,26 +478,34 @@ export default function BillsPage() {
 			});
 			await fetchBills();
 			setShowEditModal(false);
-			alert('Bill updated successfully');
+			showStatus('Success', 'Bill updated successfully');
 		} catch (err: any) {
-			alert(err.response?.data?.error || 'Failed to update bill');
+			showStatus('Error', err.response?.data?.error || 'Failed to update bill', 'error');
 		} finally {
 			setActionInProgress(false);
 		}
 	};
 
-	// Delete bill
-	const handleDeleteBill = async (billId: string) => {
-		if (!confirm('Are you sure? This action cannot be undone.')) return;
+	const initiateDeleteBill = (billId: string) => {
+		setConfirmAction({
+			title: 'Delete Bill',
+			message: 'Are you sure? This action cannot be undone and will permanently remove this record.',
+			onConfirm: () => {
+				handleDeleteBill(billId);
+				setConfirmAction(null);
+			}
+		});
+	};
 
+	const handleDeleteBill = async (billId: string) => {
 		try {
 			setActionInProgress(true);
 			await axios.delete(`/api/admin/bills/${billId}`);
 			await fetchBills();
-			alert('Bill deleted successfully');
+			showStatus('Success', 'Bill deleted successfully');
 			setShowDetail(false);
 		} catch (err: any) {
-			alert(err.response?.data?.error || 'Failed to delete bill');
+			showStatus('Error', err.response?.data?.error || 'Failed to delete bill', 'error');
 		} finally {
 			setActionInProgress(false);
 		}
@@ -551,7 +613,7 @@ export default function BillsPage() {
 									a.href = url;
 									a.download = `bills-${new Date().toISOString().split('T')[0]}.csv`;
 									a.click();
-								} catch { alert('Export failed'); }
+								} catch { showStatus('Error', 'Export failed', 'error'); }
 							}}
 							className={buttonStyles.secondaryBtn}
 						>
@@ -570,9 +632,9 @@ export default function BillsPage() {
 							try {
 								const res = await window.fetch('/api/admin/bills/import', { method: 'POST', body: fd });
 								const result = await res.json();
-								alert(result.success ? `Import: ${result.created} created` : result.error);
+								showStatus('Import Result', result.success ? `Import: ${result.created} created` : result.error, result.success ? 'success' : 'error');
 								if (result.success) fetchBills();
-							} catch { alert('Import failed'); }
+							} catch { showStatus('Error', 'Import failed', 'error'); }
 							if (fileInputRef.current) fileInputRef.current.value = '';
 						}} />
 						<button
@@ -697,7 +759,7 @@ export default function BillsPage() {
 						)}
 						{row.status === 'active' && (
 							<button
-								onClick={() => handleCancel(row._id)}
+								onClick={() => initiateCancel(row._id)}
 								className={`${buttonStyles.ghostBtn} ${styles.small}`}
 								title="Archive/Cancel"
 							>
@@ -705,7 +767,7 @@ export default function BillsPage() {
 							</button>
 						)}
 						<button
-							onClick={() => handleDeleteBill(row._id)}
+							onClick={() => initiateDeleteBill(row._id)}
 							className={`${buttonStyles.ghostBtn} ${styles.small} ${styles.danger}`}
 							title="Delete bill"
 						>
@@ -774,7 +836,7 @@ export default function BillsPage() {
 										Pay
 									</button>
 									<button
-										onClick={() => handleCancel(selectedBill._id)}
+										onClick={() => initiateCancel(selectedBill._id)}
 										className={buttonStyles.dangerBtn}
 										disabled={actionInProgress}
 									>
@@ -783,7 +845,7 @@ export default function BillsPage() {
 								</>
 							)}
 							<button
-								onClick={() => handleDeleteBill(selectedBill._id)}
+								onClick={() => initiateDeleteBill(selectedBill._id)}
 								className={buttonStyles.dangerBtn}
 								disabled={actionInProgress}
 							>
@@ -1042,6 +1104,7 @@ export default function BillsPage() {
 									className={formStyles.input}
 								/>
 								<button 
+									type="button" 
 									onClick={() => {
 										const newPhones = createFormData.customerPhones.filter((_, i) => i !== idx);
 										setCreateFormData({ ...createFormData, customerPhones: newPhones });
@@ -1054,17 +1117,27 @@ export default function BillsPage() {
 							</div>
 						))}
 						<button 
-							onClick={() => setCreateFormData({ 
-								...createFormData, 
-								customerPhones: [...createFormData.customerPhones, ''] 
-							})}
+							type="button" 
+							onClick={() => setCreateFormData({ ...createFormData, customerPhones: [...createFormData.customerPhones, ''] })}
 							className={buttonStyles.ghostBtn}
-							style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', padding: '4px 0' }}
+							style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '14px' }}
 						>
-							<PlusIcon style={{ width: '14px' }} /> Add another phone
+							<PlusIcon style={{ width: '16px' }} /> Add Phone Number
 						</button>
 					</div>
 
+					<div className={formStyles.formGroup}>
+						<label>Customer Email</label>
+						<input
+							type="email"
+							placeholder="customer@example.com"
+							value={createFormData.customerEmail}
+							onChange={(e) =>
+								setCreateFormData({ ...createFormData, customerEmail: e.target.value })
+							}
+							className={formStyles.input}
+						/>
+					</div>
 
 					<div className={formStyles.formGroup}>
 						<label>Items Description, Quantity & Rate</label>
@@ -1331,6 +1404,8 @@ export default function BillsPage() {
 													...editFormData,
 													customerName: c.name,
 													customerPhone: c.phone,
+													customerPhones: c.phones || [],
+													customerEmail: c.email || '',
 													customerCustomId: c.customerCustomId
 												});
 												setShowSuggestions(false);
@@ -1343,6 +1418,19 @@ export default function BillsPage() {
 								</div>
 							)}
 						</div>
+					</div>
+
+					<div className={formStyles.formGroup}>
+						<label>Customer Email</label>
+						<input
+							type="email"
+							placeholder="customer@example.com"
+							value={editFormData.customerEmail}
+							onChange={(e) =>
+								setEditFormData({ ...editFormData, customerEmail: e.target.value })
+							}
+							className={formStyles.input}
+						/>
 					</div>
 
 					<div className={formStyles.formGroup}>
@@ -1382,6 +1470,7 @@ export default function BillsPage() {
 									className={formStyles.input}
 								/>
 								<button 
+									type="button" 
 									onClick={() => {
 										const newPhones = editFormData.customerPhones.filter((_, i) => i !== idx);
 										setEditFormData({ ...editFormData, customerPhones: newPhones });
@@ -1638,6 +1727,100 @@ export default function BillsPage() {
 							)}
 						</div>
 					)}
+				</div>
+			</Modal>
+
+			{/* Confirmation Modal */}
+			<Modal
+				isOpen={!!confirmAction}
+				onClose={() => setConfirmAction(null)}
+				title={confirmAction?.title || ''}
+			>
+				<div style={{ textAlign: 'center', padding: '10px 0' }}>
+					<p style={{ fontSize: '18px', color: '#fff', opacity: 0.9, marginBottom: '25px' }}>
+						{confirmAction?.message}
+					</p>
+					<div style={{ display: 'flex', gap: '12px' }}>
+						<button
+							onClick={() => setConfirmAction(null)}
+							className={buttonStyles.secondaryBtn}
+							style={{ flex: 1 }}
+						>
+							Discard
+						</button>
+						<button
+							onClick={() => confirmAction?.onConfirm()}
+							className={buttonStyles.dangerBtn}
+							style={{ flex: 1 }}
+						>
+							Proceed
+						</button>
+					</div>
+				</div>
+			</Modal>
+
+			{/* Prompt Modal */}
+			<Modal
+				isOpen={!!promptAction}
+				onClose={() => setPromptAction(null)}
+				title={promptAction?.title || ''}
+			>
+				<div style={{ padding: '10px 0' }}>
+					<p style={{ fontSize: '16px', color: '#fff', opacity: 0.8, marginBottom: '15px' }}>
+						{promptAction?.message}
+					</p>
+					<div className={formStyles.formGroup}>
+						<textarea
+							placeholder={promptAction?.placeholder}
+							value={promptValue}
+							onChange={(e) => setPromptValue(e.target.value)}
+							className={formStyles.input}
+							style={{ minHeight: '100px', width: '100%', marginBottom: '20px' }}
+							autoFocus
+						/>
+					</div>
+					<div style={{ display: 'flex', gap: '12px' }}>
+						<button
+							onClick={() => setPromptAction(null)}
+							className={buttonStyles.secondaryBtn}
+							style={{ flex: 1 }}
+						>
+							Cancel
+						</button>
+						<button
+							onClick={() => promptAction?.onConfirm(promptValue)}
+							className={buttonStyles.primaryBtn}
+							style={{ flex: 1 }}
+							disabled={!promptValue.trim()}
+						>
+							Confirm
+						</button>
+					</div>
+				</div>
+			</Modal>
+
+			{/* Status / Notification Modal */}
+			<Modal
+				isOpen={!!statusModal}
+				onClose={() => setStatusModal(null)}
+				title={statusModal?.title || ''}
+			>
+				<div style={{ textAlign: 'center', padding: '10px 0' }}>
+					<div style={{
+						fontSize: '48px',
+						marginBottom: '20px',
+						color: statusModal?.type === 'error' ? '#ff5252' : statusModal?.type === 'info' ? '#2196f3' : '#4caf50'
+					}}>
+						{statusModal?.type === 'error' ? '❌' : statusModal?.type === 'info' ? 'ℹ️' : '✅'}
+					</div>
+					<p style={{ fontSize: '18px', color: '#fff', opacity: 0.9 }}>{statusModal?.message}</p>
+					<button
+						onClick={() => setStatusModal(null)}
+						className={buttonStyles.primaryBtn}
+						style={{ marginTop: '25px', width: '100%' }}
+					>
+						Understand
+					</button>
 				</div>
 			</Modal>
 		</div>
