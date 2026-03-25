@@ -16,6 +16,14 @@ export interface IAddress {
 	createdAt: Date;
 }
 
+export interface IMeasurements {
+	shirt?: Record<string, string | number>;
+	pant?: Record<string, string | number>;
+	kurta?: Record<string, string | number>;
+	suit?: Record<string, string | number>;
+	notes?: string;
+}
+
 export interface ICustomer extends Document {
 	customerId?: string; // Legacy field - keep for backward compatibility
 	userId?: mongoose.Types.ObjectId; // Link to User account
@@ -33,6 +41,7 @@ export interface ICustomer extends Document {
 	archivedAt?: Date;
 	tags: string[];
 	addresses: IAddress[];
+	measurements?: IMeasurements;
 	primaryAddressId?: string;
 	address?: string;
 	city?: string;
@@ -68,6 +77,17 @@ const AddressSchema = new Schema<IAddress>(
 		},
 		isDefault: { type: Boolean, default: false },
 		createdAt: { type: Date, default: Date.now },
+	},
+	{ _id: false }
+);
+
+const MeasurementsSchema = new Schema<IMeasurements>(
+	{
+		shirt: { type: Schema.Types.Mixed, default: {} },
+		pant: { type: Schema.Types.Mixed, default: {} },
+		kurta: { type: Schema.Types.Mixed, default: {} },
+		suit: { type: Schema.Types.Mixed, default: {} },
+		notes: { type: String, default: '' },
 	},
 	{ _id: false }
 );
@@ -114,6 +134,7 @@ const CustomerSchema = new Schema<ICustomer>(
 		archivedAt: Date,
 		tags: { type: [String], default: [], index: true },
 		addresses: { type: [AddressSchema], default: [] },
+		measurements: { type: MeasurementsSchema, default: () => ({ shirt: {}, pant: {}, kurta: {}, suit: {}, notes: '' }) },
 		primaryAddressId: String,
 		address: String,
 		city: String,

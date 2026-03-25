@@ -1,0 +1,61 @@
+.container {
+  background: #1e1e1e;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.garmentTabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 12px;
+}
+
+.garmentBtn {
+  background: transparent;
+  border: none;
+  color: #888;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.2s;
+
+  &:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  &.active {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #333;
+}
+
+.successMsg {
+  color: #4caf50;
+  font-size: 14px;
+}
+
+.errorMsg {
+  color: #f44336;
+  font-size: 14px;
+}

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import MeasurementsTab from '@/components/Admin/MeasurementsTab';
 import styles from './customer-detail.module.scss';
 
 interface Customer {
@@ -37,6 +38,7 @@ export default function CustomerDetailPage({
 	const [customer, setCustomer] = useState<Customer | null>(null);
 	const [orders, setOrders] = useState<Order[]>([]);
 	const [loading, setLoading] = useState(true);
+	const [activeTab, setActiveTab] = useState<'details' | 'measurements'>('details');
 	const router = useRouter();
 
 	useEffect(() => {
@@ -97,113 +99,139 @@ export default function CustomerDetailPage({
 				<span className={styles.customerId}>{customer.customerId}</span>
 			</div>
 
-			<div className={styles.infoGrid}>
-				<div className={styles.infoCard}>
-					<h3>Contact Information</h3>
-					<div className={styles.infoRow}>
-						<span className={styles.label}>Email:</span>
-						<span>
-							{customer.email ||
-								customer.emails?.join(', ') ||
-								'N/A'}
-						</span>
-					</div>
-					<div className={styles.infoRow}>
-						<span className={styles.label}>Phone:</span>
-						<span>
-							{customer.phoneCode}
-							{customer.phone}
-						</span>
-					</div>
-				</div>
-
-				<div className={styles.infoCard}>
-					<h3>Address</h3>
-					<div className={styles.address}>
-						{customer.address}
-						<br />
-						{customer.city}, {customer.state} {customer.zipCode}
-						<br />
-						{customer.country}
-					</div>
-				</div>
-
-				<div className={styles.infoCard}>
-					<h3>Statistics</h3>
-					<div className={styles.infoRow}>
-						<span className={styles.label}>Total Orders:</span>
-						<span className={styles.value}>{orders.length}</span>
-					</div>
-					<div className={styles.infoRow}>
-						<span className={styles.label}>Total Spent:</span>
-						<span className={styles.value}>
-							₹{totalSpent.toLocaleString()}
-						</span>
-					</div>
-					<div className={styles.infoRow}>
-						<span className={styles.label}>Customer Since:</span>
-						<span>
-							{new Date(customer.createdAt).toLocaleDateString()}
-						</span>
-					</div>
-				</div>
+			<div className={styles.tabContainer}>
+				<button 
+					className={`${styles.tabBtn} ${activeTab === 'details' ? styles.active : ''}`}
+					onClick={() => setActiveTab('details')}
+				>
+					Details & Orders
+				</button>
+				<button 
+					className={`${styles.tabBtn} ${activeTab === 'measurements' ? styles.active : ''}`}
+					onClick={() => setActiveTab('measurements')}
+				>
+					Measurements
+				</button>
 			</div>
 
-			<div className={styles.ordersSection}>
-				<h2>Order History ({orders.length})</h2>
-				<div className={styles.tableContainer}>
-					<table className={styles.table}>
-						<thead>
-							<tr>
-								<th>Order ID</th>
-								<th>Date</th>
-								<th>Items</th>
-								<th>Total</th>
-								<th>Payment Status</th>
-							</tr>
-						</thead>
-						<tbody>
-							{orders.map((order) => (
-								<tr
-									key={order.orderId}
-									onClick={() =>
-										router.push(
-											`/admin/orders/${order.orderId}`
-										)
-									}
-									className={styles.clickableRow}
-								>
-									<td className={styles.orderId}>
-										{order.orderId}
-									</td>
-									<td>
-										{new Date(
-											order.createdAt
-										).toLocaleDateString()}
-									</td>
-									<td>
-										{order.items.map((item, idx) => (
-											<div key={idx}>
-												{item.title} x{item.quantity}
-											</div>
-										))}
-									</td>
-									<td className={styles.amount}>
-										₹{order.total.toLocaleString()}
-									</td>
-									<td>
-										<span
-											className={`${styles.badge} ${styles[order.paymentStatus]}`}
+			{activeTab === 'details' && (
+				<>
+					<div className={styles.infoGrid}>
+						<div className={styles.infoCard}>
+							<h3>Contact Information</h3>
+							<div className={styles.infoRow}>
+								<span className={styles.label}>Email:</span>
+								<span>
+									{customer.email ||
+										customer.emails?.join(', ') ||
+										'N/A'}
+								</span>
+							</div>
+							<div className={styles.infoRow}>
+								<span className={styles.label}>Phone:</span>
+								<span>
+									{customer.phoneCode}
+									{customer.phone}
+								</span>
+							</div>
+						</div>
+
+						<div className={styles.infoCard}>
+							<h3>Address</h3>
+							<div className={styles.address}>
+								{customer.address}
+								<br />
+								{customer.city}, {customer.state} {customer.zipCode}
+								<br />
+								{customer.country}
+							</div>
+						</div>
+
+						<div className={styles.infoCard}>
+							<h3>Statistics</h3>
+							<div className={styles.infoRow}>
+								<span className={styles.label}>Total Orders:</span>
+								<span className={styles.value}>{orders.length}</span>
+							</div>
+							<div className={styles.infoRow}>
+								<span className={styles.label}>Total Spent:</span>
+								<span className={styles.value}>
+									₹{totalSpent.toLocaleString()}
+								</span>
+							</div>
+							<div className={styles.infoRow}>
+								<span className={styles.label}>Customer Since:</span>
+								<span>
+									{new Date(customer.createdAt).toLocaleDateString()}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<div className={styles.ordersSection}>
+						<h2>Order History ({orders.length})</h2>
+						<div className={styles.tableContainer}>
+							<table className={styles.table}>
+								<thead>
+									<tr>
+										<th>Order ID</th>
+										<th>Date</th>
+										<th>Items</th>
+										<th>Total</th>
+										<th>Payment Status</th>
+									</tr>
+								</thead>
+								<tbody>
+									{orders.map((order) => (
+										<tr
+											key={order.orderId}
+											onClick={() =>
+												router.push(
+													`/admin/orders/${order.orderId}`
+												)
+											}
+											className={styles.clickableRow}
 										>
-											{order.paymentStatus}
-										</span>
-									</td>
-								</tr>
-							))}
-						</tbody>
-					</table>
-				</div>
-			</div>
+											<td className={styles.orderId}>
+												{order.orderId}
+											</td>
+											<td>
+												{new Date(
+													order.createdAt
+												).toLocaleDateString()}
+											</td>
+											<td>
+												{order.items.map((item, idx) => (
+													<div key={idx}>
+														{item.title} x{item.quantity}
+													</div>
+												))}
+											</td>
+											<td className={styles.amount}>
+												₹{order.total.toLocaleString()}
+											</td>
+											<td>
+												<span
+													className={`${styles.badge} ${styles[order.paymentStatus]}`}
+												>
+													{order.paymentStatus}
+												</span>
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</>
+			)}
+
+			{activeTab === 'measurements' && (
+				<MeasurementsTab 
+					customerId={customer._id} 
+					initialMeasurements={(customer as any).measurements} 
+				/>
+			)}
 		</div>
 	);
 }

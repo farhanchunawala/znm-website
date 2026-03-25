@@ -17,6 +17,7 @@ import {
 	CurrencyDollarIcon,
 	ChevronLeftIcon,
 	ChevronRightIcon,
+	ScissorsIcon,
 } from '@heroicons/react/24/outline';
 import { ThemeProvider } from '@/lib/contexts/ThemeContext';
 import ThemeToggle from '@/components/ThemeToggle/ThemeToggle';
@@ -51,6 +52,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
 				{ href: '/admin/orders', label: 'Orders', icon: ShoppingBagIcon },
 				{ href: '/admin/shipments', label: 'Shipments', icon: TruckIcon },
 				{ href: '/admin/bills', label: 'Bills', icon: DocumentTextIcon },
+				{ href: '/admin/measurements', label: 'Measurements', icon: ScissorsIcon },
 				{ href: '/admin/invoices', label: 'Invoices', icon: CurrencyDollarIcon },
 			],
 		},

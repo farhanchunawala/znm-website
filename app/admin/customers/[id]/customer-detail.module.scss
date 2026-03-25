@@ -41,6 +41,35 @@
 	}
 }
 
+.tabContainer {
+	display: flex;
+	gap: 16px;
+	margin-bottom: 32px;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+.tabBtn {
+	padding: 12px 24px;
+	background: transparent;
+	border: none;
+	border-bottom: 2px solid transparent;
+	font-size: 15px;
+	font-weight: 500;
+	color: #757575;
+	cursor: pointer;
+	transition: all 0.2s;
+	margin-bottom: -1px;
+
+	&:hover {
+		color: #212121;
+	}
+
+	&.active {
+		color: #000;
+		border-bottom-color: #000;
+	}
+}
+
 .infoGrid {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
