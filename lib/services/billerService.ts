@@ -731,13 +731,48 @@ class BillerService {
     try {
       if (!customId) return null;
       const bill = await Biller.findOne({
-        'customerSnapshot.customerCustomId': customId
+        'customerSnapshot.customerCustomId': { $regex: new RegExp(`^${customId}$`, 'i') }
       }).select('customerSnapshot').lean();
       
       return bill?.customerSnapshot || null;
     } catch (error) {
       console.error('Error finding customer by custom ID:', error);
       return null;
+    }
+  }
+
+  /**
+   * SEARCH CUSTOMERS BY NAME
+   * Return unique customer profiles matching the name query
+   */
+  async searchCustomers(query: string): Promise<IBillerCustomerSnapshot[]> {
+    try {
+      if (!query || query.length < 2) return [];
+      
+      const regex = new RegExp(query, 'i');
+      const uniqueCustomers = await Biller.aggregate([
+        { $match: { 'customerSnapshot.name': { $regex: regex } } },
+        { 
+          $sort: { createdAt: -1 } 
+        },
+        { $group: {
+            _id: '$customerSnapshot.customerCustomId',
+            name: { $first: '$customerSnapshot.name' },
+            phone: { $first: '$customerSnapshot.phone' },
+            customerCustomId: { $first: '$customerSnapshot.customerCustomId' }
+        }},
+        { $limit: 5 }
+      ]);
+      
+      return uniqueCustomers.map(c => ({
+          name: c.name,
+          phone: c.phone,
+          customerCustomId: c.customerCustomId,
+          customerId: c.customerId || new mongoose.Types.ObjectId()
+      } as IBillerCustomerSnapshot));
+    } catch (error) {
+      console.error('Error searching customers:', error);
+      return [];
     }
   }
 }

@@ -26,6 +26,18 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ success: true, nextId });
     }
 
+    const lookupCustomerId = searchParams.get('lookupCustomerId');
+    if (lookupCustomerId) {
+      const details = await BillerService.findCustomerByCustomId(lookupCustomerId);
+      return NextResponse.json({ success: true, details });
+    }
+
+    const customerSearchName = searchParams.get('customerSearchName');
+    if (customerSearchName) {
+      const results = await BillerService.searchCustomers(customerSearchName);
+      return NextResponse.json({ success: true, suggestions: results });
+    }
+
     const nextInitial = searchParams.get('nextCustomerId');
     if (nextInitial) {
       const nextId = await BillerService.generateNextCustomerId(nextInitial);

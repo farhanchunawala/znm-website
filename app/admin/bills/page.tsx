@@ -109,7 +109,37 @@ export default function BillsPage() {
 	}, [billType, status, sortBy, search]);
 
 	// Auto-generate customer ID based on name initial
+	const [customerSuggestions, setCustomerSuggestions] = useState<any[]>([]);
+	const [showSuggestions, setShowSuggestions] = useState(false);
 	const [lastCheckedInitial, setLastCheckedInitial] = useState('');
+
+	const fetchCustomerSuggestions = async (query: string) => {
+		if (query.length < 2) {
+			setCustomerSuggestions([]);
+			setShowSuggestions(false);
+			return;
+		}
+		try {
+			const res = await axios.get(`/api/admin/bills?customerSearchName=${query}`);
+			if (res.data.success) {
+				setCustomerSuggestions(res.data.suggestions || []);
+				setShowSuggestions(true);
+			}
+		} catch (err) {
+			console.error('Search failed', err);
+		}
+	};
+
+	const selectCustomer = (customer: any) => {
+		setCreateFormData({
+			...createFormData,
+			customerName: customer.name,
+			customerPhone: customer.phone,
+			customerCustomId: customer.customerCustomId
+		});
+		setShowSuggestions(false);
+	};
+
 	const updateNextCustomerId = async (name: string) => {
 		if (!name) return;
 		const initial = name.charAt(0).toUpperCase();
@@ -874,22 +904,50 @@ export default function BillsPage() {
 
 					<div className={formStyles.formGroup}>
 						<label>Customer Name <span className={formStyles.required}>*</span></label>
-						<input
-							type="text"
-							placeholder="John Doe"
-							value={createFormData.customerName}
-							onChange={(e) => {
-								const name = e.target.value;
-								setCreateFormData({ 
-									...createFormData, 
-									customerName: name
-								});
-								if (name.length === 1) {
-									updateNextCustomerId(name);
-								}
-							}}
-							className={formStyles.input}
-						/>
+						<div className={styles.suggestionsContainer}>
+							<input
+								type="text"
+								placeholder="John Doe"
+								value={createFormData.customerName}
+								onChange={(e) => {
+									const name = e.target.value;
+									setCreateFormData({ 
+										...createFormData, 
+										customerName: name
+									});
+									if (name.length === 1) {
+										updateNextCustomerId(name);
+									}
+									fetchCustomerSuggestions(name);
+								}}
+								onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+								onFocus={() => { if (createFormData.customerName.length >= 2) setShowSuggestions(true); }}
+								className={formStyles.input}
+							/>
+							{showSuggestions && (customerSuggestions.length > 0 || createFormData.customerName.length >= 2) && (
+								<div className={styles.suggestionsDropdown}>
+									{customerSuggestions.map((c, i) => (
+										<div 
+											key={i} 
+											className={styles.suggestionItem}
+											onClick={() => selectCustomer(c)}
+										>
+											<span className={styles.suggestionName}>{c.name}</span>
+											<span className={styles.suggestionMeta}>{c.customerCustomId} • {c.phone}</span>
+										</div>
+									))}
+									<div 
+										className={`${styles.suggestionItem} ${styles.addNew}`}
+										onClick={() => {
+											updateNextCustomerId(createFormData.customerName);
+											setShowSuggestions(false);
+										}}
+									>
+										+ Add as New Customer
+									</div>
+								</div>
+							)}
+						</div>
 					</div>
 
 					<div className={formStyles.formGroup}>
