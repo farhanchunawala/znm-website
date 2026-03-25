@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
 		const customersWithStats = await Promise.all(
 			customers.map(async (customer) => {
 				const orders = await Order.find({
-					customerId: customer.customerId,
+					customerId: customer._id,
 					archived: { $ne: true },
 				});
 
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
 					...customer,
 					orderCount: orders.length,
 					totalSpent: orders.reduce(
-						(sum, order) => sum + (order.total || 0),
+						(sum, order) => sum + (order.totals?.grandTotal || 0),
 						0
 					),
 				};
