@@ -31,6 +31,15 @@ interface UpdateBillerOptions {
   additionalAmount?: number;
   updatedBy?: string;
   status?: 'active' | 'cancelled' | 'completed';
+  items?: Array<{ description: string; quantity: number; rate: number }>;
+  customerName?: string;
+  customerPhone?: string;
+  customerCustomId?: string;
+  trialDate?: string | Date;
+  deliveryDate?: string | Date;
+  rate?: number;
+  advancePaid?: number;
+  balanceAmount?: number;
 }
 
 interface ListBillerOptions {
@@ -497,6 +506,37 @@ class BillerService {
           new: options.notes,
         };
         bill.notes = options.notes;
+      }
+
+      if (options.customerName || options.customerPhone || options.customerCustomId) {
+        bill.customerSnapshot = {
+          ...bill.customerSnapshot,
+          name: options.customerName || bill.customerSnapshot.name,
+          phone: options.customerPhone || bill.customerSnapshot.phone,
+          customerCustomId: options.customerCustomId || bill.customerSnapshot.customerCustomId,
+        };
+      }
+
+      if (options.trialDate !== undefined) bill.trialDate = options.trialDate ? new Date(options.trialDate) : undefined;
+      if (options.deliveryDate !== undefined) bill.deliveryDate = options.deliveryDate ? new Date(options.deliveryDate) : undefined;
+
+      if (options.items !== undefined) {
+        bill.items = options.items;
+        const itemsSummary = options.items.length > 0
+          ? options.items.map(i => i.description).join(', ')
+          : 'Items';
+        bill.orderSnapshot = {
+          ...bill.orderSnapshot,
+          itemCount: options.items.length,
+          itemsSummary,
+        };
+      }
+
+      if (options.rate !== undefined) bill.rate = options.rate;
+      if (options.advancePaid !== undefined) bill.advancePaid = options.advancePaid;
+      if (options.balanceAmount !== undefined) {
+        bill.balanceAmount = options.balanceAmount;
+        bill.amountToCollect = options.balanceAmount;
       }
 
       // Add audit log entry

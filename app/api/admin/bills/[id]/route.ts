@@ -77,6 +77,15 @@ export async function PATCH(
         notes,
         paymentStatus,
         additionalAmount,
+        items: body.items,
+        customerName: body.customerName,
+        customerPhone: body.customerPhone,
+        customerCustomId: body.customerCustomId,
+        trialDate: body.trialDate,
+        deliveryDate: body.deliveryDate,
+        rate: body.rate,
+        advancePaid: body.advancePaid,
+        balanceAmount: body.balanceAmount,
       });
     }
 

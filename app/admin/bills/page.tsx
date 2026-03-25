@@ -77,8 +77,18 @@ export default function BillsPage() {
 	});
 
 	const [editFormData, setEditFormData] = useState({
-		amount: 0,
+		orderId: '',
+		customerName: '',
+		customerPhone: '',
+		customerCustomId: '',
+		trialDate: '',
+		deliveryDate: '',
 		notes: '',
+		items: [{ description: '', quantity: 1, rate: 0 }],
+		paymentStatus: '' as 'full_paid' | 'advance_payment' | 'pending_payment' | '',
+		rate: 0,
+		advancePaid: 0,
+		balanceAmount: 0,
 	});
 
 	const [actionInProgress, setActionInProgress] = useState(false);
@@ -394,9 +404,17 @@ export default function BillsPage() {
 		try {
 			setActionInProgress(true);
 			await axios.patch(`/api/admin/bills/${selectedBill._id}`, {
-				amountToCollect: selectedBill.billType === 'COD' ? editFormData.amount : undefined,
-				amountPaid: selectedBill.billType === 'PAID' ? editFormData.amount : undefined,
 				notes: editFormData.notes,
+				customerName: editFormData.customerName,
+				customerPhone: editFormData.customerPhone,
+				customerCustomId: editFormData.customerCustomId,
+				trialDate: editFormData.trialDate,
+				deliveryDate: editFormData.deliveryDate,
+				items: editFormData.items,
+				paymentStatus: editFormData.paymentStatus,
+				rate: editFormData.rate,
+				advancePaid: editFormData.advancePaid,
+				balanceAmount: editFormData.balanceAmount,
 			});
 			await fetchBills();
 			setShowEditModal(false);
@@ -714,11 +732,18 @@ export default function BillsPage() {
 									<button
 										onClick={() => {
 											setEditFormData({
-												amount:
-													selectedBill.billType === 'COD'
-														? selectedBill.amountToCollect
-														: selectedBill.amountPaid,
+												orderId: selectedBill.billId || '',
+												customerName: selectedBill.customerSnapshot.name || '',
+												customerPhone: selectedBill.customerSnapshot.phone || '',
+												customerCustomId: selectedBill.customerSnapshot.customerCustomId || '',
+												trialDate: selectedBill.trialDate ? new Date(selectedBill.trialDate).toISOString().split('T')[0] : '',
+												deliveryDate: selectedBill.deliveryDate ? new Date(selectedBill.deliveryDate).toISOString().split('T')[0] : '',
 												notes: selectedBill.notes || '',
+												items: selectedBill.items && selectedBill.items.length > 0 ? [...selectedBill.items] : [{ description: '', quantity: 1, rate: 0 }],
+												paymentStatus: selectedBill.paymentStatus || '',
+												rate: selectedBill.rate || 0,
+												advancePaid: selectedBill.advancePaid || 0,
+												balanceAmount: selectedBill.balanceAmount || 0,
 											});
 											setShowEditModal(true);
 										}}
@@ -1218,18 +1243,172 @@ export default function BillsPage() {
 			>
 				<div className={formStyles.formSection}>
 					<div className={formStyles.formGroup}>
-						<label>Amount</label>
+						<label>Bill/Order Number <span className={formStyles.required}>*</span></label>
 						<input
-							type="number"
-							value={editFormData.amount}
+							type="text"
+							placeholder="znm-DDMMYYYYXXX"
+							value={editFormData.orderId}
 							onChange={(e) =>
-								setEditFormData({
-									...editFormData,
-									amount: parseFloat(e.target.value),
-								})
+								setEditFormData({ ...editFormData, orderId: e.target.value })
 							}
 							className={formStyles.input}
 						/>
+					</div>
+
+					<div className={formStyles.formGroup}>
+						<label>Customer Name <span className={formStyles.required}>*</span></label>
+						<div className={styles.suggestionsContainer}>
+							<input
+								type="text"
+								placeholder="John Doe"
+								value={editFormData.customerName}
+								onChange={(e) => {
+									const name = e.target.value;
+									setEditFormData({ 
+										...editFormData, 
+										customerName: name
+									});
+									fetchCustomerSuggestions(name);
+								}}
+								onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+								onFocus={() => { if (editFormData.customerName.length >= 2) setShowSuggestions(true); }}
+								className={formStyles.input}
+							/>
+							{showSuggestions && (customerSuggestions.length > 0 || editFormData.customerName.length >= 2) && (
+								<div className={styles.suggestionsDropdown}>
+									{customerSuggestions.map((c, i) => (
+										<div 
+											key={i} 
+											className={styles.suggestionItem}
+											onClick={() => {
+												setEditFormData({
+													...editFormData,
+													customerName: c.name,
+													customerPhone: c.phone,
+													customerCustomId: c.customerCustomId
+												});
+												setShowSuggestions(false);
+											}}
+										>
+											<span className={styles.suggestionName}>{c.name}</span>
+											<span className={styles.suggestionMeta}>{c.customerCustomId} • {c.phone}</span>
+										</div>
+									))}
+								</div>
+							)}
+						</div>
+					</div>
+
+					<div className={formStyles.formGroup}>
+						<label>Customer ID</label>
+						<input
+							type="text"
+							placeholder="J-001"
+							value={editFormData.customerCustomId}
+							onChange={(e) => setEditFormData({ ...editFormData, customerCustomId: e.target.value })}
+							className={formStyles.input}
+						/>
+					</div>
+
+					<div className={formStyles.formGroup}>
+						<label>Customer Phone Number <span className={formStyles.required}>*</span></label>
+						<input
+							type="text"
+							placeholder="91XXXXXXXXXX"
+							value={editFormData.customerPhone}
+							onChange={(e) =>
+								setEditFormData({ ...editFormData, customerPhone: e.target.value })
+							}
+							className={formStyles.input}
+						/>
+					</div>
+
+					<div className={formStyles.formGroup}>
+						<label>Items Description, Quantity & Rate</label>
+						{editFormData.items.map((item, index) => (
+							<div key={index} style={{ display: 'flex', gap: '8px', marginBottom: '8px', alignItems: 'center' }}>
+								<div style={{ flex: 3 }}>
+									<input
+										type="text"
+										value={item.description}
+										onChange={(e) => {
+											const newItems = [...editFormData.items];
+											newItems[index].description = e.target.value;
+											setEditFormData({ ...editFormData, items: newItems });
+										}}
+										className={formStyles.input}
+									/>
+								</div>
+								<div style={{ flex: 1 }}>
+									<input
+										type="number"
+										value={item.quantity || ''}
+										onWheel={(e) => (e.target as HTMLInputElement).blur()}
+										onChange={(e) => {
+											const qty = parseInt(e.target.value) || 0;
+											const newItems = [...editFormData.items];
+											newItems[index].quantity = qty;
+											const totalRate = newItems.reduce((sum, i) => sum + ((i.quantity || 1) * (i.rate || 0)), 0);
+											setEditFormData({ 
+												...editFormData, 
+												items: newItems,
+												rate: totalRate,
+												balanceAmount: totalRate - (editFormData.advancePaid || 0)
+											});
+										}}
+										className={formStyles.input}
+									/>
+								</div>
+								<div style={{ flex: 1.5 }}>
+									<input
+										type="number"
+										value={item.rate || ''}
+										onWheel={(e) => (e.target as HTMLInputElement).blur()}
+										onChange={(e) => {
+											const val = parseFloat(e.target.value) || 0;
+											const newItems = [...editFormData.items];
+											newItems[index].rate = val;
+											const totalRate = newItems.reduce((sum, i) => sum + ((i.quantity || 1) * (i.rate || 0)), 0);
+											setEditFormData({ 
+												...editFormData, 
+												items: newItems,
+												rate: totalRate,
+												balanceAmount: totalRate - (editFormData.advancePaid || 0)
+											});
+										}}
+										className={formStyles.input}
+									/>
+								</div>
+								{index > 0 && (
+									<button 
+										onClick={() => {
+											const newItems = editFormData.items.filter((_, i) => i !== index);
+											const totalRate = newItems.reduce((sum, i) => sum + ((i.quantity || 1) * (i.rate || 0)), 0);
+											setEditFormData({ 
+												...editFormData, 
+												items: newItems,
+												rate: totalRate,
+												balanceAmount: totalRate - (editFormData.advancePaid || 0)
+											});
+										}}
+										className={buttonStyles.dangerBtn}
+										style={{ padding: '8px' }}
+									>
+										<MinusIcon style={{ width: '16px' }} />
+									</button>
+								)}
+							</div>
+						))}
+						<button 
+							onClick={() => setEditFormData({ 
+								...editFormData, 
+								items: [...editFormData.items, { description: '', quantity: 1, rate: 0 }] 
+							})}
+							className={buttonStyles.ghostBtn}
+							style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '14px' }}
+						>
+							<PlusIcon style={{ width: '16px' }} /> Add more
+						</button>
 					</div>
 
 					<div className={formStyles.formGroup}>
@@ -1241,6 +1420,64 @@ export default function BillsPage() {
 							}
 							className={formStyles.textarea}
 						/>
+					</div>
+
+					<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+						<div className={formStyles.formGroup}>
+							<label>Trial Date</label>
+							<input
+								type="date"
+								value={editFormData.trialDate}
+								onChange={(e) => setEditFormData({ ...editFormData, trialDate: e.target.value })}
+								className={formStyles.input}
+							/>
+						</div>
+						<div className={formStyles.formGroup}>
+							<label>Delivery Date</label>
+							<input
+								type="date"
+								value={editFormData.deliveryDate}
+								onChange={(e) => setEditFormData({ ...editFormData, deliveryDate: e.target.value })}
+								className={formStyles.input}
+							/>
+						</div>
+					</div>
+
+					<div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr)', gap: '10px', marginTop: '10px' }}>
+						<div className={formStyles.formGroup}>
+							<label style={{ fontSize: '10px' }}>Total Amount</label>
+							<input
+								type="number"
+								value={editFormData.rate}
+								onChange={(e) => {
+									const val = parseFloat(e.target.value) || 0;
+									setEditFormData({ ...editFormData, rate: val, balanceAmount: val - (editFormData.advancePaid || 0) });
+								}}
+								className={formStyles.input}
+							/>
+						</div>
+						<div className={formStyles.formGroup}>
+							<label style={{ fontSize: '10px' }}>Advance Paid</label>
+							<input
+								type="number"
+								value={editFormData.advancePaid}
+								onChange={(e) => {
+									const val = parseFloat(e.target.value) || 0;
+									setEditFormData({ ...editFormData, advancePaid: val, balanceAmount: (editFormData.rate || 0) - val });
+								}}
+								className={formStyles.input}
+							/>
+						</div>
+						<div className={formStyles.formGroup}>
+							<label style={{ fontSize: '10px' }}>Balance</label>
+							<input
+								type="number"
+								value={editFormData.balanceAmount}
+								readOnly
+								className={formStyles.input}
+								style={{ opacity: 0.7, backgroundColor: 'transparent' }}
+							/>
+						</div>
 					</div>
 				</div>
 			</Modal>
