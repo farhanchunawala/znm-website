@@ -112,7 +112,7 @@ export default function MeasurementsTab({
 					const key = field.toLowerCase().replace(' ', '_');
 					return (
 						<div key={key} className={formStyles.formGroup}>
-							<label style={{ fontSize: '13px' }}>{field} (inches)</label>
+							<label style={{ fontSize: '13px' }}>{field}</label>
 							<input
 								type="text"
 								placeholder={`Enter ${field.toLowerCase()}`}

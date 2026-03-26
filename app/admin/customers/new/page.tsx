@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import styles from './add-customer.module.scss';
+import PhoneSelect from '@/components/Admin/PhoneSelect';
 
 export default function AddCustomerPage() {
 	const router = useRouter();
@@ -11,6 +12,7 @@ export default function AddCustomerPage() {
 	const [error, setError] = useState('');
 
 	const [formData, setFormData] = useState({
+		customerId: '',
 		firstName: '',
 		lastName: '',
 		email: '',
@@ -19,21 +21,66 @@ export default function AddCustomerPage() {
 		address: '',
 		city: '',
 		state: '',
-		country: 'India',
+		country: '',
 		zipCode: '',
 	});
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const [showWarning, setShowWarning] = useState(false);
+	const [warningMsg, setWarningMsg] = useState('');
+	const [nextGlobalNum, setNextGlobalNum] = useState<number | null>(null);
+	const isManualId = useRef(false);
+
+	useEffect(() => {
+		// Fetch next global number on mount
+		fetch('/api/admin/customers/next-id')
+			.then(res => res.json())
+			.then(data => {
+				if (data.nextNumber) setNextGlobalNum(data.nextNumber);
+			});
+	}, []);
+
+	useEffect(() => {
+		// Auto-generate ID if not manually edited
+		if (!isManualId.current && formData.firstName && nextGlobalNum !== null) {
+			const initial = formData.firstName.charAt(0).toUpperCase();
+			const paddedNum = String(nextGlobalNum).padStart(3, '0');
+			setFormData(prev => ({ ...prev, customerId: `${initial}-${paddedNum}` }));
+		}
+	}, [formData.firstName, nextGlobalNum]);
+
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+		const { name, value } = e.target;
+		if (name === 'customerId') isManualId.current = true;
+		
 		setFormData({
 			...formData,
-			[e.target.name]: e.target.value,
+			[name]: value,
 		});
 	};
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
+	const checkDuplicateId = async (id: string) => {
+		if (!id) return { exists: false };
+		// Check if ID exists in DB
+		const res = await fetch(`/api/admin/customers/check-id?id=${id}`);
+		const data = await res.json();
+		return data;
+	};
+
+	const handleSubmit = async (e: React.FormEvent, force: boolean = false) => {
+		if (e) e.preventDefault();
 		setLoading(true);
 		setError('');
+
+		// Check for duplicate ID if not forced
+		if (!force && formData.customerId) {
+			const check = await checkDuplicateId(formData.customerId);
+			if (check.exists) {
+				setWarningMsg(`Customer ID "${check.existingId || formData.customerId}" is already registered.`);
+				setShowWarning(true);
+				setLoading(false);
+				return;
+			}
+		}
 
 		try {
 			const res = await fetch('/api/admin/customers/create', {
@@ -94,6 +141,22 @@ export default function AddCustomerPage() {
 					</div>
 
 					<div className={styles.formGroup}>
+						<label htmlFor="customerId">Customer ID (Auto-generated)</label>
+						<input
+							id="customerId"
+							name="customerId"
+							type="text"
+							value={formData.customerId}
+							onChange={handleChange}
+							className={styles.input}
+							placeholder="e.g. F-001"
+						/>
+					</div>
+					<div className={styles.formGroup}>
+						{/* Spacer */}
+					</div>
+
+					<div className={styles.formGroup}>
 						<label htmlFor="email">Email *</label>
 						<input
 							id="email"
@@ -109,33 +172,10 @@ export default function AddCustomerPage() {
 					<div className={styles.formGroup}>
 						<label htmlFor="phone">Phone *</label>
 						<div className={styles.phoneInput}>
-							<select
-								name="phoneCode"
+							<PhoneSelect
 								value={formData.phoneCode}
-								onChange={(e) =>
-									setFormData({
-										...formData,
-										phoneCode: e.target.value,
-									})
-								}
-								className={styles.phoneCode}
-							>
-								<option value="+1">🇺🇸 +1</option>
-								<option value="+44">🇬🇧 +44</option>
-								<option value="+91">🇮🇳 +91</option>
-								<option value="+971">🇦🇪 +971</option>
-								<option value="+966">🇸🇦 +966</option>
-								<option value="+974">🇶🇦 +974</option>
-								<option value="+965">🇰🇼 +965</option>
-								<option value="+968">🇴🇲 +968</option>
-								<option value="+973">🇧🇭 +973</option>
-								<option value="+61">🇦🇺 +61</option>
-								<option value="+65">🇸🇬 +65</option>
-								<option value="+60">🇲🇾 +60</option>
-								<option value="+86">🇨🇳 +86</option>
-								<option value="+81">🇯🇵 +81</option>
-								<option value="+82">🇰🇷 +82</option>
-							</select>
+								onChange={(val) => setFormData({ ...formData, phoneCode: val })}
+							/>
 							<input
 								id="phone"
 								name="phone"
@@ -150,66 +190,61 @@ export default function AddCustomerPage() {
 					</div>
 
 					<div className={styles.formGroup}>
-						<label htmlFor="address">Address *</label>
+						<label htmlFor="address">Address</label>
 						<input
 							id="address"
 							name="address"
 							type="text"
 							value={formData.address}
 							onChange={handleChange}
-							required
 							className={styles.input}
 						/>
 					</div>
 
 					<div className={styles.formGroup}>
-						<label htmlFor="city">City *</label>
+						<label htmlFor="city">City</label>
 						<input
 							id="city"
 							name="city"
 							type="text"
 							value={formData.city}
 							onChange={handleChange}
-							required
 							className={styles.input}
 						/>
 					</div>
 
 					<div className={styles.formGroup}>
-						<label htmlFor="state">State *</label>
+						<label htmlFor="state">State</label>
 						<input
 							id="state"
 							name="state"
 							type="text"
 							value={formData.state}
 							onChange={handleChange}
-							required
 							className={styles.input}
 						/>
 					</div>
 
 					<div className={styles.formGroup}>
-						<label htmlFor="country">Country *</label>
+						<label htmlFor="country">Country</label>
 						<input
 							id="country"
 							name="country"
 							type="text"
 							value={formData.country}
 							onChange={handleChange}
-							required
 							className={styles.input}
 						/>
 					</div>
 
 					<div className={styles.formGroup}>
-						<label htmlFor="zipCode">Zip Code *</label>
+						<label htmlFor="zipCode">Zip Code</label>
 						<input
 							id="zipCode"
 							name="zipCode"
 							type="text"
 							value={formData.zipCode}
 							onChange={handleChange}
-							required
 							className={styles.input}
 						/>
 					</div>
@@ -235,6 +270,36 @@ export default function AddCustomerPage() {
 					</button>
 				</div>
 			</form>
+
+			{showWarning && (
+				<div className={styles.modalOverlay}>
+					<div className={styles.modal}>
+						<div className={styles.modalHeader}>
+							<ExclamationTriangleIcon className={styles.warningIcon} />
+							<h2>Duplicate ID Warning</h2>
+						</div>
+						<p>{warningMsg}</p>
+						<p className={styles.subText}>This ID is already assigned to another customer. How would you like to proceed?</p>
+						<div className={styles.modalActions}>
+							<button 
+								onClick={() => setShowWarning(false)} 
+								className={styles.changeBtn}
+							>
+								Change ID
+							</button>
+							<button 
+								onClick={() => {
+									setShowWarning(false);
+									handleSubmit(null as any, true);
+								}} 
+								className={styles.continueAnywayBtn}
+							>
+								Continue anyway
+							</button>
+						</div>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 }

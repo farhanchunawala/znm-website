@@ -19,6 +19,17 @@
 		background: #f5f5f5;
 		border-color: #bdbdbd;
 	}
+
+	:global([data-theme='dark']) & {
+		background: #111111;
+		color: #ffffff;
+		border-color: #333333;
+
+		&:hover {
+			background: #1a1a1a;
+			border-color: #444444;
+		}
+	}
 }
 
 .header {
@@ -30,6 +41,10 @@
 		font-weight: 600;
 		color: #000000;
 		letter-spacing: -0.5px;
+
+		:global([data-theme='dark']) & {
+			color: #ffffff;
+		}
 	}
 
 	.customerId {
@@ -38,6 +53,10 @@
 		color: #757575;
 		text-transform: uppercase;
 		letter-spacing: 1px;
+
+		:global([data-theme='dark']) & {
+			color: #aaaaaa;
+		}
 	}
 }
 
@@ -46,6 +65,10 @@
 	gap: 16px;
 	margin-bottom: 32px;
 	border-bottom: 1px solid #e0e0e0;
+
+	:global([data-theme='dark']) & {
+		border-bottom-color: #333333;
+	}
 }
 
 .tabBtn {
@@ -68,6 +91,19 @@
 		color: #000;
 		border-bottom-color: #000;
 	}
+
+	:global([data-theme='dark']) & {
+		color: #aaaaaa;
+
+		&:hover {
+			color: #ffffff;
+		}
+
+		&.active {
+			color: #ffffff;
+			border-bottom-color: #ffffff;
+		}
+	}
 }
 
 .infoGrid {
@@ -83,6 +119,11 @@
 	border-radius: 8px;
 	padding: 24px;
 
+	:global([data-theme='dark']) & {
+		background: #111111;
+		border-color: #333333;
+	}
+
 	h3 {
 		margin: 0 0 20px 0;
 		font-size: 14px;
@@ -90,6 +131,10 @@
 		color: #212121;
 		text-transform: uppercase;
 		letter-spacing: 0.5px;
+
+		:global([data-theme='dark']) & {
+			color: #ffffff;
+		}
 	}
 
 	.infoRow {
@@ -108,6 +153,10 @@
 			color: #757575;
 			font-weight: 500;
 			min-width: 100px;
+
+			:global([data-theme='dark']) & {
+				color: #aaaaaa;
+			}
 		}
 
 		span:not(.label) {
@@ -115,11 +164,19 @@
 			color: #212121;
 			text-align: right;
 			flex: 1;
+
+			:global([data-theme='dark']) & {
+				color: #cccccc;
+			}
 		}
 
 		.value {
 			font-weight: 600;
 			color: #000000;
+
+			:global([data-theme='dark']) & {
+				color: #ffffff;
+			}
 		}
 	}
 
@@ -127,6 +184,10 @@
 		font-size: 14px;
 		color: #424242;
 		line-height: 1.6;
+
+		:global([data-theme='dark']) & {
+			color: #cccccc;
+		}
 	}
 }
 
@@ -137,6 +198,10 @@
 		font-weight: 600;
 		color: #000000;
 		letter-spacing: -0.3px;
+
+		:global([data-theme='dark']) & {
+			color: #ffffff;
+		}
 	}
 }
 
@@ -145,6 +210,11 @@
 	border-radius: 8px;
 	border: 1px solid #e0e0e0;
 	overflow: hidden;
+
+	:global([data-theme='dark']) & {
+		background: #000000;
+		border-color: #333333;
+	}
 }
 
 .table {
@@ -153,6 +223,10 @@
 
 	thead {
 		background: #fafafa;
+
+		:global([data-theme='dark']) & {
+			background: #000000;
+		}
 
 		th {
 			padding: 16px 20px;
@@ -163,6 +237,11 @@
 			font-size: 13px;
 			text-transform: uppercase;
 			letter-spacing: 0.5px;
+
+			:global([data-theme='dark']) & {
+				color: #aaaaaa;
+				border-bottom-color: #333333;
+			}
 		}
 	}
 
@@ -172,8 +251,16 @@
 			cursor: pointer;
 			transition: background-color 0.15s;
 
+			:global([data-theme='dark']) & {
+				border-bottom-color: #111111;
+			}
+
 			&:hover {
 				background-color: #fafafa;
+
+				:global([data-theme='dark']) & {
+					background-color: #111111;
+				}
 			}
 
 			&:last-child {
@@ -185,14 +272,26 @@
 				font-size: 14px;
 				color: #424242;
 
+				:global([data-theme='dark']) & {
+					color: #ffffff;
+				}
+
 				&.orderId {
 					font-weight: 600;
 					color: #000000;
+
+					:global([data-theme='dark']) & {
+						color: #ffffff;
+					}
 				}
 
 				&.amount {
 					font-weight: 600;
 					color: #000000;
+
+					:global([data-theme='dark']) & {
+						color: #ffffff;
+					}
 				}
 			}
 		}
@@ -216,12 +315,24 @@
 		background: #f5f5f5;
 		color: #000000;
 		border: 1px solid #000000;
+
+		:global([data-theme='dark']) & {
+			background: #1a1a1a;
+			color: #ffffff;
+			border-color: #ffffff;
+		}
 	}
 
 	&.unpaid {
 		background: #ffffff;
 		color: #616161;
 		border: 1px solid #e0e0e0;
+
+		:global([data-theme='dark']) & {
+			background: #111111;
+			color: #aaaaaa;
+			border-color: #333333;
+		}
 	}
 }
 

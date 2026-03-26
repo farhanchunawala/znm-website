@@ -32,21 +32,32 @@
 	align-items: center;
 	gap: 8px;
 	padding: 10px 16px;
-	border: 2px solid #000;
+	border: 1px solid #d4d4d4;
 	font-size: 14px;
 	font-weight: 500;
 	cursor: pointer;
 	transition: all 0.2s;
 	text-decoration: none;
+	border-radius: 8px;
 }
 
 .addBtn {
-	background: #000;
-	color: #fff;
+	background: #000000;
+	color: #ffffff;
+
+	:global([data-theme='dark']) & {
+		background: #ffffff;
+		color: #000000;
+		border-color: #ffffff;
+	}
 }
 
 .addBtn:hover {
 	background: #262626;
+
+	:global([data-theme='dark']) & {
+		background: #e5e5e5;
+	}
 }
 
 .importBtn,
@@ -181,30 +192,51 @@
 	align-items: center;
 	gap: 6px;
 	padding: 8px 14px;
-	border: 2px solid #000;
+	border: 1px solid #000;
 	font-size: 13px;
 	font-weight: 500;
 	cursor: pointer;
 	transition: all 0.2s;
+	border-radius: 6px;
 }
 
 .bulkBtn {
 	background: white;
 	color: #000;
+
+	:global([data-theme='dark']) & {
+		background: #111111;
+		color: #ffffff;
+		border-color: #444444;
+	}
 }
 
 .bulkBtn:hover {
 	background: #000;
 	color: #fff;
+
+	:global([data-theme='dark']) & {
+		background: #222222;
+	}
 }
 
 .bulkBtnDanger {
 	background: #000;
 	color: white;
+
+	:global([data-theme='dark']) & {
+		background: #ff4d4d;
+		border-color: #ff4d4d;
+	}
 }
 
 .bulkBtnDanger:hover {
 	background: #262626;
+
+	:global([data-theme='dark']) & {
+		background: #e60000;
+		border-color: #e60000;
+	}
 }
 
 .groupSelector {

@@ -256,17 +256,17 @@
 	// Dark mode override for main content
 	:global([data-theme='dark']) & {
 		background: #000000 !important;
-		color: #ffffff !important;
+		color: #ffffff;
 
-		h1, h2, h3, h4, h5, h6, p, span, label, div {
+		h1, h2, h3, h4, h5, h6, p, label {
 			&:not([class*="Card"]) {
-				color: #ffffff !important;
+				color: #ffffff;
 			}
 		}
 	}
 
 	// Light mode text colors (default)
-	h1, h2, h3, h4, h5, h6, p, span, label, div {
+	h1, h2, h3, h4, h5, h6, p, label {
 		&:not([class*="Card"]) {
 			color: #000000;
 		}

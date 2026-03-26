@@ -131,8 +131,8 @@
 		gap: 8px;
 
 		.phoneCode {
-			width: 80px;
-			padding: 12px 16px;
+			width: 110px;
+			padding: 12px 10px;
 			border: 1px solid #e0e0e0;
 			border-radius: 6px;
 			font-size: 14px;
@@ -140,6 +140,11 @@
 			background: #ffffff;
 			color: #212121;
 			transition: all 0.2s;
+			appearance: none;
+			background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+			background-repeat: no-repeat;
+			background-position: right 10px center;
+			background-size: 16px;
 
 			&:focus {
 				outline: none;
@@ -224,5 +229,116 @@
 
 	&:hover:not(:disabled) {
 		background: #212121;
+	}
+}
+
+.modalOverlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.7);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+	backdrop-filter: blur(4px);
+}
+
+.modal {
+	background: #ffffff;
+	border-radius: 12px;
+	padding: 32px;
+	width: 90%;
+	max-width: 450px;
+	box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+	:global([data-theme='dark']) & {
+		background: #1a1a1a;
+		border: 1px solid #333;
+	}
+
+	.modalHeader {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		margin-bottom: 16px;
+
+		.warningIcon {
+			width: 28px;
+			height: 28px;
+			color: #f59e0b;
+		}
+
+		h2 {
+			font-size: 20px;
+			font-weight: 600;
+			margin: 0;
+
+			:global([data-theme='dark']) & {
+				color: #fff;
+			}
+		}
+	}
+
+	p {
+		font-size: 15px;
+		color: #4b5563;
+		line-height: 1.5;
+		margin: 0 0 12px 0;
+
+		:global([data-theme='dark']) & {
+			color: #9ca3af;
+		}
+	}
+
+	.subText {
+		font-size: 13px;
+		color: #6b7280;
+	}
+
+	.modalActions {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		margin-top: 24px;
+
+		button {
+			padding: 12px;
+			border-radius: 6px;
+			font-weight: 500;
+			cursor: pointer;
+			transition: all 0.2s;
+		}
+
+		.changeBtn {
+			background: #eee;
+			border: none;
+			color: #000;
+
+			&:hover {
+				background: #ddd;
+			}
+
+			:global([data-theme='dark']) & {
+				background: #333;
+				color: #fff;
+
+				&:hover {
+					background: #444;
+				}
+			}
+		}
+
+		.continueAnywayBtn {
+			background: #ef4444;
+			border: none;
+			color: #fff;
+
+			&:hover {
+				background: #dc2626;
+			}
+		}
 	}
 }

@@ -39,18 +39,24 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		// Generate customer ID
-		const lastCustomer = await Customer.findOne().sort({ createdAt: -1 });
-		let customerNumber = 1;
-		if (lastCustomer && lastCustomer.customerId) {
-			const lastNumber = parseInt(lastCustomer.customerId.split('-')[1]);
-			customerNumber = lastNumber + 1;
+		// Generate customer ID if not provided
+		let customerId = data.customerId;
+
+		if (!customerId) {
+			const lastCustomer = await Customer.findOne().sort({ createdAt: -1 });
+			let customerNumber = 1;
+			if (lastCustomer && lastCustomer.customerId && lastCustomer.customerId.startsWith('znm-')) {
+				const lastNumberStr = lastCustomer.customerId.split('-')[1];
+				const lastNumber = parseInt(lastNumberStr) || 0;
+				customerNumber = lastNumber + 1;
+			}
+			customerId = `znm-${String(customerNumber).padStart(4, '0')}`;
 		}
-		const customerId = `znm-${String(customerNumber).padStart(4, '0')}`;
 
 		// Create new customer
 		const newCustomer = new Customer({
 			customerId,
+			name: `${firstName} ${lastName}`.trim(),
 			firstName,
 			lastName,
 			email,
@@ -70,8 +76,26 @@ export async function POST(request: NextRequest) {
 			success: true,
 			customer: newCustomer,
 		});
-	} catch (error) {
+	} catch (error: any) {
 		console.error('Failed to create customer:', error);
+		
+		// Handle Mongo Duplicate Key Error
+		if (error.code === 11000) {
+			const field = Object.keys(error.keyPattern)[0];
+			const message = field === 'customerId' 
+				? 'Customer ID already exists' 
+				: field === 'phone' 
+				? 'Phone number already exists' 
+				: field === 'email' 
+				? 'Email already exists' 
+				: 'A customer with this information already exists';
+			
+			return NextResponse.json(
+				{ error: message },
+				{ status: 400 }
+			);
+		}
+
 		return NextResponse.json(
 			{ error: 'Failed to create customer' },
 			{ status: 500 }

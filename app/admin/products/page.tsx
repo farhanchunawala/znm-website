@@ -4,6 +4,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import styles from './products.module.scss';
+import { ExportIcon, ImportIcon, PlusIcon, ArrowLeftIcon, ArrowRightIcon } from '@/components/Admin/Icons';
 
 interface Product {
 	_id: string;
@@ -141,11 +142,15 @@ export default function ProductsPage() {
 			<div className={styles.titleBar}>
 				<h1>Products</h1>
 				<div className={styles.headerActions}>
-					<button onClick={handleExportCSV} className={styles.csvBtn}>📥 Export CSV</button>
-					<button onClick={() => fileInputRef.current?.click()} className={styles.csvBtn}>📤 Import CSV</button>
+					<button onClick={handleExportCSV} className={styles.csvBtn}>
+						<ExportIcon size={16} /> Export CSV
+					</button>
+					<button onClick={() => fileInputRef.current?.click()} className={styles.csvBtn}>
+						<ImportIcon size={16} /> Import CSV
+					</button>
 					<input type="file" ref={fileInputRef} accept=".csv" onChange={handleImportCSV} style={{ display: 'none' }} />
 					<Link href={activeCollection === 'all' ? "/admin/products/new" : `/admin/products/new?collectionId=${activeCollection}`} className={styles.createBtn}>
-						+ New Product
+						<PlusIcon size={16} /> New Product
 					</Link>
 				</div>
 			</div>
@@ -276,7 +281,7 @@ export default function ProductsPage() {
 								disabled={page === 1}
 								className={styles.pageBtn}
 							>
-								← Previous
+								<ArrowLeftIcon size={14} /> Previous
 							</button>
 							<span>
 								Page {page} of {pages}
@@ -288,7 +293,7 @@ export default function ProductsPage() {
 								disabled={page === pages}
 								className={styles.pageBtn}
 							>
-								Next →
+								Next <ArrowRightIcon size={14} />
 							</button>
 						</div>
 					)}
