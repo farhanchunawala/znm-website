@@ -53,6 +53,27 @@
 	color: $btn-primary-text;
 }
 
+.backBtn {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	color: $text-secondary;
+	text-decoration: none;
+	font-size: 14px;
+	font-weight: 500;
+	margin-bottom: 15px;
+
+	&:hover {
+		color: $text-primary;
+		text-decoration: underline;
+	}
+
+	.backIcon {
+		width: 16px;
+		height: 16px;
+	}
+}
+
 .addBtn:hover {
 	background: $text-secondary;
 	border-color: $text-secondary;
@@ -823,6 +844,11 @@
 
 	&:hover {
 		color: $text-primary;
+	}
+
+	svg {
+		width: 20px;
+		height: 20px;
 	}
 }
 

@@ -9,6 +9,13 @@ interface DeliveryReminderData {
   items: Array<{ name: string; quantity: number }>;
 }
 
+const Icons = {
+	Sparkles: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-left:5px;"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>`,
+	Package: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-right:8px;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>`,
+	MapPin: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-right:8px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
+	Lightbulb: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-right:8px;"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A5 5 0 0 0 8 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"/><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/></svg>`
+};
+
 export default function deliveryReminderTemplate(data: DeliveryReminderData) {
   const {
     customerName,
@@ -26,10 +33,15 @@ export default function deliveryReminderTemplate(data: DeliveryReminderData) {
       ? `Your order ${orderNumber} arrives tomorrow!`
       : `Your order ${orderNumber} is arriving today!`;
 
+  const headingText =
+    reminderType === 'preDelivery'
+      ? 'Your Order Arrives Tomorrow!'
+      : 'Your Order is Arriving Today!';
+
   const heading =
     reminderType === 'preDelivery'
-      ? '📦 Your Order Arrives Tomorrow!'
-      : '🎉 Your Order is Arriving Today!';
+      ? `${Icons.Package} ${headingText}`
+      : `${Icons.Sparkles} ${headingText}`;
 
   const message =
     reminderType === 'preDelivery'
@@ -221,7 +233,7 @@ export default function deliveryReminderTemplate(data: DeliveryReminderData) {
           </div>
 
           <div class="tracking-section">
-            <div style="font-weight: 600; color: #333; margin-bottom: 10px;">📍 Tracking Information</div>
+            <div style="font-weight: 600; color: #333; margin-bottom: 10px;">${Icons.MapPin} Tracking Information</div>
             <div class="tracking-info">
               <div class="tracking-item">
                 <div class="tracking-label">Tracking ID</div>
@@ -243,7 +255,7 @@ export default function deliveryReminderTemplate(data: DeliveryReminderData) {
           </div>
 
           <div class="items-section">
-            <div class="items-title">📦 Items in Your Order</div>
+            <div class="items-title">${Icons.Package} Items in Your Order</div>
             ${items
               .map(
                 (item) => `
@@ -261,7 +273,7 @@ export default function deliveryReminderTemplate(data: DeliveryReminderData) {
           </div>
 
           <div class="tips">
-            <strong>💡 Delivery Tips:</strong>
+            <strong>${Icons.Lightbulb} Delivery Tips:</strong>
             <div>• Make sure your address is accessible</div>
             <div>• Keep your contact number available</div>
             <div>• Have ID proof ready for verification</div>
@@ -290,7 +302,7 @@ export default function deliveryReminderTemplate(data: DeliveryReminderData) {
   const text = `
 Hi ${customerName},
 
-${heading}
+${headingText}
 
 ${message}
 

@@ -5,6 +5,8 @@ import { usePathname } from 'next/navigation';
 import styles from './OfferBar.module.scss';
 import Link from 'next/link';
 
+import { SparklesIcon } from '@heroicons/react/24/outline';
+
 export const OfferBar = () => {
 	const pathname = usePathname();
 	const [isVisible, setIsVisible] = useState(true);
@@ -16,7 +18,8 @@ export const OfferBar = () => {
 	return (
 		<div className={styles.offerBar}>
 			<span>
-				🎉 SPECIAL OFFER: Get 15% off on all Sherwanis!
+				<SparklesIcon className={styles.icon} />
+				SPECIAL OFFER: Get 15% off on all Sherwanis!
 				<Link href="/collections/sherwani">Shop Now</Link>
 			</span>
 			<button

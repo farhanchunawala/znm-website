@@ -4,16 +4,17 @@ import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import styles from './shipments.module.scss';
 import {
-	AddIcon,
-	ExportIcon,
-	ArchiveIcon,
-	UnarchiveIcon,
-	DeleteIcon,
-	EditIcon,
-	ShippedIcon,
-	LogisticsIcon,
-	DeliveredIcon,
-} from '@/components/Icons/AdminIcons';
+	PlusIcon,
+	ArrowDownOnSquareIcon,
+	ArrowUpOnSquareIcon,
+	ArchiveBoxIcon,
+	TrashIcon,
+	PencilIcon,
+	TruckIcon,
+	CheckCircleIcon,
+	EyeIcon,
+	InboxArrowDownIcon
+} from '@heroicons/react/24/outline';
 
 interface Shipment {
 	_id: string;
@@ -39,10 +40,10 @@ interface Shipment {
 }
 
 const STATUS_ICONS: Record<string, any> = {
-	pending: ShippedIcon,
-	shipped: ShippedIcon,
-	outForDelivery: LogisticsIcon,
-	delivered: DeliveredIcon,
+	pending: TruckIcon,
+	shipped: TruckIcon,
+	outForDelivery: TruckIcon,
+	delivered: CheckCircleIcon,
 };
 
 const STATUS_COLORS: Record<string, string> = {
@@ -156,7 +157,7 @@ export default function ShipmentsPage() {
 	const getStatusIcon = (status: string) => {
 		const IconComponent = STATUS_ICONS[status];
 		if (!IconComponent) return null;
-		return <IconComponent size={16} className={styles.statusIcon} />;
+		return <IconComponent className={styles.statusIcon} style={{ width: '16px', height: '16px' }} />;
 	};
 
 	const filteredShipments = shipments.filter((shipment) => {
@@ -183,24 +184,25 @@ export default function ShipmentsPage() {
 	return (
 		<div className={styles.shipmentsPage}>
 			<div className={styles.header}>
-				<h1>Shipments</h1>
+				<h1><TruckIcon className={styles.headerIcon} style={{ width: '28px', height: '28px', display: 'inline-block', verticalAlign: 'bottom', marginRight: '8px' }} /> Shipments</h1>
 				<div className={styles.actions}>
 					<Link href="/admin/shipments/new" className={styles.addBtn}>
-						<AddIcon size={18} />
+						<PlusIcon style={{ width: '18px', height: '18px' }} />
 						Add Shipment
 					</Link>
 					<button
 						onClick={handleExportCSV}
 						className={styles.exportBtn}
 					>
-						<ExportIcon size={18} />
+						<ArrowDownOnSquareIcon style={{ width: '18px', height: '18px' }} />
 						Export CSV
 					</button>
 					<button
 						onClick={() => fileInputRef.current?.click()}
 						className={styles.exportBtn}
 					>
-						📤 Import CSV
+						<ArrowUpOnSquareIcon style={{ width: '18px', height: '18px' }} />
+						Import CSV
 					</button>
 					<input type="file" ref={fileInputRef} accept=".csv" style={{ display: 'none' }} onChange={async (e) => {
 						const file = e.target.files?.[0]; if (!file) return;
@@ -218,9 +220,9 @@ export default function ShipmentsPage() {
 						className={styles.archiveBtn}
 					>
 						{showArchived ? (
-							<UnarchiveIcon size={18} />
+							<EyeIcon style={{ width: '18px', height: '18px' }} />
 						) : (
-							<ArchiveIcon size={18} />
+							<ArchiveBoxIcon style={{ width: '18px', height: '18px' }} />
 						)}
 						{showArchived ? 'Show Active' : 'Show Archived'}
 					</button>
@@ -271,9 +273,9 @@ export default function ShipmentsPage() {
 							className={styles.bulkBtn}
 						>
 							{showArchived ? (
-								<UnarchiveIcon size={16} />
+								<EyeIcon style={{ width: '16px', height: '16px' }} />
 							) : (
-								<ArchiveIcon size={16} />
+								<ArchiveBoxIcon style={{ width: '16px', height: '16px' }} />
 							)}
 							{showArchived ? 'Unarchive' : 'Archive'}
 						</button>
@@ -281,14 +283,14 @@ export default function ShipmentsPage() {
 							onClick={() => handleBulkAction('delete')}
 							className={styles.bulkBtnDanger}
 						>
-							<DeleteIcon size={16} />
+							<TrashIcon style={{ width: '16px', height: '16px' }} />
 							Delete
 						</button>
 						<button
 							onClick={handleExportCSV}
 							className={styles.bulkBtn}
 						>
-							<ExportIcon size={16} />
+							<ArrowDownOnSquareIcon style={{ width: '16px', height: '16px' }} />
 							Export Selected
 						</button>
 					</div>
@@ -426,7 +428,7 @@ export default function ShipmentsPage() {
 												className={styles.editAction}
 												title="Edit"
 											>
-												<EditIcon size={16} />
+												<PencilIcon style={{ width: '16px', height: '16px' }} />
 											</Link>
 											<button
 												onClick={() =>
@@ -435,7 +437,7 @@ export default function ShipmentsPage() {
 												className={styles.deleteAction}
 												title="Delete"
 											>
-												<DeleteIcon size={16} />
+												<TrashIcon style={{ width: '16px', height: '16px' }} />
 											</button>
 										</td>
 									</tr>

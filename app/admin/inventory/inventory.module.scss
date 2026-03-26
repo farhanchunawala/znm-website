@@ -28,6 +28,15 @@
     :global([data-theme='dark']) & {
       color: #ffffff;
     }
+
+    .headerIcon {
+      width: 28px;
+      height: 28px;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 8px;
+      color: #2196f3;
+    }
   }
 
   .breadcrumb {
@@ -142,6 +151,15 @@
       background: #2196f3;
       border-color: #2196f3;
       color: white;
+    }
+
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    .filterIcon {
+      width: 16px;
+      height: 16px;
     }
   }
 }
@@ -270,10 +288,30 @@
           .statusCritical {
             background: #ffebee;
             color: #c62828;
-            padding: 4px 8px;
+            padding: 4px 10px;
             border-radius: 4px;
             font-size: 12px;
             font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+
+            .statusIcon {
+              width: 14px;
+              height: 14px;
+            }
+          }
+
+          /* General Status Icon */
+          .statusIcon {
+            width: 14px;
+            height: 14px;
+          }
+
+          .statusOk, .statusWarning, .statusCritical {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
           }
         }
 
@@ -305,6 +343,14 @@
   &:disabled {
     background: #ccc;
     cursor: not-allowed;
+  }
+
+  .btnIcon {
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 4px;
   }
 }
 

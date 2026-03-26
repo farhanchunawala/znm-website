@@ -2,6 +2,14 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { useInvoices, useInvoiceAction } from '@/lib/invoice/hooks';
+import { 
+	ArrowDownOnSquareIcon, 
+	ArrowUpOnSquareIcon, 
+	DocumentArrowDownIcon, 
+	ArrowPathIcon, 
+	XCircleIcon,
+	DocumentDuplicateIcon
+} from '@heroicons/react/24/outline';
 import styles from './invoices.module.scss';
 
 interface Invoice {
@@ -87,7 +95,7 @@ export default function InvoiceList() {
 		<div className={styles.pageContainer}>
 			<div className={styles.header}>
 				<div>
-					<h1>Invoices</h1>
+					<h1><DocumentDuplicateIcon className={styles.headerIcon} style={{ width: '28px', height: '28px', display: 'inline-block', verticalAlign: 'bottom', marginRight: '8px' }} /> Invoices</h1>
 					<p>Manage and track all customer invoices</p>
 				</div>
 				<div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
@@ -100,8 +108,8 @@ export default function InvoiceList() {
 							a.download = `invoices-${new Date().toISOString().split('T')[0]}.csv`;
 							a.click();
 						} catch { alert('Export failed'); }
-					}} className={styles.btnSmall}>📥 Export CSV</button>
-					<button onClick={() => fileInputRef.current?.click()} className={styles.btnSmall}>📤 Import CSV</button>
+					}} className={styles.btnSmall}><ArrowDownOnSquareIcon className={styles.btnIcon} /> Export CSV</button>
+					<button onClick={() => fileInputRef.current?.click()} className={styles.btnSmall}><ArrowUpOnSquareIcon className={styles.btnIcon} /> Import CSV</button>
 					<input type="file" ref={fileInputRef} accept=".csv" style={{ display: 'none' }} onChange={async (e) => {
 						const file = e.target.files?.[0]; if (!file) return;
 						const fd = new FormData(); fd.append('file', file);
@@ -215,14 +223,14 @@ export default function InvoiceList() {
 												title="Download PDF"
 												className={styles.btnSmall}
 											>
-												📥 PDF
+												<DocumentArrowDownIcon className={styles.btnIcon} /> PDF
 											</button>
 											<button
 												onClick={() => handleRegenerate(invoice._id)}
 												title="Regenerate Invoice"
 												className={styles.btnSmall}
 											>
-												🔄 Regen
+												<ArrowPathIcon className={styles.btnIcon} /> Regen
 											</button>
 											{invoice.status === 'generated' && (
 												<button
@@ -230,7 +238,7 @@ export default function InvoiceList() {
 													title="Cancel Invoice"
 													className={`${styles.btnSmall} ${styles.btnDanger}`}
 												>
-													❌ Cancel
+													<XCircleIcon className={styles.btnIcon} /> Cancel
 												</button>
 											)}
 										</div>

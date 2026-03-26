@@ -79,6 +79,11 @@
 	}
 }
 
+.btnIcon {
+	width: 18px;
+	height: 18px;
+}
+
 .importBtn:hover,
 .exportBtn:hover {
 	background: #fafafa;
@@ -386,6 +391,7 @@
 	}
 }
 
+.tableActions,
 .actionButtons {
 	display: flex;
 	gap: 8px;

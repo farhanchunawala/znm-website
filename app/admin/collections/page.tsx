@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useRef } from 'react';
+import { ArrowDownOnSquareIcon, ArrowUpOnSquareIcon, ChevronLeftIcon, ChevronRightIcon, PlusIcon } from '@heroicons/react/24/outline';
 import styles from './collections.module.scss';
 
 interface Collection {
@@ -162,8 +163,8 @@ export default function CollectionsPage() {
 			<div className={styles.header}>
 				<h1>Collections</h1>
 				<div className={styles.headerActions}>
-					<button onClick={handleExportCSV} className={styles.csvBtn}>📥 Export CSV</button>
-					<button onClick={() => fileInputRef.current?.click()} className={styles.csvBtn}>📤 Import CSV</button>
+					<button onClick={handleExportCSV} className={styles.csvBtn}><ArrowDownOnSquareIcon className={styles.icon} /> Export CSV</button>
+					<button onClick={() => fileInputRef.current?.click()} className={styles.csvBtn}><ArrowUpOnSquareIcon className={styles.icon} /> Import CSV</button>
 					<input type="file" ref={fileInputRef} accept=".csv" onChange={handleImportCSV} style={{ display: 'none' }} />
 					<button
 						onClick={() => {
@@ -180,7 +181,8 @@ export default function CollectionsPage() {
 						}}
 						className={styles.createBtn}
 					>
-						+ New Collection
+						<PlusIcon className={styles.icon} />
+						New Collection
 					</button>
 				</div>
 			</div>
@@ -298,7 +300,7 @@ export default function CollectionsPage() {
 								onClick={() => setPage(Math.max(1, page - 1))}
 								disabled={page === 1}
 							>
-								← Previous
+								<ChevronLeftIcon className={styles.icon} /> Previous
 							</button>
 							<span>
 								Page {page} of {pages}
@@ -309,7 +311,7 @@ export default function CollectionsPage() {
 								}
 								disabled={page === pages}
 							>
-								Next →
+								Next <ChevronRightIcon className={styles.icon} />
 							</button>
 						</div>
 					)}

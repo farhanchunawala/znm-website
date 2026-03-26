@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { ArrowLeftIcon, XMarkIcon, PlusIcon } from '@heroicons/react/24/outline';
 import styles from '../orders.module.scss';
 
 interface OrderDetail {
@@ -210,7 +211,7 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <Link href="/admin/orders" className={styles.backBtn}>← Back to Orders</Link>
+        <Link href="/admin/orders" className={styles.backBtn}><ArrowLeftIcon className={styles.backIcon} /> Back to Orders</Link>
         <h1>Order {order.orderNumber}</h1>
       </div>
 
@@ -242,7 +243,7 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
               onClick={() => setAddItemModal((prev) => ({ ...prev, isOpen: true }))}
               disabled={['shipped', 'delivered', 'cancelled'].includes(order.orderStatus)}
             >
-              + Add Item
+              <PlusIcon className={styles.btnIcon} style={{ width: '16px', height: '16px' }} /> Add Item
             </button>
           </div>
           {order.items.length > 0 ? (
@@ -365,7 +366,7 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
                 className={styles.closeBtn}
                 onClick={() => setAddItemModal((prev) => ({ ...prev, isOpen: false }))}
               >
-                ✕
+                <XMarkIcon />
               </button>
             </div>
             {addItemModal.error && <div className={styles.error}>{addItemModal.error}</div>}
@@ -441,7 +442,7 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
                 className={styles.closeBtn}
                 onClick={() => setEditItemModal((prev) => ({ ...prev, isOpen: false }))}
               >
-                ✕
+                <XMarkIcon />
               </button>
             </div>
             {editItemModal.error && <div className={styles.error}>{editItemModal.error}</div>}

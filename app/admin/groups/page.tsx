@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, PencilIcon, TrashIcon, ArrowDownOnSquareIcon, ArrowUpOnSquareIcon } from '@heroicons/react/24/outline';
 import styles from './groups.module.scss';
 
 interface Group {
@@ -118,8 +118,8 @@ export default function GroupsPage() {
 							a.download = `groups-${new Date().toISOString().split('T')[0]}.csv`;
 							a.click();
 						} catch { alert('Export failed'); }
-					}} className={styles.addBtn} style={{ background: '#333' }}>📥 Export CSV</button>
-					<button onClick={() => fileInputRef.current?.click()} className={styles.addBtn} style={{ background: '#333' }}>📤 Import CSV</button>
+					}} className={styles.addBtn} style={{ background: '#333' }}><ArrowDownOnSquareIcon className={styles.btnIcon} /> Export CSV</button>
+					<button onClick={() => fileInputRef.current?.click()} className={styles.addBtn} style={{ background: '#333' }}><ArrowUpOnSquareIcon className={styles.btnIcon} /> Import CSV</button>
 					<input type="file" ref={fileInputRef} accept=".csv" style={{ display: 'none' }} onChange={async (e) => {
 						const file = e.target.files?.[0]; if (!file) return;
 						const fd = new FormData(); fd.append('file', file);
@@ -144,7 +144,7 @@ export default function GroupsPage() {
 						}}
 						className={styles.addBtn}
 					>
-						<PlusIcon />
+						<PlusIcon className={styles.btnIcon} />
 						Create Group
 					</button>
 				</div>

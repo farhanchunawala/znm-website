@@ -2,7 +2,22 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { 
+	PlusIcon, 
+	ArrowUpTrayIcon, 
+	ArrowDownTrayIcon, 
+	InboxStackIcon,
+	TrashIcon,
+	EyeIcon,
+	EyeSlashIcon,
+	UserGroupIcon,
+	MagnifyingGlassIcon
+} from '@heroicons/react/24/solid';
+import { 
+	ArchiveBoxIcon, 
+	ArrowUpOnSquareIcon, 
+	ArrowDownOnSquareIcon 
+} from '@heroicons/react/24/outline';
 import styles from './customers.module.scss';
 
 interface Customer {
@@ -201,41 +216,48 @@ export default function CustomersPage() {
 	return (
 		<div className={styles.customersPage}>
 			<div className={styles.header}>
-				<h1>Customers</h1>
+				<h1><UserGroupIcon className={styles.headerIcon} style={{ width: '28px', height: '28px', display: 'inline-block', verticalAlign: 'bottom', marginRight: '8px' }} /> Customers</h1>
 				<div className={styles.actions}>
 					<Link href="/admin/customers/new" className={styles.addBtn}>
-						<PlusIcon />
+						<PlusIcon className={styles.btnIcon} />
 						Add Customer
 					</Link>
 					<Link
 						href="/admin/customers/import"
-						className={styles.exportBtn}
+						className={styles.importBtn}
 					>
+						<ArrowUpTrayIcon className={styles.btnIcon} />
 						Import CSV
 					</Link>
 					<button
 						onClick={handleExportCSV}
 						className={styles.exportBtn}
 					>
+						<ArrowDownTrayIcon className={styles.btnIcon} />
 						Export CSV
 					</button>
 					<button
 						onClick={() => setShowArchived(!showArchived)}
 						className={styles.archiveBtn}
 					>
+						{showArchived ? <EyeIcon className={styles.btnIcon} /> : <InboxStackIcon className={styles.btnIcon} />}
 						{showArchived ? 'Show Active' : 'Show Archived'}
 					</button>
 				</div>
 			</div>
 
 			<div className={styles.filters}>
-				<input
-					type="text"
-					placeholder="Search by name, email, phone, or ID..."
-					value={searchTerm}
-					onChange={(e) => setSearchTerm(e.target.value)}
-					className={styles.searchInput}
-				/>
+				<div className={styles.searchWrapper} style={{ flex: 1, position: 'relative', display: 'flex', alignItems: 'center' }}>
+					<MagnifyingGlassIcon className={styles.searchIcon} style={{ position: 'absolute', left: '12px', width: '18px', height: '18px', color: '#888' }} />
+					<input
+						type="text"
+						placeholder="Search by name, email, phone, or ID..."
+						value={searchTerm}
+						onChange={(e) => setSearchTerm(e.target.value)}
+						className={styles.searchInput}
+						style={{ paddingLeft: '40px', width: '100%' }}
+					/>
+				</div>
 
 				<select
 					value={sortBy}
@@ -260,12 +282,14 @@ export default function CustomersPage() {
 						onClick={() => handleBulkAction('delete')}
 						className={styles.bulkBtn}
 					>
+						<TrashIcon className={styles.btnIcon} />
 						Delete
 					</button>
 					<button
 						onClick={() => handleBulkAction('archive')}
 						className={styles.bulkBtn}
 					>
+						<ArchiveBoxIcon className={styles.btnIcon} />
 						Archive
 					</button>
 				</div>
@@ -405,7 +429,7 @@ export default function CustomersPage() {
 													: 0
 												).toLocaleString()}
 											</td>
-											<td className={styles.actions}>
+											<td className={styles.tableActions}>
 												<button
 													onClick={() =>
 														handleArchive(
@@ -423,9 +447,11 @@ export default function CustomersPage() {
 															: 'Archive'
 													}
 												>
-													{customer.archived
-														? '📤'
-														: '📁'}
+													{customer.archived ? (
+														<EyeIcon className={styles.btnIcon} />
+													) : (
+														<ArchiveBoxIcon className={styles.btnIcon} />
+													)}
 												</button>
 												<button
 													onClick={() =>
@@ -438,7 +464,7 @@ export default function CustomersPage() {
 													}
 													title="Delete"
 												>
-													🗑️
+													<TrashIcon className={styles.btnIcon} />
 												</button>
 											</td>
 										</tr>

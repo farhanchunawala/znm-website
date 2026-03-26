@@ -66,6 +66,11 @@
 	:global([data-theme='dark']) & {
 		background: #1a1a1a;
 	}
+
+	.exportIcon {
+		width: 18px;
+		height: 18px;
+	}
 }
 
 .archiveBtn {

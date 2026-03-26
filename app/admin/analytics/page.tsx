@@ -16,6 +16,7 @@ import {
 	Legend,
 	ResponsiveContainer,
 } from 'recharts';
+import { ArrowDownOnSquareIcon, ChartBarIcon } from '@heroicons/react/24/outline';
 import styles from './analytics.module.scss';
 
 interface AnalyticsData {
@@ -98,7 +99,7 @@ export default function AnalyticsPage() {
 	return (
 		<div className={styles.analyticsPage}>
 			<div className={styles.header}>
-				<h1>Analytics & Reports</h1>
+				<h1><ChartBarIcon className={styles.headerIcon} style={{ width: '28px', height: '28px', display: 'inline-block', verticalAlign: 'bottom', marginRight: '8px' }} /> Analytics & Reports</h1>
 				<div className={styles.actions}>
 					<select
 						value={dateRange}
@@ -111,7 +112,7 @@ export default function AnalyticsPage() {
 						<option value="365">Last Year</option>
 					</select>
 					<button onClick={exportToCSV} className={styles.exportBtn}>
-						📥 Export CSV
+						<ArrowDownOnSquareIcon className={styles.btnIcon} /> Export CSV
 					</button>
 				</div>
 			</div>

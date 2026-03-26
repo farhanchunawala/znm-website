@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { DocumentTextIcon, PrinterIcon, TrashIcon, PencilIcon, PlusIcon, MinusIcon, EyeIcon, ArchiveBoxIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
+import { DocumentTextIcon, PrinterIcon, TrashIcon, PencilIcon, PlusIcon, MinusIcon, EyeIcon, ArchiveBoxIcon, CheckCircleIcon, XCircleIcon, InformationCircleIcon, ArrowDownOnSquareIcon, ArrowUpOnSquareIcon } from '@heroicons/react/24/outline';
 import JsBarcode from 'jsbarcode';
 import axios from 'axios';
 import PageHeader from '@/components/Admin/PageHeader';
@@ -16,7 +16,7 @@ interface Bill {
 	_id: string;
 	billId: string;
 	orderSnapshot: { orderNumber: string };
-	customerSnapshot: { name: string; phone: string; phones?: string[]; customerCustomId?: string };
+	customerSnapshot: { name: string; phone: string; phones?: string[]; customerEmail?: string; customerCustomId?: string };
 	billType: 'COD' | 'PAID';
 	amountToCollect: number;
 	amountPaid: number;
@@ -617,13 +617,13 @@ export default function BillsPage() {
 							}}
 							className={buttonStyles.secondaryBtn}
 						>
-							📥 Export CSV
+							<ArrowDownOnSquareIcon className={styles.btnIcon} /> Export CSV
 						</button>
 						<button
 							onClick={() => fileInputRef.current?.click()}
 							className={buttonStyles.secondaryBtn}
 						>
-							📤 Import CSV
+							<ArrowUpOnSquareIcon className={styles.btnIcon} /> Import CSV
 						</button>
 						<input type="file" ref={fileInputRef} accept=".csv" style={{ display: 'none' }} onChange={async (e) => {
 							const file = e.target.files?.[0];
@@ -656,6 +656,7 @@ export default function BillsPage() {
 										customerName: '',
 										customerPhone: '',
 										customerPhones: [],
+										customerEmail: '',
 										customerCustomId: '',
 										trialDate: '',
 										deliveryDate: '',
@@ -663,15 +664,15 @@ export default function BillsPage() {
 										items: [{ description: '', quantity: 1, rate: 0 }],
 										paymentStatus: '',
 										rate: 0,
-										advancePaid: 0,
 										balanceAmount: 0,
+										advancePaid: 0,
 									});
 									setShowCreateModal(true);
 								});
 							}}
 							className={buttonStyles.primaryBtn}
 						>
-							+ Create Bill
+							<PlusIcon className={styles.btnIcon} /> Create Bill
 						</button>
 					</div>
 				}
@@ -805,6 +806,7 @@ export default function BillsPage() {
 												customerName: selectedBill.customerSnapshot.name || '',
 												customerPhone: selectedBill.customerSnapshot.phone || '',
 												customerPhones: selectedBill.customerSnapshot.phones || [],
+												customerEmail: selectedBill.customerSnapshot.customerEmail || '',
 												customerCustomId: selectedBill.customerSnapshot.customerCustomId || '',
 												trialDate: selectedBill.trialDate ? new Date(selectedBill.trialDate).toISOString().split('T')[0] : '',
 												deliveryDate: selectedBill.deliveryDate ? new Date(selectedBill.deliveryDate).toISOString().split('T')[0] : '',
@@ -1807,11 +1809,18 @@ export default function BillsPage() {
 			>
 				<div style={{ textAlign: 'center', padding: '10px 0' }}>
 					<div style={{
-						fontSize: '48px',
+						display: 'flex',
+						justifyContent: 'center',
 						marginBottom: '20px',
 						color: statusModal?.type === 'error' ? '#ff5252' : statusModal?.type === 'info' ? '#2196f3' : '#4caf50'
 					}}>
-						{statusModal?.type === 'error' ? '❌' : statusModal?.type === 'info' ? 'ℹ️' : '✅'}
+						{statusModal?.type === 'error' ? (
+							<XCircleIcon style={{ width: '64px', height: '64px' }} />
+						) : statusModal?.type === 'info' ? (
+							<InformationCircleIcon style={{ width: '64px', height: '64px' }} />
+						) : (
+							<CheckCircleIcon style={{ width: '64px', height: '64px' }} />
+						)}
 					</div>
 					<p style={{ fontSize: '18px', color: '#fff', opacity: 0.9 }}>{statusModal?.message}</p>
 					<button

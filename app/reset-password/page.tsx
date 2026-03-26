@@ -4,6 +4,7 @@ import { useState } from 'react';
 import styles from '../login/login.module.scss';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 
 export default function ResetPasswordPage() {
 	const router = useRouter();
@@ -118,7 +119,7 @@ export default function ResetPasswordPage() {
 								className={styles.togglePassword}
 								onClick={() => setShowPassword(!showPassword)}
 							>
-								{showPassword ? '👁️' : '👁️‍🗨️'}
+								{showPassword ? <EyeSlashIcon /> : <EyeIcon />}
 							</button>
 						</div>
 					</div>
@@ -143,7 +144,7 @@ export default function ResetPasswordPage() {
 									setShowConfirmPassword(!showConfirmPassword)
 								}
 							>
-								{showConfirmPassword ? '👁️' : '👁️‍🗨️'}
+								{showConfirmPassword ? <EyeSlashIcon /> : <EyeIcon />}
 							</button>
 						</div>
 					</div>

@@ -1,6 +1,21 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import {
+  ShoppingBagIcon,
+  ArrowDownOnSquareStackIcon,
+  ArrowUpOnSquareStackIcon,
+  ExclamationTriangleIcon,
+  ChartBarIcon,
+  CheckCircleIcon,
+  PencilSquareIcon,
+  EyeIcon,
+  XMarkIcon,
+  PlusIcon,
+  MinusIcon,
+  NoSymbolIcon,
+  Square3Stack3DIcon
+} from '@heroicons/react/24/outline';
 import styles from './inventory.module.scss';
 
 interface InventoryItem {
@@ -169,7 +184,7 @@ export default function InventoryPage() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1>📦 Inventory Management</h1>
+        <h1><ShoppingBagIcon className={styles.headerIcon} /> Inventory Management</h1>
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           <button onClick={async () => {
             try {
@@ -180,8 +195,8 @@ export default function InventoryPage() {
               a.download = `inventory-${new Date().toISOString().split('T')[0]}.csv`;
               a.click();
             } catch { alert('Export failed'); }
-          }} className={styles.btnSmall}>📥 Export CSV</button>
-          <button onClick={() => invFileRef.current?.click()} className={styles.btnSmall}>📤 Import CSV</button>
+          }} className={styles.btnSmall}><ArrowDownOnSquareStackIcon className={styles.btnIcon} /> Export CSV</button>
+          <button onClick={() => invFileRef.current?.click()} className={styles.btnSmall}><ArrowUpOnSquareStackIcon className={styles.btnIcon} /> Import CSV</button>
           <input type="file" ref={invFileRef} accept=".csv" style={{ display: 'none' }} onChange={async (e) => {
             const file = e.target.files?.[0]; if (!file) return;
             const fd = new FormData(); fd.append('file', file);
@@ -214,7 +229,7 @@ export default function InventoryPage() {
         </div>
       </div>
 
-      {error && <div className={styles.error}>⚠️ {error}</div>}
+      {error && <div className={styles.error}><ExclamationTriangleIcon className={styles.errorIcon} /> {error}</div>}
 
       <div className={styles.controls}>
         <input
@@ -231,7 +246,22 @@ export default function InventoryPage() {
               className={`${styles.filterBtn} ${filter === f ? styles.active : ''}`}
               onClick={() => setFilter(f)}
             >
-              {f === 'all' ? '📊 All' : f === 'lowstock' ? '⚠️ Low Stock' : '🔴 Critical'}
+              {f === 'all' ? (
+                <>
+                  <ChartBarIcon className={styles.filterIcon} />
+                  <span>All</span>
+                </>
+              ) : f === 'lowstock' ? (
+                <>
+                  <ExclamationTriangleIcon className={styles.filterIcon} />
+                  <span>Low Stock</span>
+                </>
+              ) : (
+                <>
+                  <NoSymbolIcon className={styles.filterIcon} />
+                  <span>Critical</span>
+                </>
+              )}
             </button>
           ))}
         </div>
@@ -266,11 +296,20 @@ export default function InventoryPage() {
                 <td className={styles.batches}>{inv.batches.length}</td>
                 <td className={styles.status}>
                   {inv.available === 0 ? (
-                    <span className={styles.statusCritical}>🔴 Out of Stock</span>
+                    <span className={styles.statusCritical}>
+                      <NoSymbolIcon className={styles.statusIcon} />
+                      Out of Stock
+                    </span>
                   ) : inv.isLowStock ? (
-                    <span className={styles.statusWarning}>⚠️ Low Stock</span>
+                    <span className={styles.statusWarning}>
+                      <ExclamationTriangleIcon className={styles.statusIcon} />
+                      Low Stock
+                    </span>
                   ) : (
-                    <span className={styles.statusOk}>✅ Good</span>
+                    <span className={styles.statusOk}>
+                      <CheckCircleIcon className={styles.statusIcon} />
+                      Good
+                    </span>
                   )}
                 </td>
                 <td className={styles.actions}>
@@ -285,14 +324,14 @@ export default function InventoryPage() {
                     }
                     title="Adjust stock"
                   >
-                    📝 Adjust
+                    <PencilSquareIcon className={styles.btnIcon} /> Adjust
                   </button>
                   <button
                     className={styles.btnSmall}
                     onClick={() => setBatchModal({ isOpen: true, inventoryId: inv._id })}
                     title="Add batch"
                   >
-                    📦 Batch
+                    <Square3Stack3DIcon className={styles.btnIcon} /> Batch
                   </button>
                   <button
                     className={styles.btnSmall}
@@ -302,7 +341,7 @@ export default function InventoryPage() {
                     }}
                     title="View details"
                   >
-                    👁️ View
+                    <EyeIcon className={styles.btnIcon} /> View
                   </button>
                 </td>
               </tr>
@@ -378,9 +417,9 @@ function StockAdjustmentModal({
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
-          <h2>📝 Adjust Stock: {sku}</h2>
+          <h2><PencilSquareIcon className={styles.headerIcon} /> Adjust Stock: {sku}</h2>
           <button className={styles.closeBtn} onClick={onClose}>
-            ✕
+            <XMarkIcon />
           </button>
         </div>
 
@@ -394,7 +433,17 @@ function StockAdjustmentModal({
               placeholder="Positive to add, negative to remove"
             />
             <small>
-              {qty > 0 ? '➕ Adding stock' : qty < 0 ? '➖ Removing stock' : '⚪ No change'}
+              {qty > 0 ? (
+                <>
+                  <PlusIcon className={styles.smallIcon} /> Adding stock
+                </>
+              ) : qty < 0 ? (
+                <>
+                  <MinusIcon className={styles.smallIcon} /> Removing stock
+                </>
+              ) : (
+                'No change'
+              )}
             </small>
           </div>
 
@@ -475,9 +524,9 @@ function AddBatchModal({
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
-          <h2>📦 Add Batch</h2>
+          <h2><Square3Stack3DIcon className={styles.headerIcon} /> Add Batch</h2>
           <button className={styles.closeBtn} onClick={onClose}>
-            ✕
+            <XMarkIcon />
           </button>
         </div>
 

@@ -1,6 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import {
+  ExclamationTriangleIcon,
+  ShoppingBagIcon,
+  ArrowLeftIcon,
+  ChartBarIcon,
+  Square3Stack3DIcon,
+  DocumentTextIcon,
+  NoSymbolIcon
+} from '@heroicons/react/24/outline';
 import styles from '../inventory.module.scss';
 
 interface InventoryDetail {
@@ -84,7 +93,7 @@ export default function InventoryDetailPage({ params }: { params: Promise<{ id: 
   if (!inventory) {
     return (
       <div className={styles.container}>
-        <div className={styles.error}>⚠️ Inventory not found</div>
+        <div className={styles.error}><ExclamationTriangleIcon className={styles.errorIcon} /> Inventory not found</div>
       </div>
     );
   }
@@ -92,9 +101,9 @@ export default function InventoryDetailPage({ params }: { params: Promise<{ id: 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1>📦 Inventory: {inventory.variantSku}</h1>
+        <h1><ShoppingBagIcon className={styles.headerIcon} /> Inventory: {inventory.variantSku}</h1>
         <div className={styles.breadcrumb}>
-          <a href="/admin/inventory">← Back to Inventory</a>
+          <a href="/admin/inventory"><ArrowLeftIcon className={styles.backIcon} /> Back to Inventory</a>
         </div>
       </div>
 
@@ -106,11 +115,19 @@ export default function InventoryDetailPage({ params }: { params: Promise<{ id: 
               className={`${styles.tab} ${tab === t ? styles.active : ''}`}
               onClick={() => setTab(t)}
             >
-              {t === 'overview'
-                ? '📊 Overview'
-                : t === 'batches'
-                  ? '📦 Batches'
-                  : '📜 Audit Trail'}
+              {t === 'overview' ? (
+                <>
+                  <ChartBarIcon className={styles.tabIcon} /> Overview
+                </>
+              ) : t === 'batches' ? (
+                <>
+                  <Square3Stack3DIcon className={styles.tabIcon} /> Batches
+                </>
+              ) : (
+                <>
+                  <DocumentTextIcon className={styles.tabIcon} /> Audit Trail
+                </>
+              )}
             </button>
           ))}
         </div>
@@ -156,7 +173,7 @@ export default function InventoryDetailPage({ params }: { params: Promise<{ id: 
               </div>
               {inventory.isLowStock && (
                 <div className={styles.alert}>
-                  ⚠️ Stock is below threshold
+                  <ExclamationTriangleIcon className={styles.alertIcon} /> Stock is below threshold
                 </div>
               )}
             </div>
@@ -259,7 +276,10 @@ export default function InventoryDetailPage({ params }: { params: Promise<{ id: 
                           <>
                             {new Date(batch.expiry).toLocaleDateString()}
                             {new Date(batch.expiry) < new Date() && (
-                              <span style={{ color: '#f44336', marginLeft: '8px' }}>🔴 EXPIRED</span>
+                              <span style={{ color: '#f44336', marginLeft: '8px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                <NoSymbolIcon style={{ width: '14px', height: '14px' }} />
+                                EXPIRED
+                              </span>
                             )}
                           </>
                         ) : (

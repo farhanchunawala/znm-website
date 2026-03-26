@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import MeasurementsTab from '@/components/Admin/MeasurementsTab';
 import styles from './customer-detail.module.scss';
 
@@ -89,7 +90,8 @@ export default function CustomerDetailPage({
 	return (
 		<div className={styles.customerDetail}>
 			<button onClick={() => router.back()} className={styles.backBtn}>
-				← Back
+				<ArrowLeftIcon />
+				Back
 			</button>
 
 			<div className={styles.header}>

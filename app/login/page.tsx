@@ -1,16 +1,13 @@
 'use client';
 
+import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import styles from './login.module.scss';
 
 export default function LoginPage() {
-	return (
-		<div style={{ padding: '40px', textAlign: 'center' }}>
-			<h1>Login Temporarily Disabled</h1>
-			<p style={{ fontSize: '18px', marginTop: '20px' }}>
-				Login is currently disabled. You can still proceed with guest checkout.
-			</p>
-		</div>
-	);
+	const router = useRouter();
 	const searchParams = useSearchParams();
 	const [showPassword, setShowPassword] = useState(false);
 	const [error, setError] = useState('');
@@ -104,7 +101,7 @@ export default function LoginPage() {
 								className={styles.togglePassword}
 								onClick={() => setShowPassword(!showPassword)}
 							>
-								{showPassword ? '👁️' : '👁️‍🗨️'}
+								{showPassword ? <EyeSlashIcon /> : <EyeIcon />}
 							</button>
 						</div>
 					</div>

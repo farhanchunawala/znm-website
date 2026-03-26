@@ -7,6 +7,23 @@
 	letter-spacing: 0.5px;
 	position: relative;
 	z-index: 99;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+
+	span {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+	}
+
+	.icon {
+		width: 16px;
+		height: 16px;
+		color: #fff;
+	}
 
 	a {
 		color: #fff;

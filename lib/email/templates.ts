@@ -33,6 +33,14 @@ const getCustomerName = (customer: Customer): string => {
 	return `${customer.firstName} ${customer.lastName}`;
 };
 
+const Icons = {
+	Sparkles: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-left:5px;"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>`,
+	Document: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-right:8px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`,
+	Package: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-left:5px;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>`,
+	Truck: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-left:5px;"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>`,
+	Check: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-left:5px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`
+};
+
 export function orderFulfilledEmail(
 	order: Order,
 	customer: Customer,
@@ -60,7 +68,7 @@ export function orderFulfilledEmail(
 <body>
     <div class="container">
         <div class="header">
-            <h1>Order Fulfilled! 🎉</h1>
+            <h1>Order Fulfilled! ${Icons.Sparkles}</h1>
         </div>
         <div class="content">
             <p>Dear ${customerName},</p>
@@ -85,7 +93,7 @@ export function orderFulfilledEmail(
 
             <div style="background: #f0f4ff; padding: 20px; border-radius: 8px; margin: 20px 0;">
                 <p style="margin: 0; text-align: center; color: #667eea; font-weight: 600;">
-                    📄 Your invoice is attached to this email as a PDF
+                    ${Icons.Document} Your invoice is attached to this email as a PDF
                 </p>
             </div>
 
@@ -127,7 +135,7 @@ export function orderShippedEmail(
 <body>
     <div class="container">
         <div class="header">
-            <h1>Order Shipped! 📦</h1>
+            <h1>Order Shipped! ${Icons.Package}</h1>
         </div>
         <div class="content">
             <p>Dear ${customerName},</p>
@@ -181,7 +189,7 @@ export function orderInLogisticsEmail(
 <body>
     <div class="container">
         <div class="header">
-            <h1>Out for Delivery! 🚚</h1>
+            <h1>Out for Delivery! ${Icons.Truck}</h1>
         </div>
         <div class="content">
             <p>Dear ${customerName},</p>
@@ -236,13 +244,13 @@ export function orderDeliveredEmail(
 <body>
     <div class="container">
         <div class="header">
-            <h1>Order Delivered! ✅</h1>
+            <h1>Order Delivered! ${Icons.Check}</h1>
         </div>
         <div class="content">
             <p>Dear ${customerName},</p>
             
             <div class="success-box">
-                <h2>🎉 Your order has been delivered!</h2>
+                <h2>${Icons.Sparkles} Your order has been delivered!</h2>
                 <p>Order <strong>#${order.orderId}</strong></p>
             </div>
 

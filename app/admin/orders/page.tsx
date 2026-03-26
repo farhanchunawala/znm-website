@@ -2,6 +2,12 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import { 
+	MagnifyingGlassIcon, 
+	ArrowPathIcon, 
+	EyeIcon,
+	ShoppingBagIcon
+} from '@heroicons/react/24/outline';
 import styles from './orders.module.scss';
 
 interface Order {
@@ -79,7 +85,7 @@ export default function OrdersPage() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1>Orders</h1>
+        <h1><ShoppingBagIcon className={styles.headerIcon} style={{ width: '28px', height: '28px', display: 'inline-block', verticalAlign: 'bottom', marginRight: '8px' }} /> Orders</h1>
         <p>Manage customer orders, track shipments, and handle refunds</p>
       </div>
 
@@ -176,7 +182,7 @@ export default function OrdersPage() {
                   <td>{new Date(order.createdAt).toLocaleDateString()}</td>
                   <td>
                     <Link href={`/admin/orders/${order._id}`} className={styles.actionBtn}>
-                      View
+                      <EyeIcon className={styles.btnIcon} style={{ width: '16px', height: '16px', display: 'inline-block', verticalAlign: 'text-bottom', marginRight: '4px' }} /> View
                     </Link>
                   </td>
                 </tr>

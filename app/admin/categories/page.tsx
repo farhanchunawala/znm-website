@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useRef } from 'react';
+import { ArrowDownOnSquareIcon, ArrowUpOnSquareIcon, PlusIcon } from '@heroicons/react/24/outline';
 import styles from './categories.module.scss';
 
 interface Category {
@@ -165,8 +166,8 @@ export default function CategoriesPage() {
 			<div className={styles.header}>
 				<h1>Categories</h1>
 				<div className={styles.headerActions}>
-					<button onClick={handleExportCSV} className={styles.csvBtn}>📥 Export CSV</button>
-					<button onClick={() => fileInputRef.current?.click()} className={styles.csvBtn}>📤 Import CSV</button>
+					<button onClick={handleExportCSV} className={styles.csvBtn}><ArrowDownOnSquareIcon className={styles.icon} /> Export CSV</button>
+					<button onClick={() => fileInputRef.current?.click()} className={styles.csvBtn}><ArrowUpOnSquareIcon className={styles.icon} /> Import CSV</button>
 					<input type="file" ref={fileInputRef} accept=".csv" onChange={handleImportCSV} style={{ display: 'none' }} />
 					<button
 						onClick={() => {
@@ -180,7 +181,7 @@ export default function CategoriesPage() {
 						}}
 						className={styles.createBtn}
 					>
-						+ New Category
+						<PlusIcon className={styles.icon} /> New Category
 					</button>
 				</div>
 			</div>

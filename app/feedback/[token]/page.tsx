@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import styles from './feedback.module.scss';
 import { StarIcon } from '@/components/Icons/AdminIcons';
+import { SparklesIcon } from '@heroicons/react/24/outline';
 
 export default function FeedbackPage() {
 	const params = useParams();
@@ -127,7 +128,7 @@ export default function FeedbackPage() {
 		return (
 			<div className={styles.container}>
 				<div className={styles.success}>
-					<h1>Thank You! 🎉</h1>
+					<h1>Thank You! <SparklesIcon className={styles.successIcon} /></h1>
 					<p>Your feedback has been submitted successfully.</p>
 					<p>
 						We appreciate you taking the time to share your
