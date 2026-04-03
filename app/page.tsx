@@ -145,7 +145,7 @@ export default function IndexPage() {
 					<div className={`${styles.slide}`}>
 						<Image
 							className={`${styles.img}`}
-							src="/display-photo/dp1.1-kurtas.png"
+							src="/display-photo/dp1.1-thobes.png"
 							alt="cloth"
 							width="1200"
 							height="600"
