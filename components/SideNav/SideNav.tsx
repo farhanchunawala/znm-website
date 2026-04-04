@@ -1,4 +1,4 @@
-import styles from './SideNav.module.scss';
+import styles from './SideNav.module.css';
 import Link from 'next/link';
 
 const SideNav = () => {

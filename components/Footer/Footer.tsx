@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './Footer.module.scss';
+import styles from './Footer.module.css';
 import NewsLetter from '../NewsLetter/NewsLetter';
 import Link from 'next/link';
 

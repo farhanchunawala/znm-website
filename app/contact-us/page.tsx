@@ -3,7 +3,7 @@
 import Head from 'next/head';
 import Image from 'next/image';
 // import { Inter } from 'next/font/google';
-import styles from './contact-us.module.scss';
+import styles from './contact-us.module.css';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { log } from 'console';

@@ -1,0 +1,140 @@
+/* @import '../../app/styles/mixins'; */
+
+.main .box {
+	background: black;
+	padding: 40px;
+	padding-bottom: 32px;
+	width: 100%;
+	margin-top: 80px;
+}
+
+.main .box h2 {
+	color: white;
+	margin-top: 34px;
+	font-style: normal;
+	font-weight: 400;
+	font-size: 21px;
+	line-height: 34px;
+	align-items: center;
+	text-align: center;
+}
+
+.main .box input {
+	width: 250px;
+	height: 37px;
+	background-color: black;
+	color: white;
+	border: 1px;
+	border-bottom: 1px solid white;
+	box-sizing: border-box;
+	align-content: center;
+	display: block;
+	margin: auto;
+	margin-top: 30px;
+}
+
+.main .box button {
+	background-color: white;
+	color: black;
+	font-size: 16px;
+	font-weight: 400;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	padding-right: 18px;
+	padding-left: 18px;
+	border: 1px;
+	margin: auto;
+	margin-top: 30px;
+	align-content: center;
+	display: block;
+}
+
+.main .box .location {
+	color: white;
+	font-weight: 400;
+	font-size: 12px;
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+.main .box .location svg {
+	height: 10px;
+	width: auto;
+	margin-right: 5px;
+}
+
+.main .box .social {
+	width: fit-content;
+	margin: 30px auto 0;
+}
+
+.main .box .social .app svg {
+	height: 20px;
+	width: auto;
+	margin: 0 8px;
+}
+
+.main .box .newsletter {
+	margin-top: 40px;
+	text-align: center;
+}
+
+.main .box .newsletter h2 {
+	margin-top: 0;
+	margin-bottom: 20px;
+}
+
+.main .box .newsletter .form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 15px;
+}
+
+.main .box .newsletter .form input {
+	margin: 0;
+	width: 100%;
+	max-width: 300px;
+	text-align: center;
+}
+
+.main .box .newsletter .form input:disabled {
+	opacity: 0.7;
+	cursor: not-allowed;
+}
+
+.main .box .newsletter .form button {
+	margin: 0;
+	cursor: pointer;
+	transition: opacity 0.3s;
+}
+
+.main .box .newsletter .form button:hover {
+	opacity: 0.9;
+}
+
+.main .box .newsletter .form button:disabled {
+	opacity: 0.7;
+	cursor: not-allowed;
+}
+
+.main .box .newsletter .message {
+	margin-top: 15px;
+	font-size: 14px;
+	min-height: 20px;
+}
+
+.main .box .newsletter .message.success {
+	color: #4caf50;
+}
+
+.main .box .newsletter .message.error {
+	color: #f44336;
+}
+
+@media (min-width: 576px) {
+	.main .box .newsletter .form {
+		display: flex;
+		justify-content: center;
+	}
+}

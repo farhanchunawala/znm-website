@@ -1,0 +1,371 @@
+/* @import '../../app/styles/variables'; */
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 450px;
+    background: var(--b100);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    animation: slideIn 0.3s ease-out;
+}
+
+@media (max-width: 768px) {
+    .panel {
+        max-width: 100%;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px;
+    border-bottom: 1px solid var(--b90);
+}
+
+.header h2 {
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    margin: 0;
+}
+
+.header .closeButton {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--b0);
+    transition: opacity 0.2s;
+}
+
+.header .closeButton:hover {
+    opacity: 0.7;
+}
+
+.navigation {
+    display: flex;
+    border-bottom: 1px solid var(--b90);
+    overflow-x: auto;
+}
+
+.navigation button {
+    flex: 1;
+    padding: 15px 10px;
+    background: none;
+    border: none;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    color: var(--b40);
+    transition: all 0.2s;
+    border-bottom: 2px solid transparent;
+}
+
+.navigation button:hover {
+    color: var(--b0);
+}
+
+.navigation button.active {
+    color: var(--b0);
+    border-bottom-color: var(--b0);
+}
+
+.content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 30px;
+}
+
+.section h3 {
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    margin: 0 0 25px 0;
+}
+
+.section h4 {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    margin: 0 0 10px 0;
+}
+
+.field {
+    margin-bottom: 25px;
+}
+
+.field label {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--b30);
+    margin-bottom: 8px;
+}
+
+.field p {
+    font-size: 14px;
+    color: var(--b0);
+    margin: 0;
+}
+
+.displayField {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.displayField p {
+    flex: 1;
+}
+
+.displayField button {
+    padding: 6px 16px;
+    background: none;
+    border: 1px solid var(--b0);
+    font-size: 11px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.displayField button:hover {
+    background: var(--b0);
+    color: var(--b100);
+}
+
+.displayField button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.editField {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.editField input {
+    padding: 10px;
+    border: 1px solid var(--b80);
+    font-size: 14px;
+    background: var(--b100);
+}
+
+.editField input:focus {
+    outline: none;
+    border-color: var(--b0);
+}
+
+.editField input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.editField button {
+    padding: 10px 20px;
+    background: var(--b0);
+    color: var(--b100);
+    border: none;
+    font-size: 12px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.editField button:hover {
+    background: var(--b20);
+}
+
+.editField button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.editField button:last-child {
+    background: none;
+    color: var(--b0);
+    border: 1px solid var(--b0);
+}
+
+.editField button:last-child:hover {
+    background: var(--b95);
+}
+
+.referralCode {
+    font-family: monospace;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+.customerId {
+    font-family: monospace;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--b0);
+}
+
+.notLinked {
+    color: var(--b50);
+    font-style: italic;
+}
+
+.placeholder {
+    color: var(--b50);
+    font-size: 14px;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.link {
+    display: inline-block;
+    color: var(--b0);
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    border-bottom: 1px solid var(--b0);
+    transition: opacity 0.2s;
+}
+
+.link:hover {
+    opacity: 0.7;
+}
+
+.offersList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.offerCard {
+    padding: 20px;
+    border: 1px solid var(--b85);
+    position: relative;
+}
+
+.offerCard .offerHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.offerCard .offerHeader .offerType {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: var(--b40);
+}
+
+.offerCard .offerHeader .offerCode {
+    font-family: monospace;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+.offerCard p {
+    font-size: 13px;
+    color: var(--b20);
+    margin: 5px 0;
+}
+
+.offerCard .offerExpiry {
+    font-size: 11px;
+    color: var(--b50);
+}
+
+.offerCard .claimed {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--b50);
+}
+
+.newsletterSection {
+    padding: 25px;
+    background: var(--b98);
+    border: 1px solid var(--b90);
+    margin-top: 30px;
+}
+
+.newsletterSection h4 {
+    margin-bottom: 10px;
+}
+
+.newsletterSection p {
+    font-size: 13px;
+    color: var(--b30);
+    margin-bottom: 15px;
+}
+
+.supportOption {
+    padding: 20px;
+    border: 1px solid var(--b90);
+    margin-bottom: 15px;
+}
+
+.supportOption h4 {
+    margin-bottom: 8px;
+}
+
+.supportOption p {
+    font-size: 13px;
+    color: var(--b30);
+    margin-bottom: 12px;
+}
+
+.footer {
+    padding: 20px 30px;
+    border-top: 1px solid var(--b90);
+}
+
+.footer .logoutButton {
+    width: 100%;
+    padding: 14px;
+    background: var(--b0);
+    color: var(--b100);
+    border: none;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.footer .logoutButton:hover {
+    background: var(--b20);
+}

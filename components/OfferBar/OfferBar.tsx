@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import styles from './OfferBar.module.scss';
+import styles from './OfferBar.module.css';
 import Link from 'next/link';
 
 export const OfferBar = () => {

@@ -1,0 +1,139 @@
+.main {
+    padding: 120px 20px 60px;
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+}
+
+.newsletterContainer {
+    max-width: 600px;
+    width: 100%;
+    padding: 60px 40px;
+    background-color: #fff;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.newsletterContainer h1 {
+    font-size: 2.5rem;
+    font-weight: 300;
+    margin-bottom: 15px;
+    letter-spacing: 2px;
+}
+
+.newsletterContainer .subtitle {
+    color: #666;
+    margin-bottom: 40px;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.newsletterContainer .benefits {
+    text-align: left;
+    margin-bottom: 40px;
+}
+
+.newsletterContainer .benefits ul {
+    list-style: none;
+    padding: 0;
+}
+
+.newsletterContainer .benefits ul li {
+    padding: 10px 0;
+    padding-left: 30px;
+    position: relative;
+    color: #333;
+}
+
+.newsletterContainer .benefits ul li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #000;
+    font-weight: bold;
+}
+
+.newsletterContainer form .formGroup {
+    margin-bottom: 20px;
+}
+
+.newsletterContainer form .formGroup input {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+}
+
+.newsletterContainer form .formGroup input:focus {
+    outline: none;
+    border-color: #000;
+}
+
+.newsletterContainer form .subscribeButton {
+    width: 100%;
+    padding: 15px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    letter-spacing: 1px;
+}
+
+.newsletterContainer form .subscribeButton:hover {
+    background-color: #333;
+}
+
+.newsletterContainer .privacy {
+    margin-top: 20px;
+    font-size: 0.85rem;
+    color: #999;
+}
+
+.newsletterContainer .privacy a {
+    color: #666;
+    text-decoration: underline;
+}
+
+.newsletterContainer .privacy a:hover {
+    color: #000;
+}
+
+.successMessage {
+    max-width: 600px;
+    width: 100%;
+    padding: 60px 40px;
+    background-color: #fff;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.successMessage h2 {
+    font-size: 2rem;
+    font-weight: 400;
+    margin-bottom: 15px;
+    color: #000;
+}
+
+.successMessage p {
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+}
+
+.successMessage a {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: #000;
+    color: #fff;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.successMessage a:hover {
+    background-color: #333;
+}

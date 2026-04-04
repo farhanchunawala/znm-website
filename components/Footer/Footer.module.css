@@ -1,0 +1,95 @@
+/* @import '../../app/styles/mixins';
+@import '../../app/styles/variables'; */
+
+.main .footerContent {
+    background: var(--b0);
+    color: var(--b100);
+    padding: 60px 40px 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+}
+
+@media (max-width: 768px) {
+    .main .footerContent {
+        grid-template-columns: 1fr;
+        padding: 40px 20px;
+        gap: 30px;
+    }
+}
+
+.main .footerSection h4 {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    margin: 0 0 20px 0;
+    color: var(--b100);
+}
+
+.main .footerSection address {
+    font-style: normal;
+}
+
+.main .footerSection address p {
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--b80);
+    margin: 0 0 5px 0;
+}
+
+.main .socialLinks {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.main .socialLinks a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--b80);
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+}
+
+.main .socialLinks a svg {
+    flex-shrink: 0;
+}
+
+.main .socialLinks a:hover {
+    color: var(--b100);
+}
+
+.main .quickLinks {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.main .quickLinks a {
+    color: var(--b80);
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+}
+
+.main .quickLinks a:hover {
+    color: var(--b100);
+}
+
+.main .footerBottom {
+    background: var(--b0);
+    color: var(--b60);
+    text-align: center;
+    padding: 20px;
+    border-top: 1px solid var(--b20);
+}
+
+.main .footerBottom p {
+    font-size: 11px;
+    letter-spacing: 1px;
+    margin: 0;
+}

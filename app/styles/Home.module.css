@@ -1,7 +1,7 @@
-@import 'mixins';
+/* @import 'mixins'; */
 
-// .homepage{
-// padding: 8px;
+/* .homepage{
+padding: 8px; */
 .window {
 	width: calc(100vw - 48px);
 	overflow: hidden;
@@ -23,7 +23,7 @@
 	flex-grow: 1;
 	box-sizing: border-box;
 
-	// Carousel: Animation turned off for now;
+	/* Carousel: Animation turned off for now; */
 	transition: transform 1s ease;
 	animation-name: slide;
 	animation-duration: 30s;
@@ -68,12 +68,12 @@
 	}
 }
 
-// }
+/* } */
 
-@media (min-width: $screen-sm) {
+@media (min-width: var(--screen-sm)) {
 
-	// .homepage {
-	// padding: 32px;
+	/* .homepage {
+	padding: 32px; */
 	.window {
 		width: calc(100vw - 96px);
 		margin: 0 48px;
@@ -83,5 +83,5 @@
 		width: calc(100vw - 96px);
 	}
 
-	// }
+	/* } */
 }

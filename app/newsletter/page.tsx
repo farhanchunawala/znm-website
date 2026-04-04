@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import styles from './newsletter.module.scss';
+import styles from './newsletter.module.css';
 import Link from 'next/link';
 
 export default function NewsletterPage() {

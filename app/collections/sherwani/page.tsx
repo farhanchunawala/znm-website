@@ -1,5 +1,5 @@
 import DisplayGallery from '@/components/DisplayGallery/DisplayGallery';
-import styles from './sherwani.module.scss';
+import styles from './sherwani.module.css';
 
 export default function SherwaniPage() {
     const sherwaniCollection = {

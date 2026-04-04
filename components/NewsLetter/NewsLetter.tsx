@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import styles from './NewsLetter.module.scss';
+import styles from './NewsLetter.module.css';
 // import Link from 'next/link';
 
 const NewsLetter = () => {

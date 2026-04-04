@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import styles from './login.module.scss';
+import styles from '../../login/login.module.css';
 
 export default function AdminLoginPage() {
     const [password, setPassword] = useState('');

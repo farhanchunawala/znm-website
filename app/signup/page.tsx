@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import styles from '../login/login.module.scss';
+import styles from '../login/login.module.css';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Country } from 'country-state-city';

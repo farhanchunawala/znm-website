@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './StatusNavigation.module.scss';
+import styles from './StatusNavigation.module.css';
 import {
     PendingIcon,
     FulfilledIcon,

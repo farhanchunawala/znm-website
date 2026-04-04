@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
-import styles from './login.module.scss';
+import styles from './login.module.css';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 

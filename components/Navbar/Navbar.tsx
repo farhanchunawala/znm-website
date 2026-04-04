@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import styles from './Navbar.module.scss';
+import styles from './Navbar.module.css';
 import SideNav from '../SideNav/SideNav';
 import AccountPanel from '../AccountPanel/AccountPanel';
 import Link from 'next/link';

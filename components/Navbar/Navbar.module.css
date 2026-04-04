@@ -1,0 +1,200 @@
+/* @import '../../app/styles/mixins'; */
+
+.main {
+	width: 100%;
+	background: #fff;
+	position: relative;
+	z-index: 100;
+}
+
+.main .header {
+	width: 100%;
+	padding: 20px 40px;
+	border-bottom: 1px solid transparent; /* Optional separator */
+}
+
+.main .header .topBar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	max-width: 1440px;
+	margin: 0 auto;
+}
+
+.main .header .topBar .leftSection {
+	display: flex;
+	align-items: center;
+}
+
+.main .header .topBar .leftSection .searchIcon {
+	cursor: pointer;
+	display: none; /* Hidden on mobile by default, shown on desktop */
+}
+
+@media (min-width: 768px) {
+	.main .header .topBar .leftSection .searchIcon {
+		display: block;
+	}
+}
+
+.main .header .topBar .leftSection .hamburger {
+	cursor: pointer;
+	display: block;
+}
+
+@media (min-width: 992px) {
+	.main .header .topBar .leftSection .hamburger {
+		/* Hide hamburger on larger screens where nav is visible */
+		display: none;
+	}
+}
+
+.main .header .topBar .heading {
+	text-decoration: none;
+	color: #000;
+	text-align: center;
+}
+
+.main .header .topBar .heading .logoContainer {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.main .header .topBar .heading .logoContainer .logoSymbol {
+	width: 40px; /* Adjust size as needed */
+	height: auto;
+	margin-bottom: 5px;
+}
+
+.main .header .topBar .heading .logoContainer .logoName {
+	font-size: 24px;
+	letter-spacing: 4px;
+	font-weight: 400;
+	text-transform: uppercase;
+}
+
+.main .header .topBar .rightSection {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+.main .header .topBar .rightSection .iconLink {
+	color: #000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-decoration: none;
+}
+
+.main .header .topBar .rightSection .iconLink .cartIconWrapper {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+
+.main .header .topBar .rightSection .iconLink .cartIconWrapper .cartCount {
+	position: absolute;
+	top: -8px;
+	right: -8px;
+	background-color: #000;
+	color: #fff;
+	font-size: 10px;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 600;
+}
+
+.main .searchBar {
+	width: 100%;
+	padding: 15px 40px;
+	background-color: #f9f9f9;
+	border-top: 1px solid #eee;
+}
+
+.main .searchBar form {
+	display: flex;
+	gap: 10px;
+	max-width: 600px;
+	margin: 0 auto;
+}
+
+.main .searchBar form input {
+	flex: 1;
+	padding: 12px 15px;
+	border: 1px solid #ddd;
+	font-size: 0.95rem;
+}
+
+.main .searchBar form input:focus {
+	outline: none;
+	border-color: #000;
+}
+
+.main .searchBar form button {
+	padding: 12px 25px;
+	background-color: #000;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+	font-size: 0.95rem;
+	transition: background-color 0.2s;
+}
+
+.main .searchBar form button:hover {
+	background-color: #333;
+}
+
+.main .mainnav {
+	width: 100%;
+	border-top: 1px solid #eee; /* Optional separator */
+	display: none; /* Hidden on mobile */
+}
+
+@media (min-width: 992px) {
+	.main .mainnav {
+		display: block;
+	}
+}
+
+.main .mainnav .navbar {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 40px;
+	padding: 20px 0;
+	max-width: 1440px;
+	margin: 0 auto;
+	flex-wrap: wrap;
+}
+
+.main .mainnav .navbar .link {
+	color: #000;
+	font-size: 12px;
+	font-weight: 500;
+	letter-spacing: 1.5px;
+	text-decoration: none;
+	text-transform: uppercase;
+	transition: opacity 0.2s;
+}
+
+.main .mainnav .navbar .link:hover {
+	opacity: 0.7;
+}
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+	.main .header {
+		padding: 15px 20px;
+	}
+
+	.main .header .topBar .heading .logoText .logoName {
+		font-size: 18px;
+	}
+}

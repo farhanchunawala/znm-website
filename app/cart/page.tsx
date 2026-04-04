@@ -7,7 +7,7 @@ import {
     selectCartItems,
     selectCartTotal,
 } from '@/lib/features/cartSlice';
-import styles from './cart.module.scss';
+import styles from './cart.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';

@@ -1,0 +1,46 @@
+.main {
+    padding: 45px 13px 54px;
+}
+.main .header h1 {
+    text-align: center;
+    font-size: 25px;
+    font-weight: 400;
+}
+.main .booking h1 {
+    font-size: 25px;
+    font-weight: 400;
+}
+.main .booking p {
+    font-size: 13px;
+}
+.main .booking p .span {
+    font-weight: bold;
+}
+.main .social h1 {
+    font-size: 18px;
+    font-weight: bold;
+}
+.main .social p {
+    font-size: 13px;
+}
+.main .social p .span {
+    font-weight: bold;
+}
+.main .social .inquiry_form {
+    margin: 13px;
+}
+.main .social .inquiry_form .personal_detail {
+    height: 45px;
+    width: 100%;
+    margin-bottom: 13px;
+    padding-left: 14px;
+}
+.main .social .send_button {
+    height: 45px;
+    width: 250px;
+    background-color: black;
+    color: white;
+    border: 1px black;
+    margin-left: 13px;
+    margin-top: 8px;
+}

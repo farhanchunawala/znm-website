@@ -6,8 +6,9 @@ import Footer from '../components/Footer/Footer';
 // import Image from 'next/image';
 import Script from 'next/script';
 
-import './styles/globals.scss';
-import styles from './styles/layout.module.scss';
+import './styles/variables.css';
+import './styles/globals.css';
+import styles from './styles/layout.module.css';
 
 interface Props {
 	readonly children: ReactNode;

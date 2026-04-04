@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import styles from './AccountPanel.module.scss';
+import styles from './AccountPanel.module.css';
 import Link from 'next/link';
 
 interface AccountPanelProps {
