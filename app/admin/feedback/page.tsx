@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import styles from './feedback.module.scss';
+import styles from './feedback.module.css';
 import { StarIcon, ExportIcon } from '@/components/Icons/AdminIcons';
 
 interface Feedback {

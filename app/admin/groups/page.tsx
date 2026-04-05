@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
-import styles from './groups.module.scss';
+import styles from './groups.module.css';
 
 interface Group {
     _id: string;

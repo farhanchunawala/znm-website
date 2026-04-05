@@ -1,4 +1,4 @@
-import styles from './privacy.module.scss';
+import styles from './privacy.module.css';
 import Link from 'next/link';
 
 export default function PrivacyPolicyPage() {

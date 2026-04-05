@@ -1,0 +1,275 @@
+/* @import '/app/styles/mixins'; */
+
+.main .images_holder {
+	padding: 0 14px;
+}
+
+.main .images_holder .image_wrapper {
+	display: flex;
+	width: 100%;
+}
+
+.main .add_product_form .title {
+	padding-left: 24px;
+}
+
+.main .add_product_form .title .product_name {
+	font-size: 16px;
+	font-weight: 500;
+	margin: 8px 0;
+	line-height: 1.25;
+}
+
+.main .add_product_form .title .mrp {
+	color: #707070;
+	font-size: 13px;
+	font-weight: 400;
+	line-height: 1.23;
+	margin-bottom: 2px;
+}
+
+.main .add_product_form .title .price {
+	color: #222;
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 1.25;
+}
+
+.main .add_product_form .sizes_text {
+	color: #222;
+	font-size: 13px;
+	font-weight: 400;
+	line-height: 1.23;
+	padding: 12px 24px 0;
+}
+
+.main .add_product_form .sizes {
+	display: flex;
+	flex-wrap: wrap;
+	padding: 0 24px;
+}
+
+.main .add_product_form .sizes .size {
+	border: 1px solid var(--b82);
+	height: 40px;
+	font-size: .8125rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 8px 4px;
+	flex: 0 0 calc(25% - 8px);
+	max-width: calc(25% - 8px);
+	cursor: pointer;
+	transition: all 0.2s;
+}
+
+.main .add_product_form .sizes .size:hover {
+	border-color: #000;
+}
+
+.main .add_product_form .sizes .size.selected {
+	background-color: #000;
+	color: #fff;
+	border-color: #000;
+}
+
+.main .add_product_form .notify {
+	background: #222;
+	width: calc(100% - 48px);
+	height: 48px;
+	margin: 16px auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	transition: opacity 0.2s;
+}
+
+.main .add_product_form .notify:hover {
+	opacity: 0.9;
+}
+
+.main .add_product_form .notify .txt {
+	color: #FFF;
+	text-align: center;
+	font-size: 16px;
+	font-weight: 400;
+	margin-left: 10px;
+}
+
+.main .add_product_form .feedback {
+	margin: 10px 24px;
+	padding: 10px;
+	border-radius: 4px;
+	font-size: 14px;
+	text-align: center;
+	animation: fadeIn 0.3s ease-in-out;
+}
+
+.main .add_product_form .feedback.success {
+	background-color: #e8f5e9;
+	color: #2e7d32;
+	border: 1px solid #c8e6c9;
+}
+
+.main .add_product_form .feedback.error {
+	background-color: #ffebee;
+	color: #c62828;
+	border: 1px solid #ffcdd2;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.main .add_product_form .dnf {
+	border-top: solid #D0D0D0 1px;
+}
+
+.main .add_product_form .dnf .collapse {
+	display: flex;
+}
+
+.main .add_product_form .dnf .collapse .txt_dnf {
+	color: #222;
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 16px;
+	padding: 12px 24px;
+}
+
+.main .add_product_form .dnf .collapse svg {
+	float: right;
+	margin: 16px 24px;
+	margin-left: auto;
+}
+
+.main .add_product_form .dnf .description {
+	padding: 0 24px;
+}
+
+.main .add_product_form .inquiry_form {
+	margin: 13px;
+}
+
+.main .add_product_form .inquiry_form .personal_detail {
+	height: 45px;
+	width: 100%;
+	margin-bottom: 13px;
+	padding-left: 14px;
+}
+
+.main .add_product_form .inquiry_form .message {
+	width: 100%;
+	height: 200px;
+	padding-left: 14px;
+	padding-top: 16px;
+}
+
+.main .add_product_form .send_button {
+	height: 45px;
+	width: 250px;
+	background-color: black;
+	color: white;
+	border: 1px black;
+	margin-left: 13px;
+	margin-top: 8px;
+}
+
+@media (min-width: 576px) {
+	.main {
+		display: flex;
+	}
+
+	.main .images_holder {
+		width: 100%;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 2px;
+	}
+
+	.main .images_holder .image_wrapper {
+		flex: 0 0 calc(50% - 1px);
+		max-width: calc(50% - 1px);
+	}
+
+	.main .add_product_form {
+		width: 100%;
+	}
+
+	.main .add_product_form .title .product_name {
+		color: #222;
+		font-size: 16px;
+		font-weight: 400;
+		line-height: 20px;
+	}
+
+	.main .add_product_form .title .mrp {
+		line-height: 17px;
+		font-size: 13px;
+		font-weight: 400;
+		text-transform: none;
+	}
+
+	.main .add_product_form .title .price {
+		color: #222;
+		font-size: 20px;
+		font-weight: 400;
+		line-height: 24px;
+	}
+
+	.main .add_product_form .sizes_text {
+		color: #222;
+		font-size: 13px;
+		font-weight: 400;
+		line-height: 16px;
+	}
+
+	.main .add_product_form .sizes {
+		width: 390.39px;
+		height: 102px;
+	}
+
+	.main .add_product_form .sizes .size {
+		border: 1px solid #D0D0D0;
+		background: #E4E4E4;
+	}
+
+	.main .add_product_form .notify {
+		height: 48px;
+		padding: 14px 26px;
+	}
+
+	.main .add_product_form .notify .txt {
+		display: flex;
+		padding: 0px 119.1px 0px 113.77px;
+		align-items: flex-end;
+		gap: 10.52px;
+		align-self: stretch;
+	}
+
+	.main .add_product_form .dnf .collapse .txt_dnf {
+		color: #222;
+		font-size: 16px;
+		font-weight: 400;
+		line-height: 16px;
+	}
+
+	.main .add_product_form .dnf .collapse svg {
+		float: right;
+		margin: 16px 24px;
+		margin-left: auto;
+	}
+
+	.main .add_product_form .inquiry_form .message {
+		height: 265px;
+	}
+}

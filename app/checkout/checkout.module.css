@@ -1,0 +1,364 @@
+.main {
+    padding: 120px 20px 60px;
+    min-height: 80vh;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: 'Inter', sans-serif;
+}
+
+.main.loadingCursor {
+    cursor: wait !important;
+    user-select: none;
+}
+
+.main.loadingCursor * {
+    cursor: wait !important;
+}
+
+.main.loadingCursor input,
+.main.loadingCursor select,
+.main.loadingCursor button {
+    pointer-events: none;
+}
+
+.main h1 {
+    font-size: 2.5rem;
+    font-weight: 300;
+    margin-bottom: 40px;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.checkoutContainer {
+    display: flex;
+    gap: 40px;
+}
+
+@media (max-width: 768px) {
+    .checkoutContainer {
+        flex-direction: column;
+    }
+}
+
+.checkoutForm {
+    flex: 2;
+}
+
+.checkoutForm h2 {
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+
+.checkoutForm .formSection {
+    margin-bottom: 30px;
+}
+
+.checkoutForm .formSection h3 {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.checkoutForm .formRow {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+@media (max-width: 576px) {
+    .checkoutForm .formRow {
+        flex-direction: column;
+    }
+}
+
+.checkoutForm .formGroup {
+    flex: 1;
+}
+
+.checkoutForm .formGroup label {
+    display: block;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.checkoutForm .formGroup input,
+.checkoutForm .formGroup select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    font-size: 0.95rem;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.checkoutForm .formGroup input:focus,
+.checkoutForm .formGroup select:focus {
+    outline: none;
+    border-color: #000;
+}
+
+.checkoutForm .formGroup input:disabled,
+.checkoutForm .formGroup select:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    color: #999;
+}
+
+.checkoutForm .formGroup .phoneInputGroup {
+    display: flex;
+    gap: 10px;
+}
+
+.checkoutForm .formGroup .phoneInputGroup .phoneCodeSelect {
+    flex: 0 0 180px;
+    min-width: 180px;
+}
+
+.checkoutForm .formGroup .phoneInputGroup .phoneInput {
+    flex: 1;
+}
+
+.orderSummary {
+    flex: 1;
+    background-color: #f9f9f9;
+    padding: 30px;
+    height: fit-content;
+    position: sticky;
+    top: 120px;
+}
+
+.orderSummary h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    font-weight: 400;
+}
+
+.orderSummary .summaryItem {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.orderSummary .summaryItem img {
+    width: 60px;
+    height: 80px;
+    object-fit: cover;
+}
+
+.orderSummary .summaryItem .itemInfo {
+    flex: 1;
+}
+
+.orderSummary .summaryItem .itemInfo h4 {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin: 0 0 5px;
+}
+
+.orderSummary .summaryItem .itemInfo p {
+    font-size: 0.85rem;
+    color: #666;
+    margin: 2px 0;
+}
+
+.orderSummary .summaryItem .itemPrice {
+    font-weight: 600;
+}
+
+.orderSummary .couponSection {
+    margin: 25px 0;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+.orderSummary .couponSection h3 {
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0 0 15px 0;
+    color: #333;
+}
+
+.orderSummary .couponSection .couponInput {
+    display: flex;
+    gap: 10px;
+}
+
+.orderSummary .couponSection .couponInput input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.orderSummary .couponSection .couponInput input:focus {
+    outline: none;
+    border-color: #000;
+}
+
+.orderSummary .couponSection .couponInput input::placeholder {
+    text-transform: none;
+}
+
+.orderSummary .couponSection .couponInput button {
+    padding: 12px 24px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+}
+
+.orderSummary .couponSection .couponInput button:hover {
+    background-color: #333;
+}
+
+.orderSummary .couponSection .appliedCoupon {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+}
+
+.orderSummary .couponSection .appliedCoupon span {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #2e7d32;
+}
+
+.orderSummary .couponSection .appliedCoupon button {
+    padding: 6px 12px;
+    background-color: transparent;
+    color: #666;
+    border: 1px solid #999;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.orderSummary .couponSection .appliedCoupon button:hover {
+    background-color: #f44336;
+    color: #fff;
+    border-color: #f44336;
+}
+
+.orderSummary .couponSection .couponError {
+    margin: 10px 0 0 0;
+    padding: 8px 12px;
+    background-color: #fee;
+    color: #c33;
+    font-size: 0.85rem;
+    border: 1px solid #fcc;
+}
+
+.orderSummary .discount {
+    color: #2e7d32;
+    font-weight: 500;
+}
+
+.orderSummary .summaryRow {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+}
+
+.orderSummary .summaryRow.total {
+    border-top: 1px solid #ddd;
+    padding-top: 15px;
+    margin-top: 15px;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.orderSummary .placeOrderButton {
+    width: 100%;
+    padding: 15px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+
+.orderSummary .placeOrderButton:hover {
+    background-color: #333;
+}
+
+.orderSummary .placeOrderButton.loading {
+    background-color: #666;
+    cursor: wait;
+    opacity: 0.9;
+    pointer-events: none;
+}
+
+.emptyCart {
+    text-align: center;
+    padding: 60px 0;
+}
+
+.emptyCart p {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.emptyCart a {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: #000;
+    color: #fff;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.emptyCart a:hover {
+    background-color: #333;
+}
+
+.notificationBar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 500;
+    z-index: 1000;
+    animation: slideUp 0.3s ease-out;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.notificationBar.success {
+    background-color: #4caf50;
+    color: white;
+}
+
+.notificationBar.error {
+    background-color: #f44336;
+    color: white;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

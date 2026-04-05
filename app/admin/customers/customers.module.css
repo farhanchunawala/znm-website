@@ -1,4 +1,4 @@
-.shipmentsPage {
+.customersPage {
     padding: 20px;
 }
 
@@ -21,6 +21,7 @@
 }
 
 .addBtn,
+.importBtn,
 .exportBtn,
 .archiveBtn {
     display: flex;
@@ -42,6 +43,15 @@
 
 .addBtn:hover {
     background: #262626;
+}
+
+.importBtn {
+    background: #fff;
+    color: #000;
+}
+
+.importBtn:hover {
+    background: #fafafa;
 }
 
 .exportBtn {
@@ -82,7 +92,6 @@
     border-color: #000;
 }
 
-.statusSelect,
 .sortSelect {
     padding: 10px 16px;
     border: 2px solid #d4d4d4;
@@ -91,7 +100,6 @@
     cursor: pointer;
 }
 
-.statusSelect:focus,
 .sortSelect:focus {
     outline: none;
     border-color: #000;
@@ -191,48 +199,35 @@
     background: #fafafa;
 }
 
-.shipmentId {
-    font-weight: 600;
+.customerId {
+    font-weight: 500;
 }
 
-.link,
-.orderLink,
-.customerLink {
+.link {
     color: #000;
     text-decoration: none;
     font-weight: 600;
 }
 
-.link:hover,
-.orderLink:hover,
-.customerLink:hover {
+.link:hover {
     text-decoration: underline;
 }
 
-.trackingId {
-    font-family: monospace;
-    color: #525252;
-}
-
-.statusBadge {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
+.name {
     font-weight: 500;
-    text-transform: capitalize;
 }
 
-.statusIcon {
-    flex-shrink: 0;
+.centered {
+    text-align: center;
+    font-weight: 600;
 }
 
-.actionButtons {
-    display: flex;
-    gap: 8px;
+.amount {
+    font-weight: 600;
+    color: #000;
 }
 
-.editAction,
+.archiveAction,
 .deleteAction {
     padding: 6px;
     border: none;
@@ -240,12 +235,11 @@
     cursor: pointer;
     color: #737373;
     transition: color 0.2s;
-    text-decoration: none;
     display: flex;
     align-items: center;
 }
 
-.editAction:hover,
+.archiveAction:hover,
 .deleteAction:hover {
     color: #000;
 }

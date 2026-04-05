@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import styles from './order-edit.module.scss';
+import styles from './order-edit.module.css';
 import {
     PendingIcon,
     FulfilledIcon,

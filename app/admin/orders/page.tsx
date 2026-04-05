@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import styles from './orders.module.scss';
+import styles from './orders.module.css';
 import {
     ExportIcon,
     ImportIcon,

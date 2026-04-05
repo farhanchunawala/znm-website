@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { UsersIcon, ShoppingBagIcon, CurrencyDollarIcon, ClockIcon, ChartBarIcon } from '@heroicons/react/24/outline';
-import styles from './dashboard.module.scss';
+import styles from './dashboard.module.css';
 
 interface DashboardStats {
     totalCustomers: number;

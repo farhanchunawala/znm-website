@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { PlusIcon } from '@heroicons/react/24/outline';
-import styles from './customers.module.scss';
+import styles from './customers.module.css';
 
 interface Customer {
     _id: string;

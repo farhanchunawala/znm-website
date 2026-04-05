@@ -3,7 +3,7 @@
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { HomeIcon, UsersIcon, ShoppingBagIcon, ChartBarIcon, ArrowLeftOnRectangleIcon, MegaphoneIcon, TruckIcon, TagIcon } from '@heroicons/react/24/outline';
-import styles from './admin-layout.module.scss';
+import styles from './admin-layout.module.css';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
     const router = useRouter();

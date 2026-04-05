@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
-import styles from './add-customer.module.scss';
+import styles from './add-customer.module.css';
 
 export default function AddCustomerPage() {
     const router = useRouter();

@@ -2,7 +2,7 @@
 
 import { useAppSelector } from '@/lib/hooks';
 import { selectCartItems, selectCartTotal } from '@/lib/features/cartSlice';
-import styles from './checkout.module.scss';
+import styles from './checkout.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useMemo, useEffect } from 'react';

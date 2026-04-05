@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import styles from './new-order.module.scss';
+import styles from './new-order.module.css';
 import { AddIcon } from '@/components/Icons/AdminIcons';
 
 interface Customer {

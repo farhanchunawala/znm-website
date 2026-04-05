@@ -2,7 +2,7 @@
 
 import Head from 'next/head';
 import Image from 'next/image';
-import styles from './product.module.scss';
+import styles from './product.module.css';
 import { useState } from 'react';
 import { useAppDispatch } from '@/lib/hooks';
 import { addToCart } from '@/lib/features/cartSlice';

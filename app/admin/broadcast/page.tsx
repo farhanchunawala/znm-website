@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { PaperAirplaneIcon, UsersIcon, EnvelopeIcon, ClockIcon } from '@heroicons/react/24/outline';
-import styles from './broadcast.module.scss';
+import styles from './broadcast.module.css';
 
 interface Subscriber {
     _id: string;

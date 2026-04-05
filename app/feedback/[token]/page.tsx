@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import styles from './feedback.module.scss';
+import styles from './feedback.module.css';
 import { StarIcon } from '@/components/Icons/AdminIcons';
 
 export default function FeedbackPage() {

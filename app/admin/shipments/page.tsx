@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import styles from './shipments.module.scss';
+import styles from './shipments.module.css';
 import {
     AddIcon,
     ExportIcon,

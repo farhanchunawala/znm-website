@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import styles from './analytics.module.scss';
+import styles from './analytics.module.css';
 
 interface AnalyticsData {
     todayIncome: number;

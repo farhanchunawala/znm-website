@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import styles from './shipment-detail.module.scss';
+import styles from './shipment-detail.module.css';
 import StatusNavigation from '@/components/Admin/StatusNavigation';
 import { PrintIcon } from '@/components/Icons/AdminIcons';
 
