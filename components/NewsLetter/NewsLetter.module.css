@@ -132,9 +132,12 @@
 	color: #f44336;
 }
 
-@media (min-width: 576px) {
+@media (min-width: 481px) {
 	.main .box .newsletter .form {
-		display: flex;
+		flex-direction: row;
 		justify-content: center;
+	}
+	.main .box .newsletter .form input {
+		width: 300px;
 	}
 }

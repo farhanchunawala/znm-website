@@ -1,5 +1,5 @@
 .main {
-    padding: 120px 20px 60px;
+    padding: 80px 20px 40px;
     min-height: 80vh;
     display: flex;
     justify-content: center;
@@ -7,20 +7,38 @@
     font-family: 'Inter', sans-serif;
 }
 
+@media (min-width: 992px) {
+    .main {
+        padding: 120px 20px 60px;
+    }
+}
+
 .loginContainer {
     max-width: 450px;
     width: 100%;
-    padding: 40px;
+    padding: 30px 20px;
     background-color: #fff;
     border: 1px solid #eee;
 }
 
+@media (min-width: 481px) {
+    .loginContainer {
+        padding: 40px;
+    }
+}
+
 .loginContainer h1 {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 400;
     margin-bottom: 10px;
     text-align: center;
     letter-spacing: 1px;
+}
+
+@media (min-width: 481px) {
+    .loginContainer h1 {
+        font-size: 2rem;
+    }
 }
 
 .loginContainer .subtitle {

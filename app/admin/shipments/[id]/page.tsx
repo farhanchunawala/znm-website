@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import styles from './shipment-detail.module.css';
@@ -40,7 +40,8 @@ interface Shipment {
     createdAt: string;
 }
 
-export default function ShipmentDetailPage({ params }: { params: { id: string } }) {
+export default function ShipmentDetailPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = use(params);
     const router = useRouter();
     const [shipment, setShipment] = useState<Shipment | null>(null);
     const [loading, setLoading] = useState(true);
@@ -49,7 +50,7 @@ export default function ShipmentDetailPage({ params }: { params: { id: string } 
 
     useEffect(() => {
         fetchShipment();
-    }, [params.id]);
+    }, [id]);
 
     useEffect(() => {
         const handleEsc = (e: KeyboardEvent) => {
@@ -63,7 +64,7 @@ export default function ShipmentDetailPage({ params }: { params: { id: string } 
 
     const fetchShipment = async () => {
         try {
-            const res = await fetch(`/api/admin/shipments/${params.id}`);
+            const res = await fetch(`/api/admin/shipments/${id}`);
             const data = await res.json();
 
             if (data.error) {
@@ -82,7 +83,7 @@ export default function ShipmentDetailPage({ params }: { params: { id: string } 
 
     const handleStatusChange = async (newStatus: string, data?: any) => {
         try {
-            const res = await fetch(`/api/admin/shipments/${params.id}/status`, {
+            const res = await fetch(`/api/admin/shipments/${id}/status`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

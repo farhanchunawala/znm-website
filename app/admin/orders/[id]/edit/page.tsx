@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import styles from './order-edit.module.css';
@@ -50,7 +50,8 @@ const STATUS_OPTIONS = [
     { value: 'delivered', label: 'Delivered', icon: DeliveredIcon },
 ];
 
-export default function OrderEditPage({ params }: { params: { id: string } }) {
+export default function OrderEditPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = use(params);
     const router = useRouter();
     const [order, setOrder] = useState<Order | null>(null);
     const [items, setItems] = useState<OrderItem[]>([]);
@@ -62,11 +63,11 @@ export default function OrderEditPage({ params }: { params: { id: string } }) {
 
     useEffect(() => {
         fetchOrder();
-    }, [params.id]);
+    }, [id]);
 
     const fetchOrder = async () => {
         try {
-            const res = await fetch(`/api/admin/orders/${params.id}`);
+            const res = await fetch(`/api/admin/orders/${id}`);
             const data = await res.json();
 
             if (data.error) {
@@ -115,7 +116,7 @@ export default function OrderEditPage({ params }: { params: { id: string } }) {
 
         setSaving(true);
         try {
-            const res = await fetch(`/api/admin/orders/${params.id}`, {
+            const res = await fetch(`/api/admin/orders/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -129,7 +130,7 @@ export default function OrderEditPage({ params }: { params: { id: string } }) {
             if (res.ok) {
                 // Update status separately if changed
                 if (status !== order?.status) {
-                    await fetch(`/api/admin/orders/${params.id}/status`, {
+                    await fetch(`/api/admin/orders/${id}/status`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ status }),
@@ -137,7 +138,7 @@ export default function OrderEditPage({ params }: { params: { id: string } }) {
                 }
 
                 alert('Order updated successfully!');
-                router.push(`/admin/orders/${params.id}`);
+                router.push(`/admin/orders/${id}`);
             } else {
                 alert('Failed to update order');
             }

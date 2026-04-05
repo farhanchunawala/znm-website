@@ -105,8 +105,14 @@
 
 .statusGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: 1fr;
     gap: 12px;
+}
+
+@media (min-width: 481px) {
+    .statusGrid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
 }
 
 .statusBtn {
@@ -214,9 +220,15 @@
 .itemFields {
     flex: 1;
     display: grid;
-    grid-template-columns: 1fr 100px 120px 120px;
+    grid-template-columns: 1fr;
     gap: 12px;
     align-items: center;
+}
+
+@media (min-width: 769px) {
+    .itemFields {
+        grid-template-columns: 1fr 100px 120px 120px;
+    }
 }
 
 .itemInput,
@@ -318,12 +330,4 @@
     color: #000;
 }
 
-@media (max-width: 768px) {
-    .itemFields {
-        grid-template-columns: 1fr;
-    }
-
-    .statusGrid {
-        grid-template-columns: 1fr;
-    }
-}
+/* Desktop overrides moved to min-width queries above */

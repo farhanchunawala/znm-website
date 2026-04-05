@@ -1,21 +1,45 @@
 .main {
-    padding: 100px 20px 60px;
+    padding: 60px 20px 40px;
     min-height: 80vh;
+}
+
+@media (min-width: 481px) {
+    .main {
+        padding: 80px 20px 50px;
+    }
+}
+
+@media (min-width: 992px) {
+    .main {
+        padding: 100px 20px 60px;
+    }
 }
 
 .main .header {
     text-align: center;
-    margin-bottom: 60px;
+    margin-bottom: 30px;
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
 }
 
+@media (min-width: 481px) {
+    .main .header {
+        margin-bottom: 60px;
+    }
+}
+
 .main .header h1 {
-    font-size: 3rem;
+    font-size: 2rem;
     font-weight: 300;
     margin-bottom: 20px;
     letter-spacing: 2px;
+}
+
+@media (min-width: 481px) {
+    .main .header h1 {
+        font-size: 3rem;
+    }
 }
 
 .main .header .description {

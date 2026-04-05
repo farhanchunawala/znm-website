@@ -32,7 +32,7 @@
 	display: none; /* Hidden on mobile by default, shown on desktop */
 }
 
-@media (min-width: 768px) {
+@media (min-width: 481px) {
 	.main .header .topBar .leftSection .searchIcon {
 		display: block;
 	}
@@ -69,10 +69,20 @@
 }
 
 .main .header .topBar .heading .logoContainer .logoName {
-	font-size: 24px;
+	font-size: 18px;
 	letter-spacing: 4px;
 	font-weight: 400;
 	text-transform: uppercase;
+}
+
+@media (min-width: 481px) {
+	.main .header {
+		padding: 20px 40px;
+	}
+
+	.main .header .topBar .heading .logoContainer .logoName {
+		font-size: 24px;
+	}
 }
 
 .main .header .topBar .rightSection {
@@ -188,13 +198,4 @@
 	opacity: 0.7;
 }
 
-/* Mobile adjustments */
-@media (max-width: 767px) {
-	.main .header {
-		padding: 15px 20px;
-	}
-
-	.main .header .topBar .heading .logoText .logoName {
-		font-size: 18px;
-	}
-}
+/* Mobile adjustments moved to top level and tablet overrides added above */

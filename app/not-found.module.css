@@ -13,7 +13,7 @@
 }
 
 .content h1 {
-    font-size: 120px;
+    font-size: 80px;
     font-weight: 300;
     letter-spacing: 8px;
     color: var(--b0);
@@ -21,14 +21,8 @@
     line-height: 1;
 }
 
-@media (max-width: 768px) {
-    .content h1 {
-        font-size: 80px;
-    }
-}
-
 .content h2 {
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 400;
     letter-spacing: 4px;
     color: var(--b0);
@@ -36,9 +30,13 @@
     text-transform: uppercase;
 }
 
-@media (max-width: 768px) {
+@media (min-width: 769px) {
+    .content h1 {
+        font-size: 120px;
+    }
+
     .content h2 {
-        font-size: 18px;
+        font-size: 24px;
     }
 }
 

@@ -1,9 +1,21 @@
 .main {
-    padding: 120px 20px 60px;
+    padding: 80px 15px 40px;
     min-height: 80vh;
     max-width: 1200px;
     margin: 0 auto;
     font-family: 'Inter', sans-serif;
+}
+
+@media (min-width: 481px) {
+    .main {
+        padding: 100px 20px 50px;
+    }
+}
+
+@media (min-width: 992px) {
+    .main {
+        padding: 120px 40px 60px;
+    }
 }
 
 .main.loadingCursor {
@@ -22,21 +34,36 @@
 }
 
 .main h1 {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     font-weight: 300;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     text-align: center;
     letter-spacing: 1px;
 }
 
-.checkoutContainer {
-    display: flex;
-    gap: 40px;
+@media (min-width: 481px) {
+    .main h1 {
+        font-size: 2.2rem;
+    }
 }
 
-@media (max-width: 768px) {
+@media (min-width: 992px) {
+    .main h1 {
+        font-size: 2.5rem;
+        margin-bottom: 40px;
+    }
+}
+
+.checkoutContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+@media (min-width: 992px) {
     .checkoutContainer {
-        flex-direction: column;
+        flex-direction: row;
+        gap: 40px;
     }
 }
 
@@ -62,13 +89,14 @@
 
 .checkoutForm .formRow {
     display: flex;
+    flex-direction: column;
     gap: 15px;
     margin-bottom: 15px;
 }
 
-@media (max-width: 576px) {
+@media (min-width: 481px) {
     .checkoutForm .formRow {
-        flex-direction: column;
+        flex-direction: row;
     }
 }
 

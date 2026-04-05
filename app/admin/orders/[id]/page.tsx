@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import styles from './order-detail.module.css';
@@ -36,7 +36,8 @@ interface Order {
     archived: boolean;
 }
 
-export default function OrderDetailPage({ params }: { params: { id: string } }) {
+export default function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = use(params);
     const [order, setOrder] = useState<Order | null>(null);
     const [loading, setLoading] = useState(true);
     const [updating, setUpdating] = useState(false);
@@ -44,11 +45,11 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
 
     useEffect(() => {
         fetchOrderDetails();
-    }, [params.id]);
+    }, [id]);
 
     const fetchOrderDetails = async () => {
         try {
-            const res = await fetch(`/api/admin/orders/${params.id}/details`);
+            const res = await fetch(`/api/admin/orders/${id}/details`);
             const data = await res.json();
             setOrder(data);
         } catch (error) {

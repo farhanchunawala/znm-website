@@ -1,5 +1,5 @@
 .main {
-    padding: 120px 20px 60px;
+    padding: 80px 20px 40px;
     min-height: 80vh;
     display: flex;
     justify-content: center;
@@ -8,20 +8,38 @@
     background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
 }
 
+@media (min-width: 992px) {
+    .main {
+        padding: 120px 20px 60px;
+    }
+}
+
 .newsletterContainer {
     max-width: 600px;
     width: 100%;
-    padding: 60px 40px;
+    padding: 40px 20px;
     background-color: #fff;
     text-align: center;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
+@media (min-width: 481px) {
+    .newsletterContainer {
+        padding: 60px 40px;
+    }
+}
+
 .newsletterContainer h1 {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     font-weight: 300;
     margin-bottom: 15px;
     letter-spacing: 2px;
+}
+
+@media (min-width: 481px) {
+    .newsletterContainer h1 {
+        font-size: 2.5rem;
+    }
 }
 
 .newsletterContainer .subtitle {

@@ -1,25 +1,44 @@
 .container {
     min-height: 100vh;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 40px 20px;
+    padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+@media (min-width: 481px) {
+    .container {
+        padding: 40px 20px;
+    }
+}
+
 .feedbackForm {
     background: white;
-    padding: 40px;
-    border-radius: 16px;
+    padding: 20px;
+    border-radius: 12px;
     max-width: 600px;
     width: 100%;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
+@media (min-width: 481px) {
+    .feedbackForm {
+        padding: 40px;
+        border-radius: 16px;
+    }
+}
+
 .feedbackForm h1 {
     margin: 0 0 10px 0;
-    font-size: 32px;
+    font-size: 24px;
     color: #111827;
+}
+
+@media (min-width: 481px) {
+    .feedbackForm h1 {
+        font-size: 32px;
+    }
 }
 
 .subtitle {

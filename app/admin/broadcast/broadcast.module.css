@@ -49,13 +49,13 @@
 
 .grid {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr;
     gap: 24px;
 }
 
-@media (max-width: 1024px) {
+@media (min-width: 1025px) {
     .grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 2fr 1fr;
     }
 }
 

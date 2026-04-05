@@ -58,6 +58,19 @@
 	margin: 0 auto 16px;
 }
 
+@media (min-width: 481px) {
+	.main h2 {
+		font-size: 21px;
+	}
+	.main .container {
+		padding: 0 24px;
+	}
+	.main .frame {
+		flex: 0 0 33.33%;
+		max-width: 33.33%;
+	}
+}
+
 @media (min-width: 992px) {
 	.main h2 {
 		top: 15px;

@@ -1,11 +1,13 @@
 :root {
+  --screen-mobile: 480px;
+  --screen-tablet: 481px;
+  --screen-desktop: 992px;
+
   --screen-xs: 480px;
   --screen-sm: 576px;
   --screen-md: 768px;
   --screen-lg: 992px;
   --screen-xl: 1200px;
-  --screen-xxl: 1600px;
-  --screen-xxxl: 2000px;
 
   --b0: hsl(0, 0%, 0%);
   --b1: hsl(0, 0%, 1%);

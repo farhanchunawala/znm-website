@@ -3,20 +3,21 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from './product.module.css';
-import { useState } from 'react';
+import { use, useState } from 'react';
 import { useAppDispatch } from '@/lib/hooks';
 import { addToCart } from '@/lib/features/cartSlice';
 import { getProductById, type ProductData } from '@/lib/productData';
 
 type Props = {
-	params: {
+	params: Promise<{
 		id: string;
-	};
+	}>;
 };
 
 export default function Product({ params }: Props) {
+	const { id } = use(params);
 	// Get product data based on ID from URL
-	const productData: ProductData = getProductById(params.id);
+	const productData: ProductData = getProductById(id);
 
 	const [formData, setFormData] = useState({
 		name: '',
