@@ -1,14 +1,9 @@
 import type { ReactNode } from 'react';
 import { StoreProvider } from './StoreProvider';
-import { Navbar } from '../components/Navbar/Navbar';
-import { OfferBar } from '../components/OfferBar/OfferBar';
-import Footer from '../components/Footer/Footer';
-// import Image from 'next/image';
 import Script from 'next/script';
 
 import './styles/variables.css';
 import './styles/globals.css';
-import styles from './styles/layout.module.css';
 
 interface Props {
 	readonly children: ReactNode;
@@ -29,71 +24,7 @@ export default function RootLayout({ children }: Props) {
 					></Script>
 				</head>
 				<body>
-					<section className={styles.container}>
-						<OfferBar />
-						<Navbar />
-
-						{/* <header className={styles.header}>
-							<Image
-								src="/logo.svg"
-								className={styles.logo}
-								alt="logo"
-								width={100}
-								height={100}
-							/>
-						</header> */}
-
-						<main className={styles.main}>{children}</main>
-
-						<Footer />
-						{/* <footer className={styles.footer}>
-							<span>Learn </span>
-							<a
-								className={styles.link}
-								href="https://reactjs.org"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								React
-							</a>
-							<span>, </span>
-							<a
-								className={styles.link}
-								href="https://redux.js.org"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								Redux
-							</a>
-							<span>, </span>
-							<a
-								className={styles.link}
-								href="https://redux-toolkit.js.org"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								Redux Toolkit
-							</a>
-							<span>, </span>
-							<a
-								className={styles.link}
-								href="https://react-redux.js.org"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								React Redux
-							</a>
-							,<span> and </span>
-							<a
-								className={styles.link}
-								href="https://reselect.js.org"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								Reselect
-							</a>
-						</footer> */}
-					</section>
+					{children}
 				</body>
 			</html>
 		</StoreProvider>

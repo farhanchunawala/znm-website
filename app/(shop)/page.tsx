@@ -1,8 +1,8 @@
 import Image from 'next/image';
 import type { Metadata } from 'next';
-// import { Counter } from '../components/counter/Counter';
-import DisplayGallery from '../components/DisplayGallery/DisplayGallery';
-import styles from './styles/Home.module.css';
+// import { Counter } from '../../components/counter/Counter';
+import DisplayGallery from '../../components/DisplayGallery/DisplayGallery';
+import styles from '../styles/Home.module.css';
 
 export default function IndexPage() {
 	const imageGrid = {
