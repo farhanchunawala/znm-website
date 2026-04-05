@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import styles from '../orders.module.scss';
+import styles from '../orders.module.css';
 
 export default function ImportOrdersPage() {
     const router = useRouter();
