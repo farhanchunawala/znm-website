@@ -225,7 +225,7 @@
     align-items: center;
 }
 
-@media (min-width: 769px) {
+@media (min-width: 481px) {
     .itemFields {
         grid-template-columns: 1fr 100px 120px 120px;
     }

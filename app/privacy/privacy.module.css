@@ -85,16 +85,4 @@
     opacity: 0.7;
 }
 
-@media (max-width: 768px) {
-    .container {
-        padding: 40px 20px;
-    }
-
-    .content h1 {
-        font-size: 24px;
-    }
-
-    .content section h2 {
-        font-size: 16px;
-    }
-}
+/* No media query needed for basic padding and font sizes if they are consistent across views */

@@ -16,7 +16,6 @@
     right: 0;
     bottom: 0;
     width: 100%;
-    max-width: 450px;
     background: var(--b100);
     z-index: 1000;
     display: flex;
@@ -25,9 +24,9 @@
     animation: slideIn 0.3s ease-out;
 }
 
-@media (max-width: 768px) {
+@media (min-width: 992px) {
     .panel {
-        max-width: 100%;
+        max-width: 450px;
     }
 }
 
