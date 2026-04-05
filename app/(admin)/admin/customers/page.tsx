@@ -2,7 +2,20 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { 
+    PlusIcon, 
+    MagnifyingGlassIcon, 
+    ArrowDownTrayIcon, 
+    ArrowUpTrayIcon, 
+    ArchiveBoxIcon, 
+    ArrowUpOnSquareIcon,
+    TrashIcon,
+    MapPinIcon,
+    EnvelopeIcon,
+    PhoneIcon,
+    ShoppingBagIcon,
+    CurrencyRupeeIcon
+} from '@heroicons/react/24/outline';
 import styles from './customers.module.css';
 
 interface Customer {
@@ -38,6 +51,7 @@ export default function CustomersPage() {
     }, [showArchived, sortBy]);
 
     const fetchCustomers = async () => {
+        setLoading(true);
         try {
             const res = await fetch(`/api/admin/customers?archived=${showArchived}&sort=${sortBy}`);
             const data = await res.json();
@@ -65,6 +79,12 @@ export default function CustomersPage() {
 
     const handleBulkAction = async (action: string) => {
         if (selectedCustomers.length === 0) return;
+        
+        const confirmMsg = action === 'delete' 
+            ? `Are you sure you want to delete ${selectedCustomers.length} customers?`
+            : `Are you sure you want to archive ${selectedCustomers.length} customers?`;
+            
+        if (!confirm(confirmMsg)) return;
 
         try {
             const res = await fetch('/api/admin/customers/bulk', {
@@ -138,87 +158,180 @@ export default function CustomersPage() {
         );
     });
 
+    const getInitials = (first: string, last: string) => {
+        return `${first.charAt(0)}${last.charAt(0)}`.toUpperCase();
+    };
+
     return (
         <div className={styles.customersPage}>
-            <div className={styles.header}>
-                <h1>Customers</h1>
-                <div className={styles.actions}>
+            <header className={styles.header}>
+                <div className={styles.headerTitle}>
+                    <h1>Customers</h1>
+                    <p>Manage your customer relationships and view their activity.</p>
+                </div>
+                <div className={styles.mainActions}>
                     <Link href="/admin/customers/new" className={styles.addBtn}>
                         <PlusIcon />
-                        Add Customer
+                        <span>Add Customer</span>
                     </Link>
-                    <Link href="/admin/customers/import" className={styles.exportBtn}>
-                        Import CSV
+                    <Link href="/admin/customers/import" className={styles.importBtn}>
+                        <ArrowDownTrayIcon width={18} />
+                        <span>Import</span>
                     </Link>
                     <button onClick={handleExportCSV} className={styles.exportBtn}>
-                        Export CSV
+                        <ArrowUpTrayIcon width={18} />
+                        <span>Export</span>
                     </button>
-                    <button onClick={() => setShowArchived(!showArchived)} className={styles.archiveBtn}>
-                        {showArchived ? 'Show Active' : 'Show Archived'}
+                    <button 
+                        onClick={() => setShowArchived(!showArchived)} 
+                        className={styles.archiveToggleBtn}
+                    >
+                        {showArchived ? <PlusIcon width={18} /> : <ArchiveBoxIcon width={18} />}
+                        <span>{showArchived ? 'Show Active' : 'Show Archived'}</span>
                     </button>
                 </div>
-            </div>
+            </header>
 
-            <div className={styles.filters}>
-                <input
-                    type="text"
-                    placeholder="Search by name, email, phone, or ID..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className={styles.searchInput}
-                />
+            <section className={styles.controls}>
+                <div className={styles.filters}>
+                    <div className={styles.searchWrapper}>
+                        <MagnifyingGlassIcon className={styles.searchIcon} />
+                        <input
+                            type="text"
+                            placeholder="Search by name, email, phone, or ID..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className={styles.searchInput}
+                        />
+                    </div>
 
-                <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className={styles.sortSelect}>
-                    <option value="latest">Latest First</option>
-                    <option value="oldest">Oldest First</option>
-                    <option value="mostOrders">Most Orders</option>
-                    <option value="leastOrders">Least Orders</option>
-                    <option value="highestSpent">Highest Spent</option>
-                    <option value="lowestSpent">Lowest Spent</option>
-                    <option value="nameAZ">Name (A-Z)</option>
-                    <option value="nameZA">Name (Z-A)</option>
-                </select>
-            </div>
+                    <select 
+                        value={sortBy} 
+                        onChange={(e) => setSortBy(e.target.value)} 
+                        className={styles.sortSelect}
+                    >
+                        <option value="latest">Latest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="mostOrders">Most Orders</option>
+                        <option value="leastOrders">Least Orders</option>
+                        <option value="highestSpent">Highest Spent</option>
+                        <option value="lowestSpent">Lowest Spent</option>
+                        <option value="nameAZ">Name (A-Z)</option>
+                        <option value="nameZA">Name (Z-A)</option>
+                    </select>
+                </div>
+            </section>
 
             {selectedCustomers.length > 0 && (
                 <div className={styles.bulkActions}>
-                    <span>{selectedCustomers.length} selected</span>
-                    <button onClick={() => handleBulkAction('delete')} className={styles.bulkBtn}>
-                        Delete
-                    </button>
-                    <button onClick={() => handleBulkAction('archive')} className={styles.bulkBtn}>
-                        Archive
-                    </button>
+                    <span className={styles.bulkInfo}>{selectedCustomers.length} customers selected</span>
+                    <div className={styles.bulkButtons}>
+                        <button onClick={() => handleBulkAction('archive')} className={styles.bulkBtn}>
+                            Archive Selected
+                        </button>
+                        <button onClick={() => handleBulkAction('delete')} className={`${styles.bulkBtn} styles.bulkBtnDanger`}>
+                            Delete Permanent
+                        </button>
+                    </div>
                 </div>
             )}
 
             {loading ? (
-                <div className={styles.loading}>Loading customers...</div>
+                <div className={styles.loadingWrapper}>
+                    <div className={styles.spinner}></div>
+                    <p>Loading customers...</p>
+                </div>
+            ) : filteredCustomers.length === 0 ? (
+                <div className={styles.noResults}>
+                    <h2>No customers found</h2>
+                    <p>Try adjusting your search or filters.</p>
+                </div>
             ) : (
                 <>
-                    <div className={styles.stats}>
-                        <span>{filteredCustomers.length} customers found</span>
+                    {/* Mobile Grid View */}
+                    <div className={styles.customerGrid}>
+                        {filteredCustomers.map((customer) => (
+                            <div key={customer._id} className={styles.customerCard}>
+                                <input
+                                    type="checkbox"
+                                    checked={selectedCustomers.includes(customer._id)}
+                                    onChange={() => toggleSelect(customer._id)}
+                                    className={styles.cardCheckbox}
+                                />
+                                <div className={styles.avatar}>
+                                    {getInitials(customer.firstName, customer.lastName)}
+                                </div>
+                                <div className={styles.customerInfo}>
+                                    <Link href={`/admin/customers/${customer._id}`} className={styles.customerLink}>
+                                        <h3>{customer.firstName} {customer.lastName}</h3>
+                                    </Link>
+                                    <p className={styles.idBadge}>{customer.customerId}</p>
+                                    <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'var(--b50)' }}>
+                                            <EnvelopeIcon width={14} />
+                                            <span>{customer.email || customer.emails?.[0] || 'No email'}</span>
+                                        </div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'var(--b50)' }}>
+                                            <MapPinIcon width={14} />
+                                            <span>{customer.city}, {customer.state}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div className={styles.cardStats}>
+                                    <div className={styles.statItem}>
+                                        <span>Orders</span>
+                                        <span>{customer.orderCount || 0}</span>
+                                    </div>
+                                    <div className={styles.statItem}>
+                                        <span>Spent</span>
+                                        <span className={styles.price}>₹{(customer.totalSpent || 0).toLocaleString()}</span>
+                                    </div>
+                                </div>
+
+                                <div className={styles.cardActions}>
+                                    <span className={`${styles.statusBadge} ${customer.archived ? styles.statusArchived : styles.statusActive}`}>
+                                        {customer.archived ? 'Archived' : 'Active'}
+                                    </span>
+                                    <div className={styles.rowActions}>
+                                        <button
+                                            onClick={() => handleArchive(customer._id, customer.archived)}
+                                            className={styles.actionIconBtn}
+                                            title={customer.archived ? 'Unarchive' : 'Archive'}
+                                        >
+                                            <ArchiveBoxIcon width={18} />
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(customer._id)}
+                                            className={`${styles.actionIconBtn} ${styles.deleteIconBtn}`}
+                                            title="Delete"
+                                        >
+                                            <TrashIcon width={18} />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
 
-                    <div className={styles.tableContainer}>
+                    {/* Desktop Table View */}
+                    <div className={styles.tableWrapper}>
                         <table className={styles.table}>
                             <thead>
                                 <tr>
-                                    <th>
+                                    <th style={{ width: '40px' }}>
                                         <input
                                             type="checkbox"
                                             checked={selectedCustomers.length === filteredCustomers.length && filteredCustomers.length > 0}
                                             onChange={toggleSelectAll}
                                         />
                                     </th>
-                                    <th>Customer ID</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
+                                    <th>Customer</th>
+                                    <th>Contact</th>
                                     <th>Location</th>
-                                    <th>Orders</th>
-                                    <th>Total Spent</th>
-                                    <th>Actions</th>
+                                    <th>Activity</th>
+                                    <th>Status</th>
+                                    <th style={{ textAlign: 'right' }}>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -231,36 +344,62 @@ export default function CustomersPage() {
                                                 onChange={() => toggleSelect(customer._id)}
                                             />
                                         </td>
-                                        <td className={styles.customerId}>
-                                            <Link href={`/admin/customers/${customer._id}`} className={styles.link}>
-                                                {customer.customerId}
-                                            </Link>
+                                        <td>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                                <div className={styles.avatar} style={{ width: '36px', height: '36px', fontSize: '14px', margin: 0 }}>
+                                                    {getInitials(customer.firstName, customer.lastName)}
+                                                </div>
+                                                <div>
+                                                    <Link href={`/admin/customers/${customer._id}`} className={styles.customerLink}>
+                                                        <span style={{ display: 'block' }}>{customer.firstName} {customer.lastName}</span>
+                                                    </Link>
+                                                    <span className={styles.idBadge}>{customer.customerId}</span>
+                                                </div>
+                                            </div>
                                         </td>
-                                        <td className={styles.name}>
-                                            <Link href={`/admin/customers/${customer._id}`} className={styles.link}>
-                                                {customer.firstName} {customer.lastName}
-                                            </Link>
+                                        <td>
+                                            <div style={{ fontSize: '13px' }}>
+                                                <div style={{ color: 'var(--b0)' }}>{customer.email || customer.emails?.[0] || 'N/A'}</div>
+                                                <div style={{ color: 'var(--b50)' }}>{customer.phoneCode}{customer.phone}</div>
+                                            </div>
                                         </td>
-                                        <td>{customer.email || customer.emails?.[0] || 'N/A'}</td>
-                                        <td>{customer.phoneCode}{customer.phone}</td>
-                                        <td>{customer.city}, {customer.state}</td>
-                                        <td className={styles.centered}>{customer.orderCount || 0}</td>
-                                        <td className={styles.amount}>₹{(customer.totalSpent || 0).toLocaleString()}</td>
-                                        <td className={styles.actions}>
-                                            <button
-                                                onClick={() => handleArchive(customer._id, customer.archived)}
-                                                className={styles.archiveAction}
-                                                title={customer.archived ? 'Unarchive' : 'Archive'}
-                                            >
-                                                {customer.archived ? '📤' : '📁'}
-                                            </button>
-                                            <button
-                                                onClick={() => handleDelete(customer._id)}
-                                                className={styles.deleteAction}
-                                                title="Delete"
-                                            >
-                                                🗑️
-                                            </button>
+                                        <td>
+                                            <div style={{ fontSize: '13px' }}>
+                                                <div>{customer.city}</div>
+                                                <div style={{ color: 'var(--b50)' }}>{customer.state}, {customer.country}</div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style={{ fontSize: '13px' }}>
+                                                <div style={{ fontWeight: 700 }}>{customer.orderCount || 0} Orders</div>
+                                                <div className={styles.price}>₹{(customer.totalSpent || 0).toLocaleString()}</div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span className={`${styles.statusBadge} ${customer.archived ? styles.statusArchived : styles.statusActive}`}>
+                                                {customer.archived ? 'Archived' : 'Active'}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div className={styles.rowActions} style={{ justifyContent: 'flex-end' }}>
+                                                <Link href={`/admin/customers/${customer._id}`} className={styles.actionIconBtn}>
+                                                    <PlusIcon width={18} />
+                                                </Link>
+                                                <button
+                                                    onClick={() => handleArchive(customer._id, customer.archived)}
+                                                    className={styles.actionIconBtn}
+                                                    title={customer.archived ? 'Restore' : 'Archive'}
+                                                >
+                                                    {customer.archived ? <ArrowUpOnSquareIcon width={18} /> : <ArchiveBoxIcon width={18} />}
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDelete(customer._id)}
+                                                    className={`${styles.actionIconBtn} ${styles.deleteIconBtn}`}
+                                                    title="Delete"
+                                                >
+                                                    <TrashIcon width={18} />
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}
